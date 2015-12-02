@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="RobotCore-release-">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/res" />
+      <root url="jar://$PROJECT_DIR$/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
