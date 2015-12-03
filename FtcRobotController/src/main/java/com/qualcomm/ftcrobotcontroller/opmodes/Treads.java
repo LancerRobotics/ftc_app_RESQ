@@ -15,8 +15,8 @@ public class Treads extends OpMode{
     double pwrLeft, pwrRight;
 
     //Compass stuff
-    CompassSensor compass;
-    String compassStatus;
+   // CompassSensor compass;
+   // String compassStatus;
 
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
@@ -27,6 +27,7 @@ public class Treads extends OpMode{
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
 
+        /*
         //More compass stuff DO NOT EDIT
         compass = hardwareMap.compassSensor.get("compass");
         //Calibration
@@ -36,6 +37,7 @@ public class Treads extends OpMode{
         telemetry.addData("Status: ", compass.status());
         compass.setMode(CompassSensor.CompassMode.MEASUREMENT_MODE);
         telemetry.addData("Initial position: ", compass.getDirection());
+        */
     }
 
     @Override
@@ -48,7 +50,7 @@ public class Treads extends OpMode{
 
         telemetry.addData(Keys.telementryLeftKey, pwrLeft);
         telemetry.addData(Keys.telementryRightKey, pwrRight);
-        telemetry.addData("Compass value: ", compass.getDirection());
+        //telemetry.addData("Compass value: ", compass.getDirection());
 
         powerSplit(pwrLeft, pwrRight);
     }

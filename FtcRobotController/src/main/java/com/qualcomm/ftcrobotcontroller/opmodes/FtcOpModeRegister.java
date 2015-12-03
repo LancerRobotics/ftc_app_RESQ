@@ -60,6 +60,8 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Autonomous",Autonomous.class);
     manager.register("CompassLoop",CompassLooping.class);
     manager.register("Mecanum",Mecanum.class);
+    manager.register("Treads",Treads.class);
+    manager.register("Treads Autonomous",TreadsAuton.class);
     /*
      * Uncomment any of the following lines if you want to register an op mode.
      */
