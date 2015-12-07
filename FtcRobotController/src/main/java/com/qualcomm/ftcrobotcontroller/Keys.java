@@ -30,6 +30,8 @@ public class Keys {
     public static final double FILTER_ACTIVE = 0.07;
     public static final double FILTER_CLOSE = .1;
     public static final double FILTER_UP = .7;
+    public static final double MAX_SPEED_SMOOTH_MOVE = .6;
+    public static final double MIN_SPEED_SMOOTH_MOVE = .001;
 
     public static byte[] IMAGE_DATA;
     public static String imagePath = "/storage/emulated/0/Pictures/Matt Quan's Eyes/";

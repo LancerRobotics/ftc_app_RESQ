@@ -1,6 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.ftcrobotcontroller.Keys;
+import com.qualcomm.ftcrobotcontroller.opmodes.ManualVisionSample;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  */
 public class Autonomous extends LinearOpMode {
     DcMotor fr, fl, bl, br;
+    double a3,a4,a5;
     @Override
     public void runOpMode() throws InterruptedException {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
@@ -18,17 +20,8 @@ public class Autonomous extends LinearOpMode {
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
-        //moveStraight(12, false);
-        //sleep(1500);
-        //moveStraight(12, true);
 
-        //telemetry.addData("place", "afterStraight");
-        moveAlteredSin(36, false);
 
-        telemetry.addData("place", "afterSinForward");
-        //moveSin(12,true);
-
-        //telemetry.addData("place","here");
 
 
 
@@ -49,16 +42,94 @@ public class Autonomous extends LinearOpMode {
         }
         rest();
     }
+    public void moveSmooth (double dist, boolean backwards) {
+        double rotations = dist / (6 * Math.PI);
+        double totalTicksNeeded = rotations * 1120;
+        //based off of totalTicksNeeded, you can find the correct function to minimize jerk
+        //v(ticksNeed) = 0
+        //v(ticksNeed-1) = low power, at the second to last tick, have it at the lowest power possible
+        //v(ticksNeed/2) = max power, at the half way point, you should be at max
+        //v(t) = 3a3t^2 - 4a4t^3 + 5a5t^4 --> this function will generate a velocity/function that minimizes jerk
+        //based on the top three conditions, solve for a3, a4, and a5 of the function. Use Cramer's rule
+        double D =
+                3*Math.pow(totalTicksNeeded,2)*-4*Math.pow(totalTicksNeeded-1,3)*5*Math.pow(totalTicksNeeded/2,4)
+                        +-4*Math.pow(totalTicksNeeded,3)*5*Math.pow(totalTicksNeeded-1,4)*3*Math.pow(totalTicksNeeded/2,2)
+                        +5*Math.pow(totalTicksNeeded,4)*3*Math.pow(totalTicksNeeded-1,2)*-4*Math.pow(totalTicksNeeded/2,3)
+                        -(
+                        3*Math.pow(totalTicksNeeded/2,2)*-4*Math.pow(totalTicksNeeded-1,3)*5*Math.pow(totalTicksNeeded,4)
+                                +-4*Math.pow(totalTicksNeeded/2,3)*5*Math.pow(totalTicksNeeded-1,4)*3*Math.pow(totalTicksNeeded,2)
+                                +5*Math.pow(totalTicksNeeded/2,4)*3*Math.pow(totalTicksNeeded-1,2)*-4*Math.pow(totalTicksNeeded,3)
+                );
+        telemetry.addData("D",D);
+
+
+        double Da3 =
+                0
+                        +-4*Math.pow(totalTicksNeeded,3)*5*Math.pow(totalTicksNeeded-1,4)*Keys.MAX_SPEED_SMOOTH_MOVE
+                        +5*Math.pow(totalTicksNeeded,4)*Keys.MIN_SPEED_SMOOTH_MOVE*-4*Math.pow(totalTicksNeeded/2,3)
+                        - (
+                        Keys.MAX_SPEED_SMOOTH_MOVE*-4*Math.pow(totalTicksNeeded-1,3)*5*Math.pow(totalTicksNeeded,4)
+                                +0
+                                +5*Math.pow(totalTicksNeeded/2,4)*Keys.MIN_SPEED_SMOOTH_MOVE*-4*Math.pow(totalTicksNeeded,3)
+                );
+        telemetry.addData("Da3",Da3);
+        double Da4 =
+                3*Math.pow(totalTicksNeeded,2)*Keys.MIN_SPEED_SMOOTH_MOVE*5*Math.pow(totalTicksNeeded/2,4)
+                        +0
+                        +5*Math.pow(totalTicksNeeded,4)*3*Math.pow(totalTicksNeeded-1,2)*Keys.MAX_SPEED_SMOOTH_MOVE
+                        - (
+                        3*Math.pow(totalTicksNeeded/2,2)*Keys.MIN_SPEED_SMOOTH_MOVE*5*Math.pow(totalTicksNeeded,4)
+                                +Keys.MAX_SPEED_SMOOTH_MOVE*5*Math.pow(totalTicksNeeded-1,4)*3*Math.pow(totalTicksNeeded,2)
+                                +0
+
+                );
+        telemetry.addData("Da4",Da4);
+        double Da5 =
+                3*Math.pow(totalTicksNeeded,2)*-4*Math.pow(totalTicksNeeded-1,3)*Keys.MAX_SPEED_SMOOTH_MOVE
+                        +-4*Math.pow(totalTicksNeeded,3)*Keys.MIN_SPEED_SMOOTH_MOVE*3*Math.pow(totalTicksNeeded/2,2)
+                        +0
+                        - (
+                        0
+                                +-4*Math.pow(totalTicksNeeded/2,3)*Keys.MIN_SPEED_SMOOTH_MOVE*3*Math.pow(totalTicksNeeded,2)
+                                +Keys.MAX_SPEED_SMOOTH_MOVE*3*Math.pow(totalTicksNeeded-1,2)*-4*Math.pow(totalTicksNeeded,3)
+
+                );
+        telemetry.addData("Da5",Da5);
+
+        a3 = Da3/D;
+        telemetry.addData("a3",a3);
+        a4 = Da4/D;
+        telemetry.addData("a4",a4);
+        a5 = Da5/D;
+        telemetry.addData("a5",a5);
+
+        //ok so now you know the coefficients of the v(t), formualted so that encoder is time, and eevrything is scaled in terms of motor power
+
+        int positionBeforeMovement = fl.getCurrentPosition();
+        while (fl.getCurrentPosition() < positionBeforeMovement + totalTicksNeeded) {
+            int currentTick = fl.getCurrentPosition()-positionBeforeMovement;
+            telemetry.addData("power",functionThisAndReturnPowerBasedOnEncodedTime(currentTick));
+            telemetry.addData("time/ticks",currentTick);
+            setMotorPowerUniform(functionThisAndReturnPowerBasedOnEncodedTime(currentTick),backwards);
+        }
+        //rest at end
+        rest();
+    }
+
+    private double functionThisAndReturnPowerBasedOnEncodedTime(int currentTick) {
+        //v(t) = 3a3t^2 - 4a4t^3 + 5a5t^4
+        return 3*a3*Math.pow(currentTick,2)-4*a4*Math.pow(currentTick,3)+5*a5*Math.pow(currentTick,4);
+    }
+
     public void moveAlteredSin (double dist, boolean backwards) {
         //inches
-        telemetry.addData("place","moveSin");
+
         double rotations = dist / (6 * Math.PI);
         double totalTicks = rotations * 1120;
         int positionBeforeMovement = fl.getCurrentPosition();
         while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
             telemetry.addData("front left encoder: ", "sin"+fl.getCurrentPosition());
             telemetry.addData("ticksFor", totalTicks);
-            telemetry.addData("place","moveSinWhile");
             //convert to radians
             int currentTick = fl.getCurrentPosition()-positionBeforeMovement;
             //accelerate 15% of time
@@ -72,7 +143,6 @@ public class Autonomous extends LinearOpMode {
 
                 power = .3*Math.cos((currentTick)*Math.PI/totalTicks+Math.PI)+.4;
 
-                telemetry.addData("place","1");
                 power +=.1;
                 //first quarter (period = 2pi) of sin function is only reaching altitude
 
@@ -80,13 +150,11 @@ public class Autonomous extends LinearOpMode {
             else if (currentTick<secondSectionTime) {
                 power = .8;
 
-                telemetry.addData("place","2");
             }
             else {
                 // between [40%,100%]
                 //decrease time
                 int ticksLeft=(int) Math.round(currentTick-(totalTicks*.35));
-                telemetry.addData("place", "three");
                 //with these ticks left, set a range within cosine to decrease
                 power = .4*Math.cos((ticksLeft)*Math.PI/totalTicks)+.4;
             }

@@ -4,7 +4,6 @@ import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
 
 /**
  * Created on 11/7/2015.
@@ -41,9 +40,19 @@ public class TreadsAuton extends LinearOpMode{
 
         telemetry.addData(Keys.telementryLeftKey, pwrLeft);
         telemetry.addData(Keys.telementryRightKey, pwrRight);
-
+        moveAlteredSin(60, false);
         compassTurn(90, true);
+        /*
+        moveAlteredSin(24, false);
         compassTurn(90, false);
+        moveAlteredSin(24, false);
+        compassTurn(90, true);
+        moveAlteredSin(24, false);
+        //insert camera code here
+        moveAlteredSin(33, true);
+        compassTurn(45, false);
+        moveAlteredSin(72, false);
+        */
     }
 
     public void powerSplit(double left, double right) {
@@ -101,6 +110,65 @@ public class TreadsAuton extends LinearOpMode{
             }
         }
         telemetry.addData("Compass value: ", compass.getDirection());
+    }
+    public void moveAlteredSin (double dist, boolean backwards) {
+        //inches
+        telemetry.addData("place","moveSin");
+        double rotations = dist / (6 * Math.PI);
+        double totalTicks = rotations * 1120;
+        int positionBeforeMovement = fl.getCurrentPosition();
+        while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
+            telemetry.addData("front left encoder: ", "sin"+fl.getCurrentPosition());
+            telemetry.addData("ticksFor", totalTicks);
+            telemetry.addData("place","moveSinWhile");
+            //convert to radians
+            int currentTick = fl.getCurrentPosition()-positionBeforeMovement;
+            //accelerate 15% of time
+            //coast 25% of time
+            //decelerate 60% of time
+            int firstSectionTime = (int)Math.round(.1*totalTicks);
+            int secondSectionTime = (int)(Math.round( (.1+.25)*totalTicks));
+            //rest will just be 100%
+            double power;
+            if (currentTick<firstSectionTime) {
+
+                power = .3*Math.cos((currentTick)*Math.PI/totalTicks+Math.PI)+.4;
+
+                telemetry.addData("place","1");
+                power +=.1;
+                //first quarter (period = 2pi) of sin function is only reaching altitude
+
+            }
+            else if (currentTick<secondSectionTime) {
+                power = .8;
+
+                telemetry.addData("place","2");
+            }
+            else {
+                // between [40%,100%]
+                //decrease time
+                int ticksLeft=(int) Math.round(currentTick-(totalTicks*.35));
+                telemetry.addData("place", "three");
+                //with these ticks left, set a range within cosine to decrease
+                power = .4*Math.cos((ticksLeft)*Math.PI/totalTicks)+.4;
+            }
+
+            telemetry.addData("power",power);
+            if(backwards) {
+                power = power * 1;
+            }
+            powerSplit(power, power);
+        }
+        rest();
+    }
+
+
+    public void rest() {
+        fr.setPower(0);
+        fl.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
+
     }
 }
 
