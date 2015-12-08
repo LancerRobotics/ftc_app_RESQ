@@ -1,7 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.ftcrobotcontroller.Keys;
-import com.qualcomm.ftcrobotcontroller.opmodes.ManualVisionSample;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -20,13 +19,12 @@ public class Autonomous extends LinearOpMode {
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
-
-
-
-
-
+        //Testing Smooth Move
+        moveSmooth(12, false);
+        sleep(60000);
+        moveSmooth(12, true);
     }
-
+/*
     public void moveStraight (double dist, boolean backwards) {
         //inches
         //at speed .5, it goes over four inches
@@ -41,7 +39,7 @@ public class Autonomous extends LinearOpMode {
             setMotorPowerUniform(.1,backwards);
         }
         rest();
-    }
+    }*/
     public void moveSmooth (double dist, boolean backwards) {
         double rotations = dist / (6 * Math.PI);
         double totalTicksNeeded = rotations * 1120;
@@ -121,7 +119,7 @@ public class Autonomous extends LinearOpMode {
         return 3*a3*Math.pow(currentTick,2)-4*a4*Math.pow(currentTick,3)+5*a5*Math.pow(currentTick,4);
     }
 
-    public void moveAlteredSin (double dist, boolean backwards) {
+    /*public void moveAlteredSin (double dist, boolean backwards) {
         //inches
 
         double rotations = dist / (6 * Math.PI);
@@ -163,19 +161,16 @@ public class Autonomous extends LinearOpMode {
             setMotorPowerUniform(power, backwards);
         }
         rest();
-    }
+    }*/
 
     public void setMotorPowerUniform(double power, boolean backwards) {
-        int direction = 1;
         if (backwards) {
-            direction =-1;
+            power = power * -1;
         }
         fr.setPower(power);
         fl.setPower(power);
         bl.setPower(power);
         br.setPower(power);
-        //collector.setPower(-.5);
-
     }
 
 

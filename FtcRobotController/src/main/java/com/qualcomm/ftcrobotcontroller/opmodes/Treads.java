@@ -2,9 +2,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -16,9 +14,9 @@ public class Treads extends OpMode {
     double pwrLeft, pwrRight;
 
     //Compass stuff
-    CompassSensor compass;
-    String compassStatus = "success";
-    UltrasonicSensor sonar;
+    //CompassSensor compass;
+    //String compassStatus = "success";
+    //UltrasonicSensor sonar;
 
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
@@ -28,19 +26,19 @@ public class Treads extends OpMode {
 
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
-        sonar = hardwareMap.ultrasonicSensor.get("sonar");
+        //sonar = hardwareMap.ultrasonicSensor.get("sonar");
 
 
         //More compass stuff DO NOT EDIT
-        compass = hardwareMap.compassSensor.get("compass");
+        //compass = hardwareMap.compassSensor.get("compass");
         //Calibration
-        compass.setMode(CompassSensor.CompassMode.CALIBRATION_MODE);
-        if (compass.calibrationFailed()) compassStatus = "failed";
-        telemetry.addData("Compass calibration ", compassStatus);
-        telemetry.addData("Status: ", compass.status());
-        compass.setMode(CompassSensor.CompassMode.MEASUREMENT_MODE);
-        telemetry.addData("Initial position: ", compass.getDirection());
-        telemetry.addData("Sonar Status: ", sonar.status());
+        //compass.setMode(CompassSensor.CompassMode.CALIBRATION_MODE);
+        //if (compass.calibrationFailed()) compassStatus = "failed";
+        //telemetry.addData("Compass calibration ", compassStatus);
+        //telemetry.addData("Status: ", compass.status());
+        //compass.setMode(CompassSensor.CompassMode.MEASUREMENT_MODE);
+        //telemetry.addData("Initial position: ", compass.getDirection());
+        //telemetry.addData("Sonar Status: ", sonar.status());
     }
 
     @Override
@@ -53,9 +51,9 @@ public class Treads extends OpMode {
 
         telemetry.addData(Keys.telementryLeftKey, pwrLeft);
         telemetry.addData(Keys.telementryRightKey, pwrRight);
-        telemetry.addData("Compass value: ", compass.getDirection());
-        telemetry.addData("Sonar Value", sonar.getUltrasonicLevel());
-        telemetry.addData("Sonar Status", sonar.status());
+        //telemetry.addData("Compass value: ", compass.getDirection());
+        //telemetry.addData("Sonar Value", sonar.getUltrasonicLevel());
+        //telemetry.addData("Sonar Status", sonar.status());
         powerSplit(pwrLeft, pwrRight);
     }
 
