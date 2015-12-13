@@ -19,12 +19,11 @@ public class Autonomous extends LinearOpMode {
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
-        //Testing Smooth Move
-        moveSmooth(12, false);
+        moveSmooth(12,false);
         sleep(60000);
-        moveSmooth(12, true);
+        moveSmooth(12,true);
     }
-/*
+
     public void moveStraight (double dist, boolean backwards) {
         //inches
         //at speed .5, it goes over four inches
@@ -39,10 +38,11 @@ public class Autonomous extends LinearOpMode {
             setMotorPowerUniform(.1,backwards);
         }
         rest();
-    }*/
+    }
     public void moveSmooth (double dist, boolean backwards) {
         double rotations = dist / (6 * Math.PI);
         double totalTicksNeeded = rotations * 1120;
+        telemetry.addData("ticksneed",totalTicksNeeded);
         //based off of totalTicksNeeded, you can find the correct function to minimize jerk
         //v(ticksNeed) = 0
         //v(ticksNeed-1) = low power, at the second to last tick, have it at the lowest power possible
@@ -58,7 +58,6 @@ public class Autonomous extends LinearOpMode {
                                 +-4*Math.pow(totalTicksNeeded/2,3)*5*Math.pow(totalTicksNeeded-1,4)*3*Math.pow(totalTicksNeeded,2)
                                 +5*Math.pow(totalTicksNeeded/2,4)*3*Math.pow(totalTicksNeeded-1,2)*-4*Math.pow(totalTicksNeeded,3)
                 );
-        telemetry.addData("D",D);
 
 
         double Da3 =
@@ -70,7 +69,6 @@ public class Autonomous extends LinearOpMode {
                                 +0
                                 +5*Math.pow(totalTicksNeeded/2,4)*Keys.MIN_SPEED_SMOOTH_MOVE*-4*Math.pow(totalTicksNeeded,3)
                 );
-        telemetry.addData("Da3",Da3);
         double Da4 =
                 3*Math.pow(totalTicksNeeded,2)*Keys.MIN_SPEED_SMOOTH_MOVE*5*Math.pow(totalTicksNeeded/2,4)
                         +0
@@ -81,7 +79,6 @@ public class Autonomous extends LinearOpMode {
                                 +0
 
                 );
-        telemetry.addData("Da4",Da4);
         double Da5 =
                 3*Math.pow(totalTicksNeeded,2)*-4*Math.pow(totalTicksNeeded-1,3)*Keys.MAX_SPEED_SMOOTH_MOVE
                         +-4*Math.pow(totalTicksNeeded,3)*Keys.MIN_SPEED_SMOOTH_MOVE*3*Math.pow(totalTicksNeeded/2,2)
@@ -92,23 +89,32 @@ public class Autonomous extends LinearOpMode {
                                 +Keys.MAX_SPEED_SMOOTH_MOVE*3*Math.pow(totalTicksNeeded-1,2)*-4*Math.pow(totalTicksNeeded,3)
 
                 );
-        telemetry.addData("Da5",Da5);
 
         a3 = Da3/D;
-        telemetry.addData("a3",a3);
         a4 = Da4/D;
-        telemetry.addData("a4",a4);
         a5 = Da5/D;
-        telemetry.addData("a5",a5);
+        telemetry.addData("Math","D: "+D+", Da3: "+Da3+", Da4: "+Da4+", Da5: "+Da5+", a3: "+a3+", a4: "+a4+", a5: "+a5);
 
         //ok so now you know the coefficients of the v(t), formualted so that encoder is time, and eevrything is scaled in terms of motor power
-
+        //because when tick is 0, power will be set to 0, and then tick can't change, we need to manually change it
+        boolean tick0Done = false;
         int positionBeforeMovement = fl.getCurrentPosition();
         while (fl.getCurrentPosition() < positionBeforeMovement + totalTicksNeeded) {
             int currentTick = fl.getCurrentPosition()-positionBeforeMovement;
             telemetry.addData("power",functionThisAndReturnPowerBasedOnEncodedTime(currentTick));
-            telemetry.addData("time/ticks",currentTick);
-            setMotorPowerUniform(functionThisAndReturnPowerBasedOnEncodedTime(currentTick),backwards);
+            telemetry.addData("time/ticks", currentTick);
+            setMotorPowerUniform(functionThisAndReturnPowerBasedOnEncodedTime(currentTick), backwards);
+            if (tick0Done==false) {
+                tick0Done=true;
+                //manually increase tick and do the next tick manually
+                currentTick++;
+                telemetry.addData("power","manual: "+functionThisAndReturnPowerBasedOnEncodedTime(currentTick));
+                telemetry.addData("time/ticks",currentTick);
+                setMotorPowerUniform(functionThisAndReturnPowerBasedOnEncodedTime(currentTick),backwards);
+                //when this ends, it will have moved one power and one tick only
+                //now when it goes back into the loop, fl.getCurrentPos will be changed, but it should resemble the correct change and now be at tick 2. everything else is same and currentTick will equal two
+            }
+            //implied else, it was already true so you don't need to do anything
         }
         //rest at end
         rest();
@@ -119,7 +125,7 @@ public class Autonomous extends LinearOpMode {
         return 3*a3*Math.pow(currentTick,2)-4*a4*Math.pow(currentTick,3)+5*a5*Math.pow(currentTick,4);
     }
 
-    /*public void moveAlteredSin (double dist, boolean backwards) {
+    public void moveAlteredSin (double dist, boolean backwards) {
         //inches
 
         double rotations = dist / (6 * Math.PI);
@@ -161,16 +167,19 @@ public class Autonomous extends LinearOpMode {
             setMotorPowerUniform(power, backwards);
         }
         rest();
-    }*/
+    }
 
     public void setMotorPowerUniform(double power, boolean backwards) {
+        int direction = 1;
         if (backwards) {
-            power = power * -1;
+            direction =-1;
         }
         fr.setPower(power);
         fl.setPower(power);
         bl.setPower(power);
         br.setPower(power);
+        //collector.setPower(-.5);
+
     }
 
 

@@ -42,19 +42,13 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.usb.UsbManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -72,7 +66,7 @@ import com.qualcomm.ftccommon.Restarter;
 import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.ftcrobotcontroller.opmodes.CameraTestOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.FtcOpModeRegister;
-import com.qualcomm.ftcrobotcontroller.opmodes.RoboCatAutonRedTurnLeft;
+import com.qualcomm.ftcrobotcontroller.opmodes.TakeAPicture;
 import com.qualcomm.hardware.HardwareFactory;
 import com.qualcomm.robotcore.hardware.configuration.Utility;
 import com.qualcomm.robotcore.util.Dimmer;
@@ -80,14 +74,9 @@ import com.qualcomm.robotcore.util.ImmersiveMode;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.wifi.WifiDirectAssistant;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class FtcRobotControllerActivity extends Activity {
@@ -164,17 +153,7 @@ public class FtcRobotControllerActivity extends Activity {
       DbgLog.msg("USB Device attached; app restart may be needed");
     }
   }
-public void initCameraPreview(final Camera camera, final CameraTestOp context) {
-  runOnUiThread(new Runnable() {
-    @Override
-    public void run() {
-      context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera);
-      FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-      cameraPreviewLayout.addView(context.preview);
-    }
-  });
-}
- /* public void initCameraPreview(final Camera camera, final RoboCatAutonRedTurnLeft context) {
+  public void initCameraPreview(final Camera camera, final CameraTestOp context) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
@@ -183,7 +162,18 @@ public void initCameraPreview(final Camera camera, final CameraTestOp context) {
         cameraPreviewLayout.addView(context.preview);
       }
     });
-  }*/
+  }
+  public void initCameraPreview(final Camera camera, final TakeAPicture context) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera);
+        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+        cameraPreviewLayout.addView(context.preview);
+      }
+    });
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -409,7 +399,7 @@ public void initCameraPreview(final Camera camera, final CameraTestOp context) {
   private FileInputStream fileSetup() {
 
     final String filename = Utility.CONFIG_FILES_DIR
-        + utility.getFilenameFromPrefs(R.string.pref_hardware_config_filename, Utility.NO_FILE) + Utility.FILE_EXT;
+            + utility.getFilenameFromPrefs(R.string.pref_hardware_config_filename, Utility.NO_FILE) + Utility.FILE_EXT;
 
     FileInputStream fis;
     try {

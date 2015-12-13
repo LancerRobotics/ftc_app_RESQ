@@ -42,7 +42,8 @@ import java.text.DecimalFormat;
  * navX-Micro Collision Detection Op
  *
  * This is a demo program showing the use of the navX-Micro to implement
- * a collision detection feature, which can be used to detect events
+ * a collision detection feature, which can
+ * e used to detect events
  * while driving a robot, such as bumping into a wall or being hit
  * by another robot.
  *

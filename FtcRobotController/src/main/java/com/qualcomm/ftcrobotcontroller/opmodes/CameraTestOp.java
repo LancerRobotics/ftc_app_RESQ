@@ -55,7 +55,7 @@ public class CameraTestOp extends LinearOpMode{
 
         ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
 
-        //wait 6 seconds, because I have handler wait three seconds b4 it'll take a picture
+        //wait 6 seconds, because I have handler wait three seconds b4 it'll take a picture, in initCamera
         sleep(6000);
         //now we are going to retreive the image and convert it to bitmap
         SharedPreferences prefs = hardwareMap.appContext.getApplicationContext().getSharedPreferences(
@@ -64,8 +64,7 @@ public class CameraTestOp extends LinearOpMode{
         if (!path.equals("No path found")) {
             telemetry.addData("camera","path: "+path);
             File imgFile = new File (path);
-            telemetry.addData("image","test");
-            Bitmap image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             telemetry.addData("image",image.toString());
             ((FtcRobotControllerActivity) hardwareMap.appContext).initImageTakenPreview(image);
             //ok so now I have the image
@@ -85,9 +84,9 @@ public class CameraTestOp extends LinearOpMode{
                 for (int x = 0; x<bitmapWidth;x++) {
                     int pixel = image.getPixel(x,y);
                     //pixel is in rgb value. let's break this into hsv values
-                   // hsv[0] is Hue [0 .. 360)
-                   // hsv[1] is Saturation [0...1]
-                   // hsv[2] is Value [0...1]
+                    // hsv[0] is Hue [0 .. 360)
+                    // hsv[1] is Saturation [0...1]
+                    // hsv[2] is Value [0...1]
                     float[] hsv = new float[3];
                     Color.colorToHSV(pixel,hsv);
                     //when s is approx100, then it's black.
