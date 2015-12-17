@@ -126,6 +126,7 @@ public class navXRotateToAnglePIDLinearOp extends LinearOpMode {
                         rightMotor.setPowerFloat();
                         telemetry.addData("PIDOutput", df.format(0.00));
                     } else {
+
                         double output = yawPIDResult.getOutput();
                         leftMotor.setPower(output);
                         rightMotor.setPower(-output);

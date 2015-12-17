@@ -58,6 +58,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("Unicorn",RoboCatTeleop.class);
     //manager.register("Judge",Judging.class);
     manager.register("Autonomous",Autonomous.class);
+    manager.register("Encoded Rotate Testing", GyroAutonomous.class);
     //manager.register("CompassLoop",CompassLooping.class);
     manager.register("Mecanum",Mecanum.class);
     manager.register("Treads",Treads.class);
