@@ -40,11 +40,11 @@ public class Treads extends OpMode {
         telemetry.addData(Keys.telementryLeftKey, pwrLeft);
         telemetry.addData(Keys.telementryRightKey, pwrRight);
         powerSplit(pwrLeft, pwrRight);
-        if(gamepad1.a) {
-            collect.setPower(.5);
+        if(gamepad1.b) {
+            collect.setPower(.85);
         }
-        else if(gamepad1.b) {
-            collect.setPower(-.5);
+        else if(gamepad1.a) {
+            collect.setPower(-.85);
         }
         else {
             collect.setPower(0);
