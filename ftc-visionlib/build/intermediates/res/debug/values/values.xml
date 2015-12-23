@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
     <eat-comment/>
     <string-array name="choice_array">
     <item>GYRO</item>
@@ -63,21 +63,21 @@
     <item>5GHz, Channel 157</item>
     <item>5GHz, Channel 161</item>
   </string-array>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/res/values/values.xml -->
     <eat-comment/>
     <color name="black">#000000</color>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
     <eat-comment/>
     <color name="bright_qcom_blue">#309EA4</color>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/res/values/values.xml -->
     <eat-comment/>
     <color name="bright_red">#A6040E</color>
     <color name="bright_red_text">#ff0a19</color>
     <color name="dark_red_background">#3F0206</color>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
     <eat-comment/>
     <color name="light_qcom_blue">#C1E2E4</color>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/res/values/values.xml -->
     <eat-comment/>
     <color name="light_red_background">#790E15</color>
     <color name="medium_red_background">#4e0106</color>
@@ -85,7 +85,7 @@
     <color name="very_bright_red">#bf0510</color>
     <color name="white">#FFFFFF</color>
     <declare-styleable name="CameraBridgeViewBase"><attr format="boolean" name="show_fps"/><attr format="integer" name="camera_id"><enum name="any" value="-1"/><enum name="back" value="99"/><enum name="front" value="98"/></attr></declare-styleable>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -95,10 +95,10 @@
     <string name="action_wifi_channel_selector">Wifi Channel Selection</string>
     <string name="add_motor_controller_menu_item">Add Motor Controller</string>
     <string name="add_servo_controller_menu_item">Add Servo Controller</string>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/src/main/res/values/strings.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">ftc-visionlib-java</string>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
     <eat-comment/>
     <string name="attached">Attached</string>
     <string name="autoconfigure">AutoConfigure</string>
@@ -198,7 +198,7 @@
   </string>
     <string name="writeXML_prompt">Select an XML file to instantiate a Robot from that file</string>
     <string name="writeXML_text">Press this button to write the current configuration to an XML file</string>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/RobotCore-release/res/values/values.xml -->
     <eat-comment/>
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
@@ -210,7 +210,7 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-    <!-- From: file:/C:/Users/jakew/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/ftc-visionlib/build/intermediates/exploded-aar/FtcCommon-release/res/values/values.xml -->
     <eat-comment/>
     <style name="CustomAlertDialog" parent="@android:style/Theme.Dialog">
     <item name="android:background">@color/black</item>
