@@ -2,6 +2,7 @@
 <items version="2" >
 
     <item
+<<<<<<< HEAD
         jar="C:\Users\AJ\Desktop\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\Analytics-release\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -49,15 +50,65 @@
         revision="21.1.2"
         sha1="6da7d9bc8c9a82321450b6b4273d1746b6cade21">
         <dex dex="C:\Users\AJ\Desktop\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-5232d43cd4296eafd7501d0fef3e6d664d39e3c0.jar" />
-    </item>
-    <item
-        jar="C:\Users\AJ\Desktop\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\Hardware-release\jars\classes.jar"
+=======
+        jar="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\Hardware-release\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="55ecd0b0517650a2cffd06137a40de8af3bbbde3">
-        <dex dex="C:\Users\AJ\Desktop\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-9f62da7c0cd100defc3b2eb367ec64f3e506ccb2.jar" />
+        <dex dex="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-8f942d809ecc1ead58fb055214ccff8a7a206e46.jar" />
     </item>
     <item
+        jar="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\WirelessP2p-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ebf8372b5bc9dc9f596ed438df36481099d51c41">
+        <dex dex="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-60662c6520278f80c760da732a8aa722df01cf31.jar" />
+    </item>
+    <item
+        jar="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\ftc_app\ftc-visionlib\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="0372a13b3f0e4352cf1b501ddab716c8b2d164d0">
+        <dex dex="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-0a058c4aea4ea0b20ac7cbcb6603366151473af1.jar" />
+    </item>
+    <item
+        jar="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\FtcCommon-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6da7d9bc8c9a82321450b6b4273d1746b6cade21">
+        <dex dex="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-757f9917d59a27cbe2934489c6cd43873a9ae593.jar" />
+    </item>
+    <item
+        jar="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\Analytics-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="23c74caa2b901107adc4d0aec343c5b8e8be86fb">
+        <dex dex="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-e2caa3db33456f43b93da93871496cc323f1c3e9.jar" />
+    </item>
+    <item
+        jar="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\RobotCore-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2ec6f06847bccfe30fb8f8f75ce888721e4fd275">
+        <dex dex="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-f82192f6c2081b900b1b1846145c235db07811f7.jar" />
+    </item>
+    <item
+        jar="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\ModernRobotics-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ad4adcdf8eb6ff2b3b4fe9f1d676f099db621d60">
+        <dex dex="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-6e297c57a077483bdaa4c6d6c34a8b1f7a9c59d0.jar" />
+>>>>>>> parent of 2c3233f... Added navx integration. At this time, you must switch the build.gradle file for the FtcRobotController module so that way the library goes to the correct path. Sorry for the inconvenience. Remedies to this problem are needed
+    </item>
+    <item
+        jar="C:\Users\jakew\.gradle\caches\modules-2\files-2.1\org.jetbrains\annotations\13.0\919f0dfe192fb4e063e7dacadee7f8bb9a2672a9\annotations-13.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="919f0dfe192fb4e063e7dacadee7f8bb9a2672a9">
+        <dex dex="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\annotations-13.0-422c43387e5973d1ce94d69db5b888b747fdde10.jar" />
+    </item>
+    <item
+<<<<<<< HEAD
         jar="C:\Users\AJ\Desktop\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\RobotCore-release\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -66,10 +117,13 @@
     </item>
     <item
         jar="C:\Users\AJ\Desktop\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\WirelessP2p-release\jars\classes.jar"
+=======
+        jar="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\exploded-aar\ftc_app\opencv-java\unspecified\jars\classes.jar"
+>>>>>>> parent of 2c3233f... Added navx integration. At this time, you must switch the build.gradle file for the FtcRobotController module so that way the library goes to the correct path. Sorry for the inconvenience. Remedies to this problem are needed
         jumboMode="false"
         revision="21.1.2"
-        sha1="ebf8372b5bc9dc9f596ed438df36481099d51c41">
-        <dex dex="C:\Users\AJ\Desktop\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-7f77cb5d6707bda697a8083e033fd300b00f2e36.jar" />
+        sha1="c3a04ba260226939cdb1dc1e1ae842d17e6bc1f6">
+        <dex dex="C:\Users\jakew\Lancers\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-5d3ec0b5187b262160c3603082849013fff0b193.jar" />
     </item>
 
 </items>
