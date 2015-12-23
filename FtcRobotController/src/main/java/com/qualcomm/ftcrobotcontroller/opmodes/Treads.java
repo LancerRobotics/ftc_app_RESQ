@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class Treads extends OpMode {
 
-    DcMotor fr, fl, bl, br, collect;
+    DcMotor fr, fl, bl, br;
     double pwrLeft, pwrRight;
 
     //Compass stuff
@@ -23,7 +23,7 @@ public class Treads extends OpMode {
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         br = hardwareMap.dcMotor.get(Keys.backRight);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
-        collect = hardwareMap.dcMotor.get(Keys.collector);
+        //collect = hardwareMap.dcMotor.get(Keys.collector);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
 
@@ -40,6 +40,7 @@ public class Treads extends OpMode {
         telemetry.addData(Keys.telementryLeftKey, pwrLeft);
         telemetry.addData(Keys.telementryRightKey, pwrRight);
         powerSplit(pwrLeft, pwrRight);
+        /*
         if(gamepad1.b) {
             collect.setPower(.85);
         }
@@ -49,7 +50,7 @@ public class Treads extends OpMode {
         else {
             collect.setPower(0);
         }
-
+*/
     }
 
     public void powerSplit(double left, double right) {

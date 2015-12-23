@@ -39,9 +39,9 @@ public class Mecanum extends OpMode {
         public void loop() {
             //MOVEMENT CONTROL
             //by multiplying by .78, range turns to [-.78,.78]
-            double x = Range.clip(gamepad1.left_stick_x*.78,-1,1);
-            double y = Range.clip(gamepad1.left_stick_y*.78,-1,1);
-            double z = Range.clip(gamepad1.right_stick_x*.78,-1,1);
+            double y = Range.clip(gamepad1.left_stick_x,-1,1);
+            double x = Range.clip(gamepad1.left_stick_y,-1,1);
+            double z = Range.clip(gamepad1.right_stick_x,-1,1);
 
             //DEADZONES
             if (Math.abs(x)<.15) x=0;
@@ -49,22 +49,16 @@ public class Mecanum extends OpMode {
             if (Math.abs(z)<.15) z=0;
             //TODO think about this Jake - what if the joystick was moved diagonally? So forward and strafe left/right
             //TODO would this cause it to move foward and strafe at the same time? Let me know. Idk which is why I'm asking
-            //Forward and backward
-            powerSplit(y, y, y, y);
-            //Strafing left and right
-            powerSplit(x, -x, -x, x);
-            //Turning
-            powerSplit(-z, -z, z, z);
-
+            powerSplit(x, y, z);
         }
 
-        public void powerSplit(double frontl, double backl, double frontr, double backr){
-            telemetry.addData(Keys.telementryFrontLeftPowerKey,frontl);
-            telemetry.addData(Keys.telementryFrontRightPowerKey,frontr);
-            telemetry.addData(Keys.telementryBackLeftPowerKey, backl);
-            telemetry.addData(Keys.telementryBackRightPowerKey,backr);
-            fl.setPower(frontl); fr.setPower(frontr);
-            bl.setPower(backl); br.setPower(backr);
+        public void powerSplit(double x, double y, double z){
+            telemetry.addData(Keys.telementryFrontLeftPowerKey,x+y-z);
+            telemetry.addData(Keys.telementryFrontRightPowerKey,x-y-z);
+            telemetry.addData(Keys.telementryBackLeftPowerKey, -x+y-z);
+            telemetry.addData(Keys.telementryBackRightPowerKey,-x-y-z);
+            fl.setPower(Range.clip((-x-y-z)*.78, -1, 1)); fr.setPower(Range.clip((-x-y+z) * .78, -1, 1));
+            bl.setPower(Range.clip((-x+y-z)*.78, -1, 1)); br.setPower(Range.clip((-x+y+z) * .78, -1, 1));
         }
 
 
