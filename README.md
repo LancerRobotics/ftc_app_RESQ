@@ -17,12 +17,12 @@ Information and Future Plans
 * TeleOp Updates
  - Treads teleop, movement only
  
-* Sensors (3rd party sensors are to be researched...)
- - Compass --> to detect direction, could be integrated with autonomou (VALUES: 0-360)
- - Sonar --> to detect distance, can be used in autonomous for more accurate movement (VALUES: need to be tested)
+* Sensors
+ - navX-Micro --> to detect direction and open up the possibilities as to how we can use the raw, pitch, and roll values determined by the sensor. (VALUES: need to be tested)
+ - Sonar --> (TBD) to detect distance, can be used in autonomous for more accurate movement (VALUES: need to be tested)
  - Motor Encoders --> to detect "ticks" or movement for the wheels, encoded movement in autonomous, move certain distances (VALUES: need to be tested) (Maybe 0-1400?)
 
-FTCLib and FTCVision to be integrated (Thanks to LASA Robotics)
+FTCLib and FTCVision will possibly be used in the code (Thanks to LASA Robotics)
 
 **************************************************************************************
 
