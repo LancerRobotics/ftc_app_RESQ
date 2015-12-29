@@ -153,6 +153,16 @@ public class FtcRobotControllerActivity extends Activity {
       DbgLog.msg("USB Device attached; app restart may be needed");
     }
   }
+  public void initCameraPreview(final Camera camera, final VisionV1 context) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera);
+        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+        cameraPreviewLayout.addView(context.preview);
+      }
+    });
+  }
   public void initCameraPreview(final Camera camera, final CameraTestOp context) {
     runOnUiThread(new Runnable() {
       @Override

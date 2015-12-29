@@ -28,6 +28,12 @@ repositories {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs', 'C:\\Users\\AJ\\Desktop\\Lancers\\ftc_app\\navx-micro\\android\\libs'
+    }
+}
+
 allprojects {
     repositories {
         jcenter()
@@ -45,6 +51,7 @@ dependencies {
     compile(name: 'ModernRobotics-release', ext: 'aar')
     compile(name: 'Analytics-release', ext: 'aar')
     compile(name: 'WirelessP2p-release', ext: 'aar')
+    compile (name:'navx_ftc-release', ext:'aar')
     compile project(':ftc-visionlib')
     compile project(':opencv-java')
 }
