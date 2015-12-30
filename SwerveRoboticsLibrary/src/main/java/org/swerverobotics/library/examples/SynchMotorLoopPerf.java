@@ -3,7 +3,7 @@ package org.swerverobotics.library.examples;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * An op mode that investigates how many loop() cycles it takes to do full

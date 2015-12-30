@@ -1,4 +1,4 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import android.util.Log;
 
@@ -6,12 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.exceptions.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.exceptions.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
-import static org.swerverobotics.library.internal.Util.*;
+import static com.qualcomm.ftcrobotcontroller.internal.Util.*;
 import static junit.framework.Assert.*;
-import static org.swerverobotics.library.interfaces.NavUtil.*;
+import static com.qualcomm.ftcrobotcontroller.interfaces.NavUtil.*;
 
 /**
  * Instances of AdaFruitBNO055IMU provide API access to an 

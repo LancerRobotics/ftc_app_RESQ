@@ -4,8 +4,8 @@ import com.qualcomm.ftccommon.FtcEventLoopHandler;
 import com.qualcomm.robotcore.eventloop.EventLoopManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.robocol.Telemetry;
-import org.swerverobotics.library.interfaces.*;
-import org.swerverobotics.library.internal.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.internal.*;
 import java.util.*;
 
 /**

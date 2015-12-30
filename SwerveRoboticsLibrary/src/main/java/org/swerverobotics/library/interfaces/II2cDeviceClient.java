@@ -1,4 +1,4 @@
-package org.swerverobotics.library.interfaces;
+package com.qualcomm.ftcrobotcontroller.interfaces;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
@@ -20,7 +20,7 @@ import org.swerverobotics.library.*;
  * registers which are to be read from the I2C device. <em>Changing</em> that set of registers
  * is a relatively time consuming operation, on the order of several tens of milliseconds. If your
  * code wishes to read some registers at some times and then others at another, it behooves you to
- * set up a {@link org.swerverobotics.library.interfaces.II2cDeviceClient.ReadWindow ReadWindow} that
+ * set up a {@link com.qualcomm.ftcrobotcontroller.interfaces.II2cDeviceClient.ReadWindow ReadWindow} that
  * covers them all (if it can): the read window will be read all at once, then subsequent read()
  * operations will return various parts of that already retrieved data (if still valid) without
  * the need to invoke another enableI2cReadMode() expense. Note that this is purely an optimization:
@@ -36,7 +36,7 @@ import org.swerverobotics.library.*;
  * duration, a heartbeat facility is optionally provided.</p>
  *
  * @see ClassFactory#createI2cDeviceClient(OpMode, I2cDevice, int, boolean)
- * @see org.swerverobotics.library.interfaces.II2cDeviceClient.ReadWindow
+ * @see com.qualcomm.ftcrobotcontroller.interfaces.II2cDeviceClient.ReadWindow
  * @see #ensureReadWindow(ReadWindow, ReadWindow)
  * @see #setHeartbeatAction(HeartbeatAction)
  */
@@ -118,7 +118,7 @@ public interface II2cDeviceClient extends HardwareDevice
      * milliseconds to execute, and thus should not be called from the loop() thread.
      *
      * <p>You can always just call this method without worrying at all about
-     * {@link org.swerverobotics.library.interfaces.II2cDeviceClient.ReadWindow read windows},
+     * {@link com.qualcomm.ftcrobotcontroller.interfaces.II2cDeviceClient.ReadWindow read windows},
      * that will work, but usually it is more efficient to take some thought and care as to what set
      * of registers the I2C device controller is being set up to read, as adjusting that window
      * of registers incurs significant extra time.</p>
@@ -126,7 +126,7 @@ public interface II2cDeviceClient extends HardwareDevice
      * <p>If the current read window can't be used to read the requested registers, then
      * a new read window will automatically be created as follows. If the current read window is non
      * null and wholly contains the registers to read but can't be read because it is a used-up
-     * {@link org.swerverobotics.library.interfaces.II2cDeviceClient.READ_MODE#ONLY_ONCE} window,
+     * {@link com.qualcomm.ftcrobotcontroller.interfaces.II2cDeviceClient.READ_MODE#ONLY_ONCE} window,
      * a new read fresh window will be created with the same set of registers. Otherwise, a
      * window that exactly covers the requested set of registers will be created.</p>
      *

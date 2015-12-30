@@ -1,9 +1,9 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.SerialNumber;
 
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 import java.util.concurrent.locks.Lock;
 
 public class ThunkedLegacyModule implements LegacyModule, IThunkWrapper<LegacyModule>

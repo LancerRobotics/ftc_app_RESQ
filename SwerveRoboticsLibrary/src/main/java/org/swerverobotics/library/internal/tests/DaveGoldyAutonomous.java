@@ -1,9 +1,9 @@
-package org.swerverobotics.library.internal.tests;
+package com.qualcomm.ftcrobotcontroller.internal.tests;
 
 import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * Created by davegoldy on 9/1/15.

@@ -1,7 +1,7 @@
 package org.swerverobotics.library.examples;
 
 import org.swerverobotics.library.SynchronousOpMode;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * This is a very simple placeholder. It doesn't actually *do* anything. Rather, it merely 

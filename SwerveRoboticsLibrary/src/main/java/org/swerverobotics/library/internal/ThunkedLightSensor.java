@@ -1,7 +1,7 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import com.qualcomm.robotcore.hardware.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * A LightSensor that can be called on a synchronous thread.

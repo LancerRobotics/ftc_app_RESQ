@@ -1,9 +1,9 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import com.qualcomm.robotcore.hardware.*;
 import static junit.framework.Assert.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * A CompassSensor that can be called on the main() thread.

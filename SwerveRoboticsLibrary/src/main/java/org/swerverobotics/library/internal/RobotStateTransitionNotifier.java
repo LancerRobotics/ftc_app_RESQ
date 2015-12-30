@@ -1,4 +1,4 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import android.content.Context;
 import android.util.Log;

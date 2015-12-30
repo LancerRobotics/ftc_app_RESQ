@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.hardware.AnalogOutput;
 
 import org.swerverobotics.library.SynchronousOpMode;
 import org.swerverobotics.library.TelemetryDashboardAndLog;
-import org.swerverobotics.library.interfaces.Disabled;
-import org.swerverobotics.library.interfaces.IFunc;
-import org.swerverobotics.library.interfaces.TeleOp;
+import com.qualcomm.ftcrobotcontroller.interfaces.Disabled;
+import com.qualcomm.ftcrobotcontroller.interfaces.IFunc;
+import com.qualcomm.ftcrobotcontroller.interfaces.TeleOp;
 
 /**
  * SynchAnalogOutputDemo is a short demo of an AnalogOutput port.

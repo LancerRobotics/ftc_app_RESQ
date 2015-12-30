@@ -1,4 +1,4 @@
-package org.swerverobotics.library.interfaces;
+package com.qualcomm.ftcrobotcontroller.interfaces;
 
 import org.swerverobotics.library.SynchronousOpMode;
 

@@ -1,7 +1,7 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import com.qualcomm.robotcore.hardware.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * An implementation of ServoController that talks to a non-thunking target implementation

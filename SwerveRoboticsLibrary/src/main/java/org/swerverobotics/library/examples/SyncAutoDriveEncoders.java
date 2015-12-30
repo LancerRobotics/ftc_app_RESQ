@@ -3,7 +3,7 @@ package org.swerverobotics.library.examples;
 import com.qualcomm.robotcore.hardware.*;
 
 import org.swerverobotics.library.SynchronousOpMode;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * This simple OpMode illustrates how to drive autonomously a certain distance using encoders.

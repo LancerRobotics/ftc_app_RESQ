@@ -1,5 +1,5 @@
 org.swerverobotics.library
 org.swerverobotics.library.examples
-org.swerverobotics.library.exceptions
-org.swerverobotics.library.interfaces
+com.qualcomm.ftcrobotcontroller.exceptions
+com.qualcomm.ftcrobotcontroller.interfaces
 org.usfirst.ftc.exampleteam.yourcodehere

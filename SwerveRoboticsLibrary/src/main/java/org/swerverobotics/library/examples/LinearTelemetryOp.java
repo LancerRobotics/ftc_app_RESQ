@@ -3,7 +3,7 @@ package org.swerverobotics.library.examples;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * An example that illustrates use of the telemetry dashboard and log in a linear opmode

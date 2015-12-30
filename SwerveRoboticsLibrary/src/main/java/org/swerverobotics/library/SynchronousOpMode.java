@@ -7,9 +7,9 @@ import android.util.*;
 import static junit.framework.Assert.*;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import org.swerverobotics.library.exceptions.*;
-import org.swerverobotics.library.interfaces.*;
-import org.swerverobotics.library.internal.*;
+import com.qualcomm.ftcrobotcontroller.exceptions.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.internal.*;
 
 /**
  * SynchronousOpMode is a base class that can be inherited from in order to

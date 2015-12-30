@@ -1,10 +1,10 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.swerverobotics.library.SynchronousOpMode;
-import org.swerverobotics.library.interfaces.IOpModeLoopCounter;
+import com.qualcomm.ftcrobotcontroller.interfaces.IOpModeLoopCounter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

@@ -140,7 +140,7 @@ extends java.lang.Object</pre>
       computations needed for their display. Only when a transmission is actually to be made
       to the driver station are these expressions evaluated and the lines composed. This is
       accomplished using a series of <a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine--"><code>addLine()</code></a> calls, each containing a
-      number of <a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#item-java.lang.String-org.swerverobotics.library.interfaces.IFunc-"><code>item()</code></a> invocations.
+      number of <a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#item-java.lang.String-com.qualcomm.ftcrobotcontroller.interfaces.IFunc-"><code>item()</code></a> invocations.
  </li></ol>
 
  <p>The log simply contains a serial history of the messages it has been asked to display.
@@ -272,26 +272,26 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item)</code>
 <div class="block">Add a line to the dashboard containing the indicated item</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item:A-">addLine</a></span>(TelemetryDashboardAndLog.Item[]&nbsp;items)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item:A-">addLine</a></span>(TelemetryDashboardAndLog.Item[]&nbsp;items)</code>
 <div class="block">Add a line to the dashboard containing the indicated items.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item0,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item0,
        TelemetryDashboardAndLog.Item&nbsp;item1)</code>
 <div class="block">Add a line to the dashboard containing the indicated items</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item0,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item0,
        TelemetryDashboardAndLog.Item&nbsp;item1,
        TelemetryDashboardAndLog.Item&nbsp;item2)</code>
 <div class="block">Add a line to the dashboard containing the indicated items</div>
@@ -299,7 +299,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item0,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item0,
        TelemetryDashboardAndLog.Item&nbsp;item1,
        TelemetryDashboardAndLog.Item&nbsp;item2,
        TelemetryDashboardAndLog.Item&nbsp;item3)</code>
@@ -308,7 +308,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item0,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">addLine</a></span>(TelemetryDashboardAndLog.Item&nbsp;item0,
        TelemetryDashboardAndLog.Item&nbsp;item1,
        TelemetryDashboardAndLog.Item&nbsp;item2,
        TelemetryDashboardAndLog.Item&nbsp;item3,
@@ -337,8 +337,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>TelemetryDashboardAndLog.Item</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#item-java.lang.String-org.swerverobotics.library.interfaces.IFunc-">item</a></span>(java.lang.String&nbsp;itemCaption,
-    <a href="../../../org/swerverobotics/library/interfaces/IFunc.html" title="interface in org.swerverobotics.library.interfaces">IFunc</a>&lt;java.lang.Object&gt;&nbsp;itemValue)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#item-java.lang.String-com.qualcomm.ftcrobotcontroller.interfaces.IFunc-">item</a></span>(java.lang.String&nbsp;itemCaption,
+    <a href="../../../org/swerverobotics/library/interfaces/IFunc.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IFunc</a>&lt;java.lang.Object&gt;&nbsp;itemValue)</code>
 <div class="block">Create a new dashboard item with the indicated caption and value computation.</div>
 </td>
 </tr>
@@ -668,14 +668,14 @@ public&nbsp;TelemetryDashboardAndLog(com.qualcomm.robotcore.robocol.Telemetry&nb
 </dl>
 </li>
 </ul>
-<a name="item-java.lang.String-org.swerverobotics.library.interfaces.IFunc-">
+<a name="item-java.lang.String-com.qualcomm.ftcrobotcontroller.interfaces.IFunc-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>item</h4>
 <pre>public&nbsp;TelemetryDashboardAndLog.Item&nbsp;item(java.lang.String&nbsp;itemCaption,
-                                          <a href="../../../org/swerverobotics/library/interfaces/IFunc.html" title="interface in org.swerverobotics.library.interfaces">IFunc</a>&lt;java.lang.Object&gt;&nbsp;itemValue)</pre>
+                                          <a href="../../../org/swerverobotics/library/interfaces/IFunc.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IFunc</a>&lt;java.lang.Object&gt;&nbsp;itemValue)</pre>
 <div class="block">Create a new dashboard item with the indicated caption and value computation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -718,11 +718,11 @@ public&nbsp;TelemetryDashboardAndLog(com.qualcomm.robotcore.robocol.Telemetry&nb
 <div class="block">Add an empty line to the dashboard</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
+<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">
+<a name="addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -734,11 +734,11 @@ public&nbsp;TelemetryDashboardAndLog(com.qualcomm.robotcore.robocol.Telemetry&nb
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item</code> - the item to be contained in the line</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
+<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">
+<a name="addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -752,11 +752,11 @@ public&nbsp;TelemetryDashboardAndLog(com.qualcomm.robotcore.robocol.Telemetry&nb
 <dd><code>item0</code> - the first item to be contained in the line</dd>
 <dd><code>item1</code> - the second item to be contained in the line</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
+<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">
+<a name="addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -772,11 +772,11 @@ public&nbsp;TelemetryDashboardAndLog(com.qualcomm.robotcore.robocol.Telemetry&nb
 <dd><code>item1</code> - the second item to be contained in the line</dd>
 <dd><code>item2</code> - the third item to be contained in the line</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
+<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">
+<a name="addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -794,11 +794,11 @@ public&nbsp;TelemetryDashboardAndLog(com.qualcomm.robotcore.robocol.Telemetry&nb
 <dd><code>item2</code> - the third item to be contained in the line</dd>
 <dd><code>item3</code> - the fourth item to be contained in the line</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
+<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-org.swerverobotics.library.TelemetryDashboardAndLog.Item-">
+<a name="addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -818,11 +818,11 @@ public&nbsp;TelemetryDashboardAndLog(com.qualcomm.robotcore.robocol.Telemetry&nb
 <dd><code>item3</code> - the fourth item to be contained in the line</dd>
 <dd><code>item4</code> - the fifth item to be contained in the line</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
+<dd><a href="../../../org/swerverobotics/library/TelemetryDashboardAndLog.html#addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item:A-"><code>addLine(Item[])</code></a></dd>
 </dl>
 </li>
 </ul>
-<a name="addLine-org.swerverobotics.library.TelemetryDashboardAndLog.Item:A-">
+<a name="addLine-com.qualcomm.ftcrobotcontroller.TelemetryDashboardAndLog.Item:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">

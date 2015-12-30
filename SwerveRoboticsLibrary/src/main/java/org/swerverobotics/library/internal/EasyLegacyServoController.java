@@ -1,4 +1,4 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.Range;
 import org.swerverobotics.library.BuildConfig;
 import org.swerverobotics.library.SynchronousOpMode;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 import java.util.*;
 
 import static junit.framework.Assert.*;
-import static org.swerverobotics.library.internal.EasyModernServoController.*;
+import static com.qualcomm.ftcrobotcontroller.internal.EasyModernServoController.*;
 
 /**
  * An alternative implementation of a Legacy Servo controller.

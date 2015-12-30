@@ -2,7 +2,7 @@ package org.swerverobotics.library.examples;
 
 import com.qualcomm.robotcore.hardware.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * This is similar to LinearAutonomousPolygon, but uses a 'run to position'

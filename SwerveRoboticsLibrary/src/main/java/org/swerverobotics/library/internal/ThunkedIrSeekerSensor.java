@@ -1,9 +1,9 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import junit.framework.Assert;
 import com.qualcomm.robotcore.hardware.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * An IrSeekerSensor that can be called on a synchronous thread

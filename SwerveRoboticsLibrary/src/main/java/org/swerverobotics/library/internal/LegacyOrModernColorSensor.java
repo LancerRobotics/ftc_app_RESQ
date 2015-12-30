@@ -1,4 +1,4 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import android.graphics.Color;
 
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.*;
 
 import org.swerverobotics.library.ClassFactory;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * This class implements a driver for either a HiTechnic color sensor or a

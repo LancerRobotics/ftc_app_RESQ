@@ -1,4 +1,4 @@
-package org.swerverobotics.library.interfaces;
+package com.qualcomm.ftcrobotcontroller.interfaces;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.I2cDevice;

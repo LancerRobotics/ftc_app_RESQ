@@ -1,4 +1,4 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import com.qualcomm.ftccommon.*;
 import com.qualcomm.hardware.*;

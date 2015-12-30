@@ -1,9 +1,9 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.exceptions.*;
+import com.qualcomm.ftcrobotcontroller.exceptions.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;

@@ -3,8 +3,8 @@ package org.swerverobotics.library.examples;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.swerverobotics.library.SynchronousOpMode;
-import org.swerverobotics.library.interfaces.Disabled;
-import org.swerverobotics.library.interfaces.TeleOp;
+import com.qualcomm.ftcrobotcontroller.interfaces.Disabled;
+import com.qualcomm.ftcrobotcontroller.interfaces.TeleOp;
 
 /**
  * This is an example showing the use of servos.

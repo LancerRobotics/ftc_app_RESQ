@@ -1,4 +1,4 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import android.content.Context;
 import com.qualcomm.ftccommon.FtcEventLoop;
@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.eventloop.EventLoopManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.robocol.Command;
-
-import java.util.concurrent.Semaphore;
 
 /**
  * This class provides hooking services that we use to provide contextual 

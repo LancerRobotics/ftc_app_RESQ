@@ -3,9 +3,9 @@ package org.swerverobotics.library.examples;
 import com.qualcomm.robotcore.hardware.LED;
 
 import org.swerverobotics.library.SynchronousOpMode;
-import org.swerverobotics.library.interfaces.Disabled;
-import org.swerverobotics.library.interfaces.IFunc;
-import org.swerverobotics.library.interfaces.TeleOp;
+import com.qualcomm.ftcrobotcontroller.interfaces.Disabled;
+import com.qualcomm.ftcrobotcontroller.interfaces.IFunc;
+import com.qualcomm.ftcrobotcontroller.interfaces.TeleOp;
 
 /**
  * SynchLEDDemo is a short demo on using the digital output pins to light an LED.

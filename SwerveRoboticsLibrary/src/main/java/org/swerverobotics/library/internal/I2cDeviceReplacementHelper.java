@@ -1,4 +1,4 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -8,10 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cController;
 import com.qualcomm.robotcore.hardware.LegacyModule;
 
-import org.swerverobotics.library.exceptions.RuntimeInterruptedException;
+import com.qualcomm.ftcrobotcontroller.exceptions.RuntimeInterruptedException;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**

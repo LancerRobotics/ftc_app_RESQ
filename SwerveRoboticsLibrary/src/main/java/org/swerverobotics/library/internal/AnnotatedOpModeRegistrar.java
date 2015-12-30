@@ -1,4 +1,4 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import android.app.Application;
 import android.content.Context;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.robocol.*;
 import com.qualcomm.robotcore.util.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.lang.annotation.*;

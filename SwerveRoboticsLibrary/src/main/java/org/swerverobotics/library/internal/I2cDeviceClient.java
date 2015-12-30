@@ -1,4 +1,4 @@
-package org.swerverobotics.library.internal;
+package com.qualcomm.ftcrobotcontroller.internal;
 
 import android.util.Log;
 
@@ -6,14 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.exceptions.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.exceptions.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 import static junit.framework.Assert.*;
-import static org.swerverobotics.library.internal.Util.*;
+import static com.qualcomm.ftcrobotcontroller.internal.Util.*;
 
 /**
  * I2cDeviceClient is a utility class that makes it easy to read or write data to 

@@ -1,9 +1,9 @@
 package org.swerverobotics.library.examples;
 
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.Autonomous;
-import org.swerverobotics.library.interfaces.Disabled;
-import org.swerverobotics.library.interfaces.TeleOp;
+import com.qualcomm.ftcrobotcontroller.interfaces.Autonomous;
+import com.qualcomm.ftcrobotcontroller.interfaces.Disabled;
+import com.qualcomm.ftcrobotcontroller.interfaces.TeleOp;
 
 import com.qualcomm.robotcore.util.*;
 

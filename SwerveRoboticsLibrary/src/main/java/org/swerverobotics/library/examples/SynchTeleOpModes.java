@@ -3,7 +3,7 @@ package org.swerverobotics.library.examples;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * An example of a synchronous opmode that's a little more complex than

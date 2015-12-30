@@ -2,8 +2,8 @@ package org.swerverobotics.library;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
-import org.swerverobotics.library.interfaces.*;
-import org.swerverobotics.library.internal.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.internal.*;
 import java.util.*;
 
 /**
@@ -166,7 +166,7 @@ public final class ClassFactory
      * and position measurements using integration in software. That said, the built-in accelerometer
      * integration algorithm is quite naive. For a real robot, you'll want to do some investigation
      * and reading and make a better one, whose use you can indicate using
-     * {@link org.swerverobotics.library.interfaces.IBNO055IMU.Parameters#accelerationIntegrationAlgorithm parameters.accelerationIntegrationAlgorithm}.</p>
+     * {@link com.qualcomm.ftcrobotcontroller.interfaces.IBNO055IMU.Parameters#accelerationIntegrationAlgorithm parameters.accelerationIntegrationAlgorithm}.</p>
      *
      * <p>Also, while the out-of-box sensor BNO055 works remarkably well, Bosch
      * <a href="https://github.com/SwerveRobotics/ftc_app/raw/master/SwerveRoboticsLibrary/doc/reference/BST_BNO055_DS000_13.pdf">describes</a>
@@ -175,7 +175,7 @@ public final class ClassFactory
      * calibrated (or at least the gyro and the accelerometer), extract the configuration
      * state with {@link IBNO055IMU#readCalibrationData()}. We suggest that you then incorporate
      * the results as constants in your code, and provide them during OpMode startup in
-     * {@link org.swerverobotics.library.interfaces.IBNO055IMU.Parameters#calibrationData parameters.calibrationData}
+     * {@link com.qualcomm.ftcrobotcontroller.interfaces.IBNO055IMU.Parameters#calibrationData parameters.calibrationData}
      * where they will automatically be applied.</p>
      *
      * @param context       the OpMode within which this creation is taking place

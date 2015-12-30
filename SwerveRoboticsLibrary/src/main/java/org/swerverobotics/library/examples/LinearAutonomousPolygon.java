@@ -3,7 +3,7 @@ package org.swerverobotics.library.examples;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.*;
 import org.swerverobotics.library.*;
-import org.swerverobotics.library.interfaces.*;
+import com.qualcomm.ftcrobotcontroller.interfaces.*;
 
 /**
  * This autonomous OpMode drives the robot forward for a while, turns left, then drives forward

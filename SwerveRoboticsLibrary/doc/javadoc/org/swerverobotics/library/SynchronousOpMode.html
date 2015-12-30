@@ -112,7 +112,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in org.swerverobotics.library.interfaces">IThunkDispatcher</a></dd>
+<dd><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IThunkDispatcher</a></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -122,7 +122,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public abstract class <span class="typeNameLabel">SynchronousOpMode</span>
 extends com.qualcomm.robotcore.eventloop.opmode.OpMode
-implements <a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in org.swerverobotics.library.interfaces">IThunkDispatcher</a></pre>
+implements <a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IThunkDispatcher</a></pre>
 <div class="block">SynchronousOpMode is a base class that can be inherited from in order to
  write op modes that can be coded in a traditional programming style.
 
@@ -244,7 +244,7 @@ implements <a href="../../../org/swerverobotics/library/interfaces/IThunkDispatc
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>java.lang.Thread</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/SynchronousOpMode.html#createSynchronousWorkerThread-org.swerverobotics.library.interfaces.IInterruptableRunnable-">createSynchronousWorkerThread</a></span>(<a href="../../../org/swerverobotics/library/interfaces/IInterruptableRunnable.html" title="interface in org.swerverobotics.library.interfaces">IInterruptableRunnable</a>&nbsp;threadBody)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/SynchronousOpMode.html#createSynchronousWorkerThread-com.qualcomm.ftcrobotcontroller.interfaces.IInterruptableRunnable-">createSynchronousWorkerThread</a></span>(<a href="../../../org/swerverobotics/library/interfaces/IInterruptableRunnable.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IInterruptableRunnable</a>&nbsp;threadBody)</code>
 <div class="block">Advanced: createSynchronousWorkerThread() is used to create secondary worker threads
  from your main thread, should you wish to do so.</div>
 </td>
@@ -283,7 +283,7 @@ implements <a href="../../../org/swerverobotics/library/interfaces/IThunkDispatc
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>static <a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in org.swerverobotics.library.interfaces">IThunkDispatcher</a></code></td>
+<td class="colFirst"><code>static <a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IThunkDispatcher</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../org/swerverobotics/library/SynchronousOpMode.html#getThreadThunker--">getThreadThunker</a></span>()</code>
 <div class="block">Advanced: If we are running on a synchronous thread, then return the object
  which manages thunking from the current thread to the loop() thread.</div>
@@ -511,7 +511,7 @@ implements <a href="../../../org/swerverobotics/library/interfaces/IThunkDispatc
 <div class="block">The logging tag we use in LogCat output in this general vicinity.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../constant-values.html#org.swerverobotics.library.SynchronousOpMode.LOGGING_TAG">Constant Field Values</a></dd>
+<dd><a href="../../../constant-values.html#com.qualcomm.ftcrobotcontroller.SynchronousOpMode.LOGGING_TAG">Constant Field Values</a></dd>
 </dl>
 </li>
 </ul>
@@ -573,7 +573,7 @@ implements <a href="../../../org/swerverobotics/library/interfaces/IThunkDispatc
 <div class="block">Advanced: the number of nanoseconds in a millisecond.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../constant-values.html#org.swerverobotics.library.SynchronousOpMode.NANO_TO_MILLI">Constant Field Values</a></dd>
+<dd><a href="../../../constant-values.html#com.qualcomm.ftcrobotcontroller.SynchronousOpMode.NANO_TO_MILLI">Constant Field Values</a></dd>
 </dl>
 </li>
 </ul>
@@ -868,13 +868,13 @@ public&nbsp;void&nbsp;waitOneFullHardwareCycle()
 </dl>
 </li>
 </ul>
-<a name="createSynchronousWorkerThread-org.swerverobotics.library.interfaces.IInterruptableRunnable-">
+<a name="createSynchronousWorkerThread-com.qualcomm.ftcrobotcontroller.interfaces.IInterruptableRunnable-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createSynchronousWorkerThread</h4>
-<pre>public&nbsp;java.lang.Thread&nbsp;createSynchronousWorkerThread(<a href="../../../org/swerverobotics/library/interfaces/IInterruptableRunnable.html" title="interface in org.swerverobotics.library.interfaces">IInterruptableRunnable</a>&nbsp;threadBody)</pre>
+<pre>public&nbsp;java.lang.Thread&nbsp;createSynchronousWorkerThread(<a href="../../../org/swerverobotics/library/interfaces/IInterruptableRunnable.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IInterruptableRunnable</a>&nbsp;threadBody)</pre>
 <div class="block">Advanced: createSynchronousWorkerThread() is used to create secondary worker threads
  from your main thread, should you wish to do so. 
  <p>
@@ -1191,7 +1191,7 @@ public&nbsp;void&nbsp;waitOneFullHardwareCycle()
 <div class="block">Advanced: Execute the indicated action on the loop thread given that we are on a synchronous thread</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html#executeOnLoopThread-java.lang.Runnable-">executeOnLoopThread</a></code>&nbsp;in interface&nbsp;<code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in org.swerverobotics.library.interfaces">IThunkDispatcher</a></code></dd>
+<dd><code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html#executeOnLoopThread-java.lang.Runnable-">executeOnLoopThread</a></code>&nbsp;in interface&nbsp;<code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IThunkDispatcher</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>action</code> - the action to execute</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1214,7 +1214,7 @@ public&nbsp;void&nbsp;waitOneFullHardwareCycle()
  otherwise, add a new action with the key.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html#executeSingletonOnLoopThread-int-java.lang.Runnable-">executeSingletonOnLoopThread</a></code>&nbsp;in interface&nbsp;<code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in org.swerverobotics.library.interfaces">IThunkDispatcher</a></code></dd>
+<dd><code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html#executeSingletonOnLoopThread-int-java.lang.Runnable-">executeSingletonOnLoopThread</a></code>&nbsp;in interface&nbsp;<code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IThunkDispatcher</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>singletonKey</code> - the key that indicates which pending previous action to replace</dd>
 <dd><code>action</code> - the action to execute</dd>
@@ -1234,7 +1234,7 @@ public&nbsp;void&nbsp;waitOneFullHardwareCycle()
 <div class="block">Advanced: Return a new key for use in executeSingletonOnLoopThread()</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html#getNewSingletonKey--">getNewSingletonKey</a></code>&nbsp;in interface&nbsp;<code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in org.swerverobotics.library.interfaces">IThunkDispatcher</a></code></dd>
+<dd><code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html#getNewSingletonKey--">getNewSingletonKey</a></code>&nbsp;in interface&nbsp;<code><a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IThunkDispatcher</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the new key</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -1263,7 +1263,7 @@ public&nbsp;void&nbsp;waitOneFullHardwareCycle()
 <ul class="blockList">
 <li class="blockList">
 <h4>getThreadThunker</h4>
-<pre>public static&nbsp;<a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in org.swerverobotics.library.interfaces">IThunkDispatcher</a>&nbsp;getThreadThunker()</pre>
+<pre>public static&nbsp;<a href="../../../org/swerverobotics/library/interfaces/IThunkDispatcher.html" title="interface in com.qualcomm.ftcrobotcontroller.interfaces">IThunkDispatcher</a>&nbsp;getThreadThunker()</pre>
 <div class="block">Advanced: If we are running on a synchronous thread, then return the object
  which manages thunking from the current thread to the loop() thread.</div>
 <dl>
