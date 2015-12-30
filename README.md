@@ -19,10 +19,10 @@ Information and Future Plans
  
 * Sensors
  - navX-Micro --> to detect direction and open up the possibilities as to how we can use the raw, pitch, and roll values determined by the sensor. (VALUES: need to be tested)
- - Sonar --> (TBD) to detect distance, can be used in autonomous for more accurate movement (VALUES: need to be tested)
+ - Sonar --> (Maxbotix i2c/PWM/Analog Sonar) to detect distance, can be used in autonomous for more accurate movement (VALUES: need to be tested)
  - Motor Encoders --> to detect "ticks" or movement for the wheels, encoded movement in autonomous, move certain distances (VALUES: need to be tested) (Maybe 0-1400?)
 
-FTCLib and FTCVision will possibly be used in the code (Thanks to LASA Robotics)
+Swerve Robotics' Library and FTCVision will possibly be used in the code (Thanks to Swerve Robotics and LASA Robotics)
 
 **************************************************************************************
 
