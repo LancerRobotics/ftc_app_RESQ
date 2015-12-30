@@ -27,6 +27,15 @@ repositories {
         dirs 'libs'
     }
 }
+<<<<<<< HEAD
+
+repositories {
+    flatDir {
+        dirs 'libs', 'C:\\Users\\AJ\\Desktop\\Lancers\\ftc_app\\navx-micro\\android\\libs'
+    }
+}
+=======
+>>>>>>> master
 
 allprojects {
     repositories {

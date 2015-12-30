@@ -18,6 +18,8 @@ public class Keys {
     public static final String score = "score";
     public static final String climber = "climber";
     public static final String touch = "touch" ;
+    public static final String advancedSensorModule = "asm";
+    public static final int NAVX_DIM_I2C_PORT = 0;
 
     public static final String telementryLeftKey = "left joystick  y value:";
     public static final String telementryRightKey = "right joystick y value: ";
@@ -61,4 +63,8 @@ public class Keys {
     final public static String pictureImagePathSharedPrefsKeys = "com.qualcomm.ftcrobotcontroller.pictureImagePathSharedPrefsKeys";
 
     final public static String testServo = "servo_test";
+
+    public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
+    public static final double TOLERANCE_DEGREES = 2.0;
+
 }

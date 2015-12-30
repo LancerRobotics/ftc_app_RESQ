@@ -2,9 +2,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -16,31 +14,19 @@ public class Treads extends OpMode {
     double pwrLeft, pwrRight;
 
     //Compass stuff
-    CompassSensor compass;
-    String compassStatus = "success";
-    UltrasonicSensor sonar;
+    //CompassSensor compass;
+    //String compassStatus = "success";
+    //UltrasonicSensor sonar;
 
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         br = hardwareMap.dcMotor.get(Keys.backRight);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
-
+        //collect = hardwareMap.dcMotor.get(Keys.collector);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
-        sonar = hardwareMap.ultrasonicSensor.get("sonar");
 
-
-        //More compass stuff DO NOT EDIT
-        compass = hardwareMap.compassSensor.get("compass");
-        //Calibration
-        compass.setMode(CompassSensor.CompassMode.CALIBRATION_MODE);
-        if (compass.calibrationFailed()) compassStatus = "failed";
-        telemetry.addData("Compass calibration ", compassStatus);
-        telemetry.addData("Status: ", compass.status());
-        compass.setMode(CompassSensor.CompassMode.MEASUREMENT_MODE);
-        telemetry.addData("Initial position: ", compass.getDirection());
-        telemetry.addData("Sonar Status: ", sonar.status());
     }
 
     @Override
@@ -53,10 +39,18 @@ public class Treads extends OpMode {
 
         telemetry.addData(Keys.telementryLeftKey, pwrLeft);
         telemetry.addData(Keys.telementryRightKey, pwrRight);
-        telemetry.addData("Compass value: ", compass.getDirection());
-        telemetry.addData("Sonar Value", sonar.getUltrasonicLevel());
-        telemetry.addData("Sonar Status", sonar.status());
         powerSplit(pwrLeft, pwrRight);
+        /*
+        if(gamepad1.b) {
+            collect.setPower(.85);
+        }
+        else if(gamepad1.a) {
+            collect.setPower(-.85);
+        }
+        else {
+            collect.setPower(0);
+        }
+*/
     }
 
     public void powerSplit(double left, double right) {
