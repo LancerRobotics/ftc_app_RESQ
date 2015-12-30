@@ -54,49 +54,10 @@ public class FtcOpModeRegister implements OpModeRegister {
      *
      * If two or more op modes are registered with the same name, the app will display an error.
      */
-
-    //manager.register("Unicorn",RoboCatTeleop.class);
-    //manager.register("Judge",Judging.class);
     manager.register("Autonomous",Autonomous.class);
     manager.register("Encoded Rotate Testing", GyroAuton.class);
-    //manager.register("CompassLoop",CompassLooping.class);
     manager.register("Mecanum",Mecanum.class);
     manager.register("Treads",Treads.class);
     manager.register("Camera", CameraTestOp.class);
-    //manager.register("Treads Autonomous",TreadsAuton.class);
-    //manager.register("Sonar Test OpMode", SonarTest.class);
-    /*
-     * Uncomment any of the following lines if you want to register an op mode.
-     */
-
-    //manager.register("AdafruitRGBExample", AdafruitRGBExample.class);
-    //manager.register("ColorSensorDriver", ColorSensorDriver.class);
-
-    //manager.register("IrSeekerOp", IrSeekerOp.class);
-    //manager.register("CompassCalibration", CompassCalibration.class);
-    //manager.register("I2cAddressChangeExample", LinearI2cAddressChange.class);
-
-
-    //manager.register("NxtTeleOp", NxtTeleOp.class);
-    
-    //manager.register("LinearK9TeleOp", LinearK9TeleOp.class);
-    //manager.register("LinearIrExample", LinearIrExample.class);
-
-    
-    //manager.register ("PushBotManual1", PushBotManual1.class);
-    //manager.register ("PushBotAutoSensors", PushBotAutoSensors.class);
-    //manager.register ("PushBotIrEvent", PushBotIrEvent.class);
-    
-    //manager.register ("PushBotManualSensors", PushBotManualSensors.class);
-    //manager.register ("PushBotOdsDetectEvent", PushBotOdsDetectEvent.class);
-    //manager.register ("PushBotOdsFollowEvent", PushBotOdsFollowEvent.class);
-    //manager.register ("PushBotTouchEvent", PushBotTouchEvent.class);    
-    
-    //manager.register("PushBotDriveTouch", PushBotDriveTouch.java);
-    //manager.register("PushBotIrSeek", PushBotIrSeek.java);
-    //manager.register("PushBotSquare", PushBotSquare.java);
-
-    
-    
   }
 }
