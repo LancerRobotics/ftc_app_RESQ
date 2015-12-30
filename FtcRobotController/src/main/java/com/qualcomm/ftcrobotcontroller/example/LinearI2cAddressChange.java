@@ -31,6 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.example;
 
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.IrSeekerSensor;
@@ -183,7 +184,7 @@ public class LinearI2cAddressChange extends LinearOpMode {
       StringBuilder s = new StringBuilder(300 * 4);
       String mismatch = "";
       for (int i = 0; i < byteArray.length; i++) {
-        s.append(String.format("expected: %02x, got: %02x \n", TypeConversion.unsignedByteToInt( (byte) byteArray[i]), cache[i]));
+        s.append(String.format("expected: %02x, got: %02x \n", TypeConversion.unsignedByteToInt((byte) byteArray[i]), cache[i]));
         if (TypeConversion.unsignedByteToInt(cache[i]) != TypeConversion.unsignedByteToInt( (byte) byteArray[i])) {
           mismatch = String.format("i: %d, byteArray[i]: %02x, cache[i]: %02x", i, byteArray[i], cache[i]);
           allMatch = false;
