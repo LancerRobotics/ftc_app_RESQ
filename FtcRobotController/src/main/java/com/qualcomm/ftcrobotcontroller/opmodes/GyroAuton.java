@@ -18,20 +18,20 @@ public class GyroAuton extends LinearOpMode {
     private AHRS navx_device;
     private navXPIDController yawPIDController;
     private ElapsedTime runtime = new ElapsedTime();
+    public static final double YAW_PID_P = 0.005;
+    public static final double YAW_PID_I = 0.0;
+    public static final double YAW_PID_D = 0.0;
     @Override
     public void runOpMode() throws InterruptedException {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
-        //br = hardwareMap.dcMotor.get(Keys.backRight);
-        //bl = hardwareMap.dcMotor.get(Keys.backLeft);
         fr.setDirection(DcMotor.Direction.REVERSE);
-        //bl.setDirection(DcMotor.Direction.REVERSE);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         yawPIDController = new navXPIDController( navx_device, navXPIDController.navXTimestampedDataSource.YAW);
         yawPIDController.setContinuous(true);
-        yawPIDController.setOutputRange(Keys.MIN_SPEED_SMOOTH_MOVE * -1, Keys.MAX_SPEED_SMOOTH_MOVE);
+        yawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
         yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
-        yawPIDController.setPID(Keys.YAW_PID_P, Keys.YAW_PID_I, Keys.YAW_PID_D);
+        yawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
         waitForStart();
         gyroTurn(90.0, true);
     }
@@ -51,9 +51,8 @@ public class GyroAuton extends LinearOpMode {
             int DEVICE_TIMEOUT_MS = 500;
             navXPIDController.PIDResult yawPIDResult = new navXPIDController.PIDResult();
             while (!yawPIDResult.isOnTarget()) {
-                if (yawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {
-                    double motorPower = yawPIDResult.getOutput();
-                    turn(motorPower);
+                if (yawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {;
+                    turn(yawPIDResult.getOutput());
                 } else {
 			    /* A timeout occurred */
                     Log.w("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");

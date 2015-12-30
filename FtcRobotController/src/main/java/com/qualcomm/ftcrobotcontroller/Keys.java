@@ -65,9 +65,6 @@ public class Keys {
     final public static String testServo = "servo_test";
 
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
-    public static final double ORIGINAL_TARGET_ANGLE = 90.0;
     public static final double TOLERANCE_DEGREES = 2.0;
-    public static final double YAW_PID_P = 0.005;
-    public static final double YAW_PID_I = 0.0;
-    public static final double YAW_PID_D = 0.0;
+
 }
