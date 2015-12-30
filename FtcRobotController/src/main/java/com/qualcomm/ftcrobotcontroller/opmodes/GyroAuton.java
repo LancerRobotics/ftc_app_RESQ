@@ -27,11 +27,6 @@ public class GyroAuton extends LinearOpMode {
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         fr.setDirection(DcMotor.Direction.REVERSE);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
-        yawPIDController = new navXPIDController( navx_device, navXPIDController.navXTimestampedDataSource.YAW);
-        yawPIDController.setContinuous(true);
-        yawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
-        yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
-        yawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
         waitForStart();
         gyroTurn(90.0, true);
     }
@@ -42,17 +37,27 @@ public class GyroAuton extends LinearOpMode {
     }
 
     public void gyroTurn(double degreesOfTurn, boolean right) {
-        if(!right) {
+        if(right) {
             degreesOfTurn = degreesOfTurn * -1;
         }
+        yawPIDController = new navXPIDController( navx_device, navXPIDController.navXTimestampedDataSource.YAW);
         yawPIDController.setSetpoint(degreesOfTurn);
+        yawPIDController.setContinuous(true);
+        yawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
+        yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
+        yawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
         try {
             yawPIDController.enable(true);
             int DEVICE_TIMEOUT_MS = 500;
             navXPIDController.PIDResult yawPIDResult = new navXPIDController.PIDResult();
-            while (!yawPIDResult.isOnTarget()) {
+            while (true) {
                 if (yawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {;
-                    turn(yawPIDResult.getOutput());
+                    if(yawPIDResult.isOnTarget()) {
+                        break;
+                    }
+                    else {
+                        turn(yawPIDResult.getOutput());
+                    }
                 } else {
 			    /* A timeout occurred */
                     Log.w("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");
@@ -60,8 +65,9 @@ public class GyroAuton extends LinearOpMode {
                 telemetry.addData("Yaw", navx_device.getYaw());
                 telemetry.addData("Motor Power", yawPIDResult.getOutput());
                 telemetry.addData("End Point", yawPIDController.getSetpoint());
+                telemetry.addData("Finished Turn?", "No");
             }
-            rest();
+            telemetry.addData("Finished Turn?", "Yes");
         }
         catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
