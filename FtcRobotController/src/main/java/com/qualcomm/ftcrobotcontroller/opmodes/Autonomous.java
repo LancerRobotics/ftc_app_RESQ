@@ -20,7 +20,14 @@ public class Autonomous extends LinearOpMode {
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
+<<<<<<< HEAD
         moveSmooth(12, false);
+=======
+        moveAlteredSin(24,true);
+
+
+
+>>>>>>> c4e1d094e63b3b74f05f0237c3a3f8ff58e8848f
 
 
     }

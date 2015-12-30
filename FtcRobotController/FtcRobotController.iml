@@ -26,7 +26,7 @@
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/intermediates/classes/debug" />
     <output-test url="file://$MODULE_DIR$/build/intermediates/classes/androidTest/debug" />
     <exclude-output />
@@ -93,8 +93,5 @@
     <orderEntry type="library" exported="" name="RobotCore-release-" level="project" />
     <orderEntry type="module" module-name="opencv-java" exported="" />
     <orderEntry type="module" module-name="ftc-visionlib" exported="" />
-    <orderEntry type="library" exported="" name="effects-android-19" level="project" />
-    <orderEntry type="library" exported="" name="usb-android-19" level="project" />
-    <orderEntry type="library" exported="" name="maps-android-19" level="project" />
   </component>
 </module>
