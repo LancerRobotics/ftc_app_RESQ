@@ -23,7 +23,7 @@ Thumbs.db
 *.idea
 *.idea/
 *.gradle
-*FtcRobotController/build/intermediates
+*FtcRobotController/build/
 
 
 *ASUS_PC_01*
