@@ -1,2 +1,0 @@
--notimestamp
--notimestamp -noqualifier org.swerverobotics.library.*:com.qualcomm.ftcrobotcontroller.interfaces.*:org.swerverobotics.library.examples.*:com.qualcomm.ftcrobotcontroller.exceptions.*:org.usfirst.ftc.exampleteam.yourcodehere.*
