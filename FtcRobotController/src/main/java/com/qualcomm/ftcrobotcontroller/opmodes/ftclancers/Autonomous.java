@@ -187,7 +187,6 @@ public class Autonomous extends LinearOpMode {
 
     }
 
-
     public void rest() {
         fr.setPower(0);
         fl.setPower(0);

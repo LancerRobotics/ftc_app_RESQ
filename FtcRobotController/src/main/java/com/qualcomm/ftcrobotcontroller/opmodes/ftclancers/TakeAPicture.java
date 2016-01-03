@@ -8,7 +8,7 @@ import android.hardware.Camera;
 
 import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.ftcrobotcontroller.Keys;
-import com.qualcomm.ftcrobotcontroller.opmodes.CameraPreview;
+import com.qualcomm.ftcrobotcontroller.CameraPreview;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.io.File;

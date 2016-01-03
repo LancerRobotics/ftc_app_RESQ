@@ -31,6 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Autonomous;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
 import com.qualcomm.ftcrobotcontroller.opmodes.navX.navXProcessedOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.sample.K9Line;
 import com.qualcomm.ftcrobotcontroller.opmodes.sample.K9TeleOp;
@@ -63,7 +65,7 @@ public class FtcOpModeRegister implements OpModeRegister {
      */
 
     manager.register("NullOp", NullOp.class);
-    manager.register("MR Gyro Test", MRGyroTest.class);
-    manager.register("navXProcessedOp", navXProcessedOp.class);
+    manager.register("Autonomous", Autonomous.class);
+    manager.register("GryoAuton", GyroAuton.class);
   }
 }

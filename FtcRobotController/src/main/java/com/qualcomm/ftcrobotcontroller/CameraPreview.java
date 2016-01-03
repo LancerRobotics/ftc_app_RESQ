@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller.opmodes;
+package com.qualcomm.ftcrobotcontroller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
