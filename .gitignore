@@ -21,8 +21,9 @@ Thumbs.db
 # Android Studio
 *.iml
 *.idea
+*.idea/
 *.gradle
-*FtcRobotController/build/
+*FtcRobotController/build/intermediates
 
 
 *ASUS_PC_01*
