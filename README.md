@@ -35,6 +35,7 @@ Information and Future Plans
  - Sonar --> (Maxbotix i2c/PWM/Analog Sonar) to detect distance, can be used in autonomous for more accurate movement (VALUES: need to be tested)
  - Motor Encoders --> to detect "ticks" or movement for the wheels, encoded movement in autonomous, move certain distances (VALUES: need to be tested) (Maybe 0-1400?)
  - ODS --> to detect distance in the Maxbotix's deadzone (VALUES: need to be tested)
+ - Limit Switch --> to detect if we hit a wall, when our lift is back in our robot and ready to hold more debris, and other miscellaneous uses (VALUES: 0 or 1 (most likely))
 
 Swerve Robotics' Library will possibly be used in the code (Thanks to Swerve Robotics)
 
