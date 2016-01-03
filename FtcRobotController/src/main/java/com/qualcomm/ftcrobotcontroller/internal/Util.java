@@ -1,13 +1,24 @@
 package com.qualcomm.ftcrobotcontroller.internal;
 
-import com.qualcomm.robotcore.hardware.*;
-import com.qualcomm.robotcore.util.*;
-import com.qualcomm.ftcrobotcontroller.exceptions.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.concurrent.*;
+import com.qualcomm.ftcrobotcontroller.BuildConfig;
+import com.qualcomm.ftcrobotcontroller.exceptions.RuntimeInterruptedException;
+import com.qualcomm.ftcrobotcontroller.exceptions.SwerveRuntimeException;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import static junit.framework.Assert.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Various internal utilities that assist us.

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.*;
 import com.qualcomm.ftcrobotcontroller.exceptions.*;
 import com.qualcomm.ftcrobotcontroller.interfaces.*;
+import com.qualcomm.robotcore.BuildConfig;
 
 import static com.qualcomm.ftcrobotcontroller.internal.Util.*;
 import static junit.framework.Assert.*;

@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.hardware.usb.RobotUsbDevice;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.SerialNumber;
-import org.swerverobotics.library.BuildConfig;
 import java.util.*;
 
 import static junit.framework.Assert.*;

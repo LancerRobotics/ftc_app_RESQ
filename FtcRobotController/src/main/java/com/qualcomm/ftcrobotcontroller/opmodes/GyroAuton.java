@@ -1,14 +1,10 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
-
-import android.util.Log;
-
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 /**
  * Created on 11/25/2015.
  */
@@ -30,12 +26,10 @@ public class GyroAuton extends LinearOpMode {
         waitForStart();
         gyroTurn(90.0, true);
     }
-
     public void turn (double power) {
         fl.setPower(power);
         fr.setPower(-power);
     }
-
     public void gyroTurn(double degreesOfTurn, boolean right) {
         if(right) {
             degreesOfTurn = degreesOfTurn * -1;
@@ -56,11 +50,14 @@ public class GyroAuton extends LinearOpMode {
                         break;
                     }
                     else {
-                        turn(yawPIDResult.getOutput());
+                        if (60<=navx_device.getYaw()&&navx_device.getYaw()<=120)
+                        turn(yawPIDResult.getOutput()/10);
+                        else
+                            turn(yawPIDResult.getOutput());
                     }
                 } else {
 			    /* A timeout occurred */
-                    Log.w("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");
+                    //Log.w("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");
                 }
                 telemetry.addData("Yaw", navx_device.getYaw());
                 telemetry.addData("Motor Power", yawPIDResult.getOutput());
@@ -75,11 +72,10 @@ public class GyroAuton extends LinearOpMode {
         finally {
             navx_device.close();
         }
-    }
 
+    }
     public void rest() {
         fr.setPower(0);
         fl.setPower(0);
     }
-
 }

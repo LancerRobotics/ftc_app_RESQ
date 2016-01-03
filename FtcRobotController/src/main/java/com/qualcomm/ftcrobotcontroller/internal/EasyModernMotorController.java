@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.exception.*;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.hardware.usb.*;
 import com.qualcomm.robotcore.util.*;
-
-import org.swerverobotics.library.BuildConfig;
 import java.nio.*;
 import java.util.*;
 

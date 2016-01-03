@@ -4,7 +4,7 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.Range;
-import org.swerverobotics.library.BuildConfig;
+import com.qualcomm.robotcore.BuildConfig;
 import com.qualcomm.ftcrobotcontroller.SynchronousOpMode;
 import com.qualcomm.ftcrobotcontroller.interfaces.*;
 import java.util.*;

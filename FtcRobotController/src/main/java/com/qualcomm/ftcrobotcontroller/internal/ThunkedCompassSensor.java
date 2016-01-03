@@ -2,6 +2,7 @@ package com.qualcomm.ftcrobotcontroller.internal;
 
 import com.qualcomm.ftcrobotcontroller.SynchronousOpMode;
 import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.BuildConfig;
 import static junit.framework.Assert.*;
 
 /**

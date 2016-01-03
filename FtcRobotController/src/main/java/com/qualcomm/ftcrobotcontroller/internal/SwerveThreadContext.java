@@ -1,8 +1,9 @@
 package com.qualcomm.ftcrobotcontroller.internal;
 
+import com.qualcomm.ftcrobotcontroller.BuildConfig;
+import com.qualcomm.ftcrobotcontroller.interfaces.IThunkDispatcher;
 import com.qualcomm.robotcore.eventloop.EventLoopManager;
-import com.qualcomm.robotcore.eventloop.opmode.*;
-import com.qualcomm.ftcrobotcontroller.interfaces.*;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 /**
  * SwerveThreadContext maintains thread-specific context for the Swerve Library

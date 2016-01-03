@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.*;
 import com.qualcomm.ftcrobotcontroller.exceptions.*;
 import com.qualcomm.ftcrobotcontroller.interfaces.*;
-
+import com.qualcomm.robotcore.BuildConfig;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;

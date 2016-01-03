@@ -4,14 +4,21 @@ import android.util.Log;
 
 import com.qualcomm.ftcrobotcontroller.ClassFactory;
 import com.qualcomm.ftcrobotcontroller.SynchronousOpMode;
+import com.qualcomm.ftcrobotcontroller.exceptions.RuntimeInterruptedException;
+import com.qualcomm.ftcrobotcontroller.interfaces.II2cDeviceClient;
+import com.qualcomm.robotcore.BuildConfig;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.*;
-import com.qualcomm.robotcore.util.*;
-import com.qualcomm.ftcrobotcontroller.exceptions.*;
-import com.qualcomm.ftcrobotcontroller.interfaces.*;
-import java.nio.*;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.LegacyModule;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.TypeConversion;
 
-import static junit.framework.Assert.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import static junit.framework.Assert.assertTrue;
 
 /**
  * An alternative implementation of a Legacy DC Motor controller.

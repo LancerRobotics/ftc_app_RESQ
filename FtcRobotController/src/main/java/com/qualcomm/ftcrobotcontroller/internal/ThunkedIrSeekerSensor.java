@@ -1,9 +1,11 @@
 package com.qualcomm.ftcrobotcontroller.internal;
 
-import junit.framework.Assert;
-
+import com.qualcomm.ftcrobotcontroller.BuildConfig;
 import com.qualcomm.ftcrobotcontroller.SynchronousOpMode;
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.IrSeekerSensor;
+import com.qualcomm.robotcore.hardware.LegacyModule;
+
+import junit.framework.Assert;
 
 /**
  * An IrSeekerSensor that can be called on a synchronous thread
