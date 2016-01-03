@@ -3,6 +3,19 @@ This is our 2015-2016 FTC app, where all of our opmodes and code will be written
 
 **************************************************************************************
 
+# IMPORTANT UPDATE
+To install fully on your own computer:
+* Download navX-micro from http://www.pdocs.kauailabs.com/navx-mxp/software/android-library-ftc/ by clicking on _latest build_, it is in purple
+MAKE SURE THERE IS A navX-micro FOLDER IN YOUR HOME DIRECTORY (C:\Users\YOURUSERNAME)
+* Extract the contents and run through setup.exe
+* Open your project in android studio
+* Change the directory in the *FTC ROBOT CONTROLLER* build.gradle located in Gradle Scripts
+  - When changing go to the repositories flat-dr placce
+  - Then change the directory to yours, you should only be changing your username (where it says jakew)
+
+
+**************************************************************************************
+
 IMPORTANT RESOURCE (ftc forum): http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
 
 Information and Future Plans
