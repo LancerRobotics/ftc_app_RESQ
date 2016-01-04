@@ -24,7 +24,7 @@ buildscript {
 repositories {
     flatDir {
         dirs 'libs'
-        dirs 'libs', 'C:\\Users\\jakew\\navx-micro\\android\\libs'
+        dirs 'libs', 'C:\\Users\\AJ\\navx-micro\\android\\libs'
     }
 }
 
