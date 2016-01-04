@@ -1,6 +1,9 @@
-# built application files
+#built application files
 *.apk
 *.ap_
+
+# files for the dex VM
+*.dex
 
 # Java class files
 *.class
@@ -18,12 +21,16 @@ Thumbs.db
 # OSX files
 .DS_Store
 
+# Eclipse project files
+.classpath
+.project
+
 # Android Studio
 *.iml
-*.idea
-.idea/
-*.gradle
+.idea
+#.idea/workspace.xml - remove # and delete .idea if it better suit your needs.
+.gradle
 build/
 
-
-*ASUS_PC_01*
+#NDK
+obj/
