@@ -58,8 +58,8 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Encoded Rotate Testing", GyroAuton.class);
     manager.register("Mecanum",Mecanum.class);
     manager.register("Treads",Treads.class);
-    manager.register("Sonar", AnalogSonar.class);
-    manager.register("Limit Switch", DigitalLimitSwitch.class);
+    manager.register("Sonar Telemetry", AnalogSonar.class);
+    manager.register("Limit Switch Telemetry", DigitalLimitSwitch.class);
     manager.register("Camera", CameraTestOp.class);
     manager.register("Example Rotate", com.qualcomm.ftcrobotcontroller.opmodes.navX.navXRotateToAnglePIDLinearOp.class);
   }
