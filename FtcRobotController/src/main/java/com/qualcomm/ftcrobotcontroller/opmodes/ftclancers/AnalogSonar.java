@@ -17,7 +17,7 @@ public class AnalogSonar extends OpMode {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         fr.setDirection(DcMotor.Direction.REVERSE);
-        sonar1 = hardwareMap.analogInput.get("sonar1");
+        sonar1 = hardwareMap.analogInput.get(Keys.SONAR_ONE);
     }
     public void loop() {
         double s1 = readSonar(sonar1);

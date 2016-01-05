@@ -11,18 +11,18 @@ import com.qualcomm.robotcore.hardware.DigitalChannelController;
  */
 public class DigitalLimitSwitch extends OpMode {
     DcMotor fr, fl;
-    DigitalChannel ls1;
+    DigitalChannel limit1;
 
     @Override
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         fr.setDirection(DcMotor.Direction.REVERSE);
-        ls1 = hardwareMap.digitalChannel.get("ls1");
-        ls1.setMode(DigitalChannelController.Mode.INPUT);
+        limit1 = hardwareMap.digitalChannel.get(Keys.LIMIT_ONE);
+        limit1.setMode(DigitalChannelController.Mode.INPUT);
     }
     public void loop() {
-        telemetry.addData("Limit switch is pressed: ", ls1.getState());
+        telemetry.addData("Limit switch is pressed: ", limit1.getState());
     }
 
 
