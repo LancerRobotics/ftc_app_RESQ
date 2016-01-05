@@ -64,8 +64,8 @@ import com.qualcomm.ftccommon.FtcRobotControllerService.FtcRobotControllerBinder
 import com.qualcomm.ftccommon.LaunchActivityConstantsList;
 import com.qualcomm.ftccommon.Restarter;
 import com.qualcomm.ftccommon.UpdateUI;
-import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.FtcOpModeRegister;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.TakeAPicture;
 import com.qualcomm.hardware.HardwareFactory;
 import com.qualcomm.robotcore.hardware.configuration.Utility;

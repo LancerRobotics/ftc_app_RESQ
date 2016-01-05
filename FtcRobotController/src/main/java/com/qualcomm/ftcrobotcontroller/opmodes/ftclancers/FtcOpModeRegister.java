@@ -59,6 +59,6 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Mecanum",Mecanum.class);
     manager.register("Treads",Treads.class);
     manager.register("Camera", CameraTestOp.class);
-    manager.register("Example Rotate", com.qualcomm.ftcrobotcontroller.opmodes.navXRotateToAnglePIDLinearOp.class);
+    manager.register("Example Rotate", com.qualcomm.ftcrobotcontroller.opmodes.navX.navXRotateToAnglePIDLinearOp.class);
   }
 }
