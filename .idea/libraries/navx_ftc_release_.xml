@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="navx_ftc-release-">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/FtcRobotController/build/intermediates/exploded-aar/navx_ftc-release/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/FtcRobotController/build/intermediates/exploded-aar/navx_ftc-release/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

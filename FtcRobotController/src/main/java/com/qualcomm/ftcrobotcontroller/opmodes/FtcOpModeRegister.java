@@ -31,6 +31,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Autonomous;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
+import com.qualcomm.ftcrobotcontroller.opmodes.navX.navXProcessedOp;
+import com.qualcomm.ftcrobotcontroller.opmodes.sample.K9Line;
+import com.qualcomm.ftcrobotcontroller.opmodes.sample.K9TeleOp;
+import com.qualcomm.ftcrobotcontroller.opmodes.sample.MRGyroTest;
+import com.qualcomm.ftcrobotcontroller.opmodes.sample.NullOp;
+import com.qualcomm.ftcrobotcontroller.opmodes.sample.PushBotAuto;
+import com.qualcomm.ftcrobotcontroller.opmodes.sample.PushBotManual;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
@@ -54,11 +63,9 @@ public class FtcOpModeRegister implements OpModeRegister {
      *
      * If two or more op modes are registered with the same name, the app will display an error.
      */
-    manager.register("Autonomous",Autonomous.class);
-    manager.register("Encoded Rotate Testing", GyroAuton.class);
-    manager.register("Mecanum",Mecanum.class);
-    manager.register("Treads",Treads.class);
-    manager.register("Camera", CameraTestOp.class);
-    manager.register("Example Rotate", com.qualcomm.ftcrobotcontroller.opmodes.navXRotateToAnglePIDLinearOp.class);
+
+    manager.register("NullOp", NullOp.class);
+    manager.register("Autonomous", Autonomous.class);
+    manager.register("GryoAuton", GyroAuton.class);
   }
 }

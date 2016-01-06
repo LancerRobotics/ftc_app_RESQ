@@ -1,31 +1,4 @@
 # ftc_app
-This is our 2015-2016 FTC app, where all of our opmodes and code will be written, do NOT push to master unless approved
-
-**************************************************************************************
-
-IMPORTANT RESOURCE (ftc forum): http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
-
-Information and Future Plans
-
-* Autonomous Plans
- - Drive to button
- - Push button
- - Score climbers
- - Back up
- - Climb up mountain, possibly find a way to score climbers on the zipline
- 
-* TeleOp Updates
- - Treads teleop, movement only
- 
-* Sensors
- - navX-Micro --> to detect direction and open up the possibilities as to how we can use the raw, pitch, and roll values determined by the sensor. (VALUES: need to be tested)
- - Sonar --> (Maxbotix i2c/PWM/Analog Sonar) to detect distance, can be used in autonomous for more accurate movement (VALUES: need to be tested)
- - Motor Encoders --> to detect "ticks" or movement for the wheels, encoded movement in autonomous, move certain distances (VALUES: need to be tested) (Maybe 0-1400?)
-
-Swerve Robotics' Library and FTCVision will possibly be used in the code (Thanks to Swerve Robotics and LASA Robotics)
-
-**************************************************************************************
-
 FTC Android Studio project to create FTC Robot Controller app.
 
 This is the FTC SDK that can be used to create an FTC Robot Controller app, with custom op modes.
@@ -43,10 +16,79 @@ Documentation for the FTC SDK are included with this repository.  There is a sub
 
 For technical questions regarding the SDK, please visit the FTC Technology forum:
 
-FTC FORUM: http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
+  http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
 
 **************************************************************************************
 
-Livingston Lancer Robotics
-www.lancerrobotics.com
-ftc3415@gmail.com
+Release 15.11.04.001
+
+ * Added Support for Modern Robotics Gyro.
+  - The GyroSensor class now supports the MR Gyro Sensor.
+  - Users can access heading data (about Z axis)
+  - Users can also access raw gyro data (X, Y, & Z axes).
+  - Example MRGyroTest.java op mode included.
+ * Improved error messages
+  - More descriptive error messages for exceptions in user code.
+ * Updated DcMotor API
+ * Enable read mode on new address in setI2cAddress
+ * Fix so that driver station app resets the gamepads when switching op modes.
+ * USB-related code changes to make USB comm more responsive and to display more explicit error messages.
+  - Fix so that USB will recover properly if the USB bus returns garbage data.
+  - Fix USB initializtion race condition.
+  - Better error reporting during FTDI open.
+  - More explicit messages during USB failures.
+  - Fixed bug so that USB device is closed if event loop teardown method was not called.
+ * Fixed timer UI issue
+ * Fixed duplicate name UI bug (Legacy Module configuration).
+ * Fixed race condition in EventLoopManager.
+ * Fix to keep references stable when updating gamepad.
+ * For legacy Matrix motor/servo controllers removed necessity of appending "Motor" and "Servo" to controller names.
+ * Updated HT color sensor driver to use constants from ModernRoboticsUsbLegacyModule class.
+ * Updated MR color sensor driver to use constants from ModernRoboticsUsbDeviceInterfaceModule class. 
+ * Correctly handle I2C Address change in all color sensors
+ * Updated/cleaned up op modes.
+  - Updated comments in LinearI2cAddressChange.java example op mode.
+  - Replaced the calls to "setChannelMode" with "setMode" (to match the new of the DcMotor  method).
+  - Removed K9AutoTime.java op mode.
+  - Added MRGyroTest.java op mode (demonstrates how to use MR Gyro Sensor).
+  - Added MRRGBExample.java op mode (demonstrates how to use MR Color Sensor).
+  - Added HTRGBExample.java op mode (demonstrates how to use HT legacy color sensor).
+  - Added MatrixControllerDemo.java (demonstrates how to use legacy Matrix controller).
+ * Updated javadoc documentation.
+ * Updated release .apk files for Robot Controller and Driver Station apps.
+
+T. Eng
+November 5, 2015
+ 
+**************************************************************************************
+
+Release 15.10.06.002
+
+ * Added support for Legacy Matrix 9.6V motor/servo controller.
+ * Cleaned up build.gradle file.
+ * Minor UI and bug fixes for driver station and robot controller apps.
+ * Throws error if Ultrasonic sensor (NXT) is not configured for legacy module port 4 or 5.
+
+T. Eng
+October 6, 2015
+
+**************************************************************************************
+
+In this latest version of the FTC SDK (20150803_001) the following changes should be noted:
+
+ * New user interfaces for FTC Driver Station and FTC Robot Controller apps.
+ * An init() method is added to the OpMode class.
+   - For this release, init() is triggered right before the start() method.
+   - Eventually, the init() method will be triggered when the user presses an "INIT" button on driver station.
+   - The init() and loop() methods are now required (i.e., need to be overridden in the user's op mode).
+   - The start() and stop() methods are optional.
+ * A new LinearOpMode class is introduced.
+   - Teams can use the LinearOpMode mode to create a linear (not event driven) program model.
+   - Teams can use blocking statements like Thread.sleep() within a linear op mode.
+ * The API for the Legacy Module and Core Device Interface Module have been updated.
+   - Support for encoders with the Legacy Module is now working.
+ * The hardware loop has been updated for better performance.
+
+
+T. Eng
+August 3, 2015

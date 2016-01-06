@@ -105,7 +105,7 @@ public class Vision {
     }
     public static boolean isBlue (double hue) {
         if (170<hue&&hue<190) {
-             // it's blue
+            // it's blue
             return true;
         }
         return false;

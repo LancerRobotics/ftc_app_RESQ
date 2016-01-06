@@ -1,18 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
-
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 19
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
+    compileSdkVersion 'Google Inc.:Google APIs:19'
+    buildToolsVersion '21.1.2'
 }
 
 buildscript {
@@ -22,7 +16,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.2.3'
 
-
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -31,16 +24,9 @@ buildscript {
 repositories {
     flatDir {
         dirs 'libs'
+        dirs 'libs', 'C:\\Users\\AJ\\navx-micro\\android\\libs'
     }
 }
-
-
-repositories {
-    flatDir {
-        dirs 'libs', 'C:\\Users\\AJ\\Desktop\\Lancers\\ftc_app\\navx-micro\\android\\libs'
-    }
-}
-
 
 allprojects {
     repositories {
@@ -60,6 +46,4 @@ dependencies {
     compile(name: 'Analytics-release', ext: 'aar')
     compile(name: 'WirelessP2p-release', ext: 'aar')
     compile (name:'navx_ftc-release', ext:'aar')
-    compile project(':ftc-visionlib')
-    compile project(':opencv-java')
 }

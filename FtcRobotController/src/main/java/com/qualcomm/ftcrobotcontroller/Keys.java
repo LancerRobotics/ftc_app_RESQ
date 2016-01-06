@@ -19,7 +19,12 @@ public class Keys {
     public static final String climber = "climber";
     public static final String touch = "touch" ;
     public static final String advancedSensorModule = "asm";
+    public static final String LIMIT_ONE = "ls1";
+    public static final String SONAR_ONE = "sona1";
+
     public static final int NAVX_DIM_I2C_PORT = 0;
+    public static final int SONAR_ONE_ANALOG_PORT = 0; //just in case, may not be needed
+    public static final int LIMIT_ONE_DIGITAL_PORT = 0; //just in case, may not be needed
 
     public static final String telementryLeftKey = "left joystick  y value:";
     public static final String telementryRightKey = "right joystick y value: ";
