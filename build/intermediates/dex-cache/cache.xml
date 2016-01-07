@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\exploded-aar\navx_ftc-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="07e6b0934541d0ba93a025d5ecc0edd835db0ed1">
+        <dex dex="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-242f7e877d175ece2d8bf1602a34700a4c5daf62.jar" />
+    </item>
+    <item
+        jar="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\exploded-aar\WirelessP2p-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ebf8372b5bc9dc9f596ed438df36481099d51c41">
+        <dex dex="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-cee01885439bea6fe4b297f5367f89bfeb12b268.jar" />
+    </item>
+    <item
+        jar="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\exploded-aar\FtcCommon-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6da7d9bc8c9a82321450b6b4273d1746b6cade21">
+        <dex dex="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-0b04fb09f7743086b5afab593e777931f08956d7.jar" />
+    </item>
+    <item
+        jar="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\exploded-aar\Analytics-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="23c74caa2b901107adc4d0aec343c5b8e8be86fb">
+        <dex dex="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-c718dfa1ff2f3e04825f28484b910b3448490b52.jar" />
+    </item>
+    <item
+        jar="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\exploded-aar\ModernRobotics-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ad4adcdf8eb6ff2b3b4fe9f1d676f099db621d60">
+        <dex dex="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-701b99168df8f08b8e11423456b83d17ca3a721d.jar" />
+    </item>
+    <item
+        jar="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\exploded-aar\RobotCore-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2ec6f06847bccfe30fb8f8f75ce888721e4fd275">
+        <dex dex="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-1bb69ffd77e5a9df72fa0eea2cbc82ce0035f9b2.jar" />
+    </item>
+    <item
+        jar="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\exploded-aar\Hardware-release\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="55ecd0b0517650a2cffd06137a40de8af3bbbde3">
+        <dex dex="C:\Users\AJ\Desktop\Lancers\plswork\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\classes-36d2b7ae40d3108cb5e224dd65dbc781097850cc.jar" />
+    </item>
+
+</items>

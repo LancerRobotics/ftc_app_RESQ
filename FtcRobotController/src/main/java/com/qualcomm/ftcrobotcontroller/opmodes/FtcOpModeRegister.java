@@ -31,6 +31,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+<<<<<<< HEAD
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.AnalogSonar;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Autonomous;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.DigitalLimitSwitch;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Mecanum;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Treads;
+=======
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Autonomous;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
 import com.qualcomm.ftcrobotcontroller.opmodes.navX.navXProcessedOp;
@@ -40,6 +49,7 @@ import com.qualcomm.ftcrobotcontroller.opmodes.sample.MRGyroTest;
 import com.qualcomm.ftcrobotcontroller.opmodes.sample.NullOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.sample.PushBotAuto;
 import com.qualcomm.ftcrobotcontroller.opmodes.sample.PushBotManual;
+>>>>>>> master
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
@@ -64,8 +74,19 @@ public class FtcOpModeRegister implements OpModeRegister {
      * If two or more op modes are registered with the same name, the app will display an error.
      */
 
+<<<<<<< HEAD
+    manager.register("Autonomous",Autonomous.class);
+    manager.register("Encoded Rotate Testing", GyroAuton.class);
+    manager.register("Mecanum",Mecanum.class);
+    manager.register("Treads",Treads.class);
+    manager.register("Sonar Telemetry", AnalogSonar.class);
+    manager.register("Limit Switch Telemetry", DigitalLimitSwitch.class);
+    manager.register("Camera", CameraTestOp.class);
+    manager.register("Example Rotate", com.qualcomm.ftcrobotcontroller.opmodes.navX.navXRotateToAnglePIDLinearOp.class);
+=======
     manager.register("NullOp", NullOp.class);
     manager.register("Autonomous", Autonomous.class);
     manager.register("GryoAuton", GyroAuton.class);
+>>>>>>> master
   }
 }
