@@ -45,9 +45,5 @@ dependencies {
     compile(name: 'ModernRobotics-release', ext: 'aar')
     compile(name: 'Analytics-release', ext: 'aar')
     compile(name: 'WirelessP2p-release', ext: 'aar')
-<<<<<<< HEAD
     compile (name:'navx_ftc-release', ext:'aar')
-=======
-    compile (name:'navX_ftc-release', ext:'aar')
->>>>>>> master
 }
