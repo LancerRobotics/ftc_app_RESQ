@@ -88,7 +88,11 @@ application
 ADDED from AndroidManifest.xml:40:3
 MERGED from :FtcCommon-release::21:5
 MERGED from :Analytics-release::19:5
+<<<<<<< HEAD
 MERGED from :navx_ftc-release::11:5
+=======
+MERGED from :navX_ftc-release::11:5
+>>>>>>> master
 	android:label
 		ADDED from AndroidManifest.xml:43:7
 	android:allowBackup
@@ -211,7 +215,11 @@ MERGED from :FtcCommon-release::7:5
 MERGED from :ModernRobotics-release::5:5
 MERGED from :Analytics-release::5:5
 MERGED from :WirelessP2p-release::5:5
+<<<<<<< HEAD
 MERGED from :navx_ftc-release::7:5
+=======
+MERGED from :navX_ftc-release::7:5
+>>>>>>> master
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0

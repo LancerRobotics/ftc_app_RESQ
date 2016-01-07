@@ -84,7 +84,11 @@
     <color name="transparent_color">#00000000</color>
     <color name="very_bright_red">#bf0510</color>
     <color name="white">#FFFFFF</color>
+<<<<<<< HEAD
     <!-- From: file:/C:/Users/AJ/Desktop/Lancers/plswork/ftc_app/FtcRobotController/src/main/res/values/dimens.xml -->
+=======
+    <!-- From: file:/C:/Users/AJ/Desktop/Lancers/ftc_app/FtcRobotController/src/main/res/values/dimens.xml -->
+>>>>>>> master
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">5dp</dimen>
