@@ -1,6 +1,4 @@
 # ftc_app
-<<<<<<< HEAD
-=======
 This is our 2015-2016 FTC app, where all of our opmodes and code will be written, do NOT push to master unless approved
 
 **************************************************************************************
@@ -43,7 +41,6 @@ Swerve Robotics' Library will possibly be used in the code (Thanks to Swerve Rob
 
 **************************************************************************************
 
->>>>>>> master
 FTC Android Studio project to create FTC Robot Controller app.
 
 This is the FTC SDK that can be used to create an FTC Robot Controller app, with custom op modes.
