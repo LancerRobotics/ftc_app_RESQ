@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 /**
  * Created on 11/25/2015.
  */
-public class Autonomous extends LinearOpMode {
+public class zAutonomous extends LinearOpMode {
     DcMotor fr, fl, bl, br;
     double a3, a4, a5;
 

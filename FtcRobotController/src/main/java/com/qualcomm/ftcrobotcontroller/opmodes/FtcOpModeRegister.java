@@ -37,15 +37,6 @@ import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.DigitalLimitSwitch;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Mecanum;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Treads;
-import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Autonomous;
-import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
-import com.qualcomm.ftcrobotcontroller.opmodes.navX.navXProcessedOp;
-import com.qualcomm.ftcrobotcontroller.opmodes.sample.K9Line;
-import com.qualcomm.ftcrobotcontroller.opmodes.sample.K9TeleOp;
-import com.qualcomm.ftcrobotcontroller.opmodes.sample.MRGyroTest;
-import com.qualcomm.ftcrobotcontroller.opmodes.sample.NullOp;
-import com.qualcomm.ftcrobotcontroller.opmodes.sample.PushBotAuto;
-import com.qualcomm.ftcrobotcontroller.opmodes.sample.PushBotManual;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
@@ -77,8 +68,5 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Limit Switch Telemetry", DigitalLimitSwitch.class);
     manager.register("Camera", CameraTestOp.class);
     manager.register("Example Rotate", com.qualcomm.ftcrobotcontroller.opmodes.navX.navXRotateToAnglePIDLinearOp.class);
-    manager.register("NullOp", NullOp.class);
-    manager.register("Autonomous", Autonomous.class);
-    manager.register("GryoAuton", GyroAuton.class);
   }
 }
