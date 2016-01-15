@@ -42,6 +42,12 @@ public class CameraTestOp extends LinearOpMode {
         telemetry.addData("image", image.toString());
         ((FtcRobotControllerActivity) hardwareMap.appContext).initImageTakenPreview(image);
         //ok so now I have the image
+        if (image.getHeight()>4096||image.getWidth()>4096) {
+            //too large to be uploaded into a texture
+            int nh = (int) ( image.getHeight() * (512.0 / image.getWidth()) );
+            image = Bitmap.createScaledBitmap(image,512,nh,true);
+            telemetry.addData("bitmap too large","shrunk");
+        }
         String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
         telemetry.addData("Vision1","half split color only" +returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
         String returnedStringViaCutAndWhite = Vision.findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(image,hardwareMap.appContext);

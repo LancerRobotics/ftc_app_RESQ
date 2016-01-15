@@ -147,22 +147,30 @@ public class Vision {
                 if ((1<=hsv[0]&&hsv[0]<=15)||hsv[0]>295||(170<hsv[0]&&hsv[0]<190)) {
                     //then it is either red or blue, and is noteworthy
                     //note a complete white pixel has hue values of 0, hence the greater than or equal to 1
+                    Log.e("unworthy pixel",String.valueOf(numberOfPixelsThatAreNoteWorthy));
                     numberOfPixelsThatAreNoteWorthy++;
+                }
+                else {
+                    Log.e("worth","worth");
                 }
             }
             //from our testing, about 25% of the row is taken up by the beacon
             //so noteworthiness must cross the 25% threshold
-            double percentNoteworthy = numberOfPixelsThatAreNoteWorthy/image.getWidth();
+            double percentNoteworthy = (double)(numberOfPixelsThatAreNoteWorthy)/(double)(image.getWidth());
+            Log.e("numPixNote",String.valueOf(numberOfPixelsThatAreNoteWorthy));
+            Log.e("total",String.valueOf(image.getWidth()));
+            Log.e("percentNoteWorthy",String.valueOf(percentNoteworthy));
             if (percentNoteworthy<.25) {
                 //delete this row
-                for (int x = 0; x<image.getWidth();x++) {
+                Log.e("delete!","Deleting...");
+                /*for (int x = 0; x<image.getWidth();x++) {
                     if (x>=image.getWidth()) {
                         x=image.getWidth()-1;
                     }
                     image.setPixel(x,i,Color.argb(255,255,255,255));
                     //set the pixel to white
                     //note a complete white pixel has hue value of 0
-                }
+                }*/
             }
         }
         //ok so now you have a corrected image.
@@ -240,7 +248,7 @@ public class Vision {
         for (int i =0; i<image.getWidth();i++) {
             for (int j = 0; j<image.getHeight();j++) {
                 //go down and move to the right (start from left) until you hit a non white
-                int pixel = image.getPixel(j,i);
+                int pixel = image.getPixel(i,j);
                 float[] hsv = new float[3];
                 Color.colorToHSV(pixel, hsv);
                 if (hsv[0]!=0) {
