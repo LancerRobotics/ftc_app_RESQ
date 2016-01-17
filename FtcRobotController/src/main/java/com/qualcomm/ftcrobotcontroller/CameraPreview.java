@@ -57,7 +57,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         File mediaFile;
         if (type == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE){
             String path = mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp+ "MattQuanfinallyGotCameraWorking"+".jpg";
+                    "IMG_" + timeStamp+ "Original"+".jpg";
             Log.e("savedPath",path);
             SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(
                     "com.quan.companion", Context.MODE_PRIVATE);

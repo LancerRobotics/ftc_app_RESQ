@@ -20,7 +20,16 @@ import java.util.Date;
  * Created by Matt on 12/27/2015.
  */
 public class Vision {
-
+    public static double EDGE_THRESHOLD = 50;
+    public static double LOWER_BOUNDS_BLUE_HUE = 172;
+    public static double UPPER_BOUNDS_BLUE_HUE = 240;
+    //red is right where the circle turns around
+    public static double LOWER_BOUNDS_PINK_HUE = 290;
+    public static double UPPER_BOUNDS_RED_HUE = 15;
+    public static double UPPER_BOUNDS_BLUE_VIBRANCY = 50;
+    public static double UPPER_BOUNDS_BLUE_SATURATION = 50;
+    public static double UPPER_BOUNDS_RED_VIBRANCY = 80;
+    //these values are all based off of the color wheel
     public static String findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide (Bitmap image) {
         //find the avg hue for right side, find avg hue for left side
         //compare
@@ -64,12 +73,12 @@ public class Vision {
         //done getting right side
         //compare and return
         String returnThis = "avgHueLeft:"+avgHueLeft+"avgHueRight:"+avgHueRight;
-        if (isRed(avgHueLeft)) {
+        if (isRedHue(avgHueLeft)) {
             //left was red
             returnThis+="left=red";
             return returnThis;
         }
-        else if (isBlue(avgHueLeft)) {
+        else if (isBlueHue(avgHueLeft)) {
             returnThis+="left=blue";
             return returnThis;
         }
@@ -78,12 +87,12 @@ public class Vision {
         }
         //if you're here, it means we're unknown
         //so let's check the right side
-        if (isRed(avgHueRight)) {
+        if (isRedHue(avgHueRight)) {
             //right was red
             returnThis+="right=red";
             return returnThis;
         }
-        else if (isBlue(avgHueRight)) {
+        else if (isBlueHue(avgHueRight)) {
             returnThis+="right=blue";
             return returnThis;
         }
@@ -95,20 +104,180 @@ public class Vision {
         return returnThis;
 
     }
+    public static boolean isRedHue (double hue) {
+        //returns if the color is red, based solely on hue. inaccuracies with saturataion/vibrancy variables
+        return 0 < hue && hue < UPPER_BOUNDS_RED_HUE || hue > LOWER_BOUNDS_PINK_HUE;
+    }
+    public static boolean isBlueHue (double hue) {
+        //returns if the color is blue, based solely on hue. inaccuracies with saturataion/vibrancy variables
+        return LOWER_BOUNDS_BLUE_HUE < hue && hue < UPPER_BOUNDS_BLUE_HUE;
+    }
 
-    public static boolean isRed (double hue) {
-        if (0<hue&&hue<15||hue>295) {
+    public static boolean isRed (double hue, double V) {
+        //it is too dark to be red, lightness doesnt really matter for red since lighter red is pink which is basically red
+        return V >= UPPER_BOUNDS_BLUE_VIBRANCY && (0 < hue && hue < UPPER_BOUNDS_RED_HUE || hue > LOWER_BOUNDS_PINK_HUE);
+        /* UNSIMPLIFIED CODE cuz this makes more sense then the random stuff up there
+        if (V<UPPER_BOUNDS_BLUE_VIBRANCY) {
+            //it is too dark to be red, lightness doesnt really matter for red since lighter red is pink which is basically red
+            return false;
+        }
+        if (0<hue&&hue<UPPER_BOUNDS_RED_HUE||hue>LOWER_BOUNDS_PINK_HUE) {
             //it's red
             return true;
         }
         return false;
+         */
     }
-    public static boolean isBlue (double hue) {
-        if (170<hue&&hue<190) {
+    public static boolean isBlue (double hue, double S, double V) {
+        //becuase blue can be less vibrant and still be blue, as well as lighter and still be blue, there's more lenienacy for "blue"
+        return !(V < UPPER_BOUNDS_BLUE_VIBRANCY && S < UPPER_BOUNDS_BLUE_SATURATION) && LOWER_BOUNDS_BLUE_HUE < hue && hue < UPPER_BOUNDS_BLUE_HUE;
+        /* UNSIMPLIFIED CODE (because this makes more sense then the random stuff up there.
+        if (V<UPPER_BOUNDS_BLUE_VIBRANCY&& S<UPPER_BOUNDS_BLUE_SATURATION) {
+
+            return false;
+            //becuase blue can be less vibrant and still be blue, as well as lighter and still be blue, there's more lenienacy for "blue"
+
+        }
+        if (LOWER_BOUNDS_BLUE_HUE<hue&&hue<UPPER_BOUNDS_BLUE_HUE) {
             // it's blue
             return true;
         }
         return false;
+        */
+    }
+
+    public static double toLum (int r, int g, int b) {
+        //luminace returns between 0, 255, 0 being black and 255 being white
+        //formula from https://github.com/rayning0/Princeton-Algorithms-Java/blob/master/introcs/Luminance.java
+        return .299*r + .587*g + .114*b;
+    }
+
+    public static Bitmap toGrayscaleBitmap (Bitmap original) {
+
+        Bitmap palet = original.copy(Bitmap.Config.ARGB_8888,true);
+        for (int i =0; i <palet.getWidth();i++ ) {
+            for (int j = 0;j <palet.getHeight();j++) {
+                //getPixel returns a color int of the pixel
+                int red = Color.red(palet.getPixel(i,j));
+                int green = Color.green(palet.getPixel(i,j));
+                int blue = Color.blue(palet.getPixel(i,j));
+                int lum = (int)(Math.round(toLum(red,green,blue)));
+                palet.setPixel(i,j,Color.argb(255,lum,lum,lum));
+            }
+        }
+        return palet;
+
+    }
+
+    public static Bitmap convertGrayscaleToEdged (Bitmap grayscale) {
+        //sort through image matrix pixxel by pixel
+        //for each pixel, analyze each of the 8 pixels surrounding it
+
+        //record the value of the darkest pixel, and the lightest pixel
+
+        // if (darkest_pixel_value - lightest_pixel_value) > threshold)
+        //then rewrite that pixel as 1;
+        //else rewrite that pixel as 0;
+        //255 = white
+        //0 = dark;
+        //so we need to find max and min
+        Bitmap clean = Bitmap.createBitmap(grayscale.getWidth(),grayscale.getHeight(), Bitmap.Config.ARGB_8888);
+        //make entire bitmap white
+        for (int i = 0; i<clean.getWidth();i++) {
+            for (int j  = 0 ; j <grayscale.getHeight();j++) {
+                clean.setPixel(i,j,Color.WHITE);
+            }
+        }
+        Log.e("Done with clean","DONE");
+       int label = 1;
+        for (int i = 0; i <grayscale.getWidth();i++) {
+            for (int j  = 0 ; j <grayscale.getHeight();j++) {
+                int max = 0;
+                int min = 255;
+                for (int a = -1; a<=1;a++) {
+                    for (int b =-1;b<=1;b++) {
+                        int x = i+a;
+                        int y = j+b;
+                        //check bottom left first, then moves down, then next column
+                        //greyscale = all rgb values are equal to luminace value
+                        if (!(x<0||y<0||x>=grayscale.getWidth()||y>=grayscale.getHeight()||(a==0&&b==0))) {
+                            //if not any of these conditions, then it's a real pixel
+                            //get the lum and see if it's a max or min
+                            int pixel = grayscale.getPixel(x,y);
+                            int lum = Color.red(pixel);
+                            if (lum>max) {
+                                max = lum;
+                            }
+                            if (lum<min) {
+                                min = lum;
+                            }
+                        }
+                    }
+                }
+                //ok so now u set max/min for this group of surrounding pixels
+                //if darkest - lightest > threshold, then it's an edge
+                if (max - min > EDGE_THRESHOLD) {
+                    //his is an edge
+                    Log.e("Edge found!",""+i+","+j);
+                    //mark i,j as an edge
+
+                    //if neighbours are unlabled, label pixel with label. increment label by one.
+                    //else label the neighbor label
+                    boolean neighborHasLabel = false;
+                    for (int a = -1; a<=1;a++) {
+                        for (int b = -1; b <= 1; b++) {
+                            int x = i+a;
+                            int y = j+b;
+                            if (!(x<0||y<0||x>=grayscale.getWidth()||y>=grayscale.getHeight()||(a==0&&b==0))) {
+                                int pixel = clean.getPixel(x, y);
+                                if (Color.red(pixel) != 255) {
+                                    //if neighbor pixel is not 0, then it has a label
+                                    //if it finds itself, it should still be equal to 0 so no problems there
+                                    clean.setPixel(i, j, Color.argb(255,Color.red(pixel),Color.red(pixel),Color.red(pixel)) );
+                                    Log.e("label", "neighbor had a label: " + Color.red(pixel));
+                                    neighborHasLabel = true;
+                                }
+                            }
+                        }
+                    }
+                    //if after checking all labels, neighborHasLabel is still fallse, then sit it to label and icrement label
+                    if (neighborHasLabel==false) {
+                        clean.setPixel(i,j,Color.argb(255,label,label,label));
+                        label++;
+                    }
+                }
+
+
+            }
+        }
+        //ok so now you have a graph with a bunch of labeled pixels.
+        if (label>255) {
+            //we have a problem because then we cant scale values to different shades of grade
+            Log.e("ERROR","label overflow"+label);
+        }
+        else if (label==50) {
+            Log.e("LOL","got fifty shades of gray");
+        }
+        else {
+            //shade the gray
+            //shade it to 255/label
+            //ok so now you've found edge, and successfully labeled it
+            for (int i = 0; i <grayscale.getWidth();i++) {
+                for (int j = 0; j < grayscale.getHeight(); j++) {
+                    if (Color.red(clean.getPixel(i,j))!=255) {
+                        //if it's not white, dont do this
+                        Log.e("pixel", "red" + Color.red(clean.getPixel(i, j)) + "blue" + Color.blue(clean.getPixel(i, j)) + "colorint" + clean.getPixel(i, j));
+                        int shade = (255 / (label + 1)) * Color.red(clean.getPixel(i, j));
+                        Log.e("shade", shade + "" + "label"+label+" redCol"+Color.red(clean.getPixel(i,j)));
+                        clean.setPixel(i, j, Color.argb(255, shade, shade, shade));
+                        Log.e("clean shade", Color.red(clean.getPixel(i, j)) + "first" + Color.blue(clean.getPixel(i, j)) + "second");
+                    }
+                }
+            }
+
+        }
+        //beautiful. now you've got a shaded grayed image.
+        return clean;   //not clean anymore doe
     }
 
     public static String findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor (Bitmap image, Context context) {
@@ -147,11 +316,7 @@ public class Vision {
                 if ((1<=hsv[0]&&hsv[0]<=15)||hsv[0]>295||(170<hsv[0]&&hsv[0]<190)) {
                     //then it is either red or blue, and is noteworthy
                     //note a complete white pixel has hue values of 0, hence the greater than or equal to 1
-                    Log.e("unworthy pixel",String.valueOf(numberOfPixelsThatAreNoteWorthy));
                     numberOfPixelsThatAreNoteWorthy++;
-                }
-                else {
-                    Log.e("worth","worth");
                 }
             }
             //from our testing, about 25% of the row is taken up by the beacon
@@ -253,11 +418,11 @@ public class Vision {
                 Color.colorToHSV(pixel, hsv);
                 if (hsv[0]!=0) {
                     //because r=255,g=255,b=255, means hue = 0; (which is white)
-                    if (isBlue(hsv[0])) {
+                    if (isBlue(hsv[0], hsv[1], hsv[2])) {
                         returnThis+="firstColorFound:blue XYCoor:"+i+","+j;
                         return returnThis;
                     }
-                    else if (isRed(hsv[0])) {
+                    else if (isRed(hsv[0],hsv[2])) {
                         returnThis+= "firstColorFound:red XYCoor:"+i+","+j;
                         return returnThis;
                     }
@@ -271,6 +436,30 @@ public class Vision {
 
         return returnThis;
     }
+
+    public static String savePicture (Bitmap bitmap, Context context, String tag) {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())+tag;
+        File pictureFile = getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE,timeStamp, context);
+        if (pictureFile == null){
+            Log.d("ERROR", "Error creating media file, check storage permissions: "
+            );
+            return "ERROR";
+        }
+        try {
+
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
+            fos.close();
+
+
+        } catch (FileNotFoundException e) {
+            Log.d("ERROR", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("ERROR", "Error accessing file: " + e.getMessage());
+        }
+        return pictureFile.getName();
+    }
+
     private static File getOutputMediaFile(int type, String timeStamp, Context context) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.

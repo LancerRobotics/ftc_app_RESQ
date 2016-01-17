@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.util.Log;
 
 import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.ftcrobotcontroller.Keys;
@@ -42,15 +43,27 @@ public class CameraTestOp extends LinearOpMode {
         telemetry.addData("image", image.toString());
         ((FtcRobotControllerActivity) hardwareMap.appContext).initImageTakenPreview(image);
         //ok so now I have the image
-        if (image.getHeight()>4096||image.getWidth()>4096) {
+        //scale image down to 216 height if needed
+        if (image.getHeight()>216||image.getWidth()>216) {
             //too large to be uploaded into a texture
-            int nh = (int) ( image.getHeight() * (512.0 / image.getWidth()) );
-            image = Bitmap.createScaledBitmap(image,512,nh,true);
-            telemetry.addData("bitmap too large","shrunk");
+            int nh = (int) ( image.getHeight() * (216.0 / image.getWidth()) );
+            Log.e("nh",nh+" h"+image.getHeight()+" w"+image.getWidth());
+            image = Bitmap.createScaledBitmap(image,216,nh,true);
+            //original will be same size as everything else
+            //the saved version of the pic is original size, however
+            Vision.savePicture(image,hardwareMap.appContext,"SHRUNKEN");
+            telemetry.addData("bitmap shrunk","shrunk");
         }
         String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
         telemetry.addData("Vision1","half split color only" +returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
-        String returnedStringViaCutAndWhite = Vision.findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(image,hardwareMap.appContext);
+        Log.e("half split color", returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
+        String returnedStringViaCutAndWhite = Vision.findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(image, hardwareMap.appContext);
         telemetry.addData("Vision2","white out "+returnedStringViaCutAndWhite);
+        Log.e("whiteout",returnedStringViaCutAndWhite);
+        Bitmap grayscaleBitmap = Vision.toGrayscaleBitmap(image);
+        telemetry.addData("grayscale image", Vision.savePicture(grayscaleBitmap, hardwareMap.appContext,"GRAYSCALE"));
+        Bitmap edged = Vision.convertGrayscaleToEdged(grayscaleBitmap);
+        telemetry.addData("edged image",Vision.savePicture(edged,hardwareMap.appContext,"EDGED"));
+
     }
 }
