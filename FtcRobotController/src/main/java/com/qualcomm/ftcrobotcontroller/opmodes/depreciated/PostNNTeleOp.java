@@ -71,7 +71,7 @@ public class PostNNTeleOp extends OpMode {
         powerSplit(pwrLeft, pwrRight);
 
         //collector going backwards on left bumper press
-        if (gamepad2.left_bumper&&filterRight.getPosition()!=Keys.FILTER_UP) {
+        if (gamepad2.left_bumper&&filterRight.getPosition()!= Keys.FILTER_UP) {
 
                 filterLeft.setPosition(Keys.FILTER_UP);
                 filterRight.setPosition(Keys.FILTER_UP);
@@ -79,7 +79,7 @@ public class PostNNTeleOp extends OpMode {
                 collector.setPower(-.5);
 
         }
-        else if (gamepad2.left_bumper&&filterRight.getPosition()==Keys.FILTER_UP) {
+        else if (gamepad2.left_bumper&&filterRight.getPosition()== Keys.FILTER_UP) {
             //toggled
             //filter position is already up
             //toggle collector off
@@ -97,10 +97,10 @@ public class PostNNTeleOp extends OpMode {
                 //switch collector to forward
                 collector.setPower(.5);
                 //assuming positive is forward
-                freezeAllOtherServosToWhereverTheyAreExceptFor(Keys.filterLeft,Keys.filterRight);
+                freezeAllOtherServosToWhereverTheyAreExceptFor(Keys.filterLeft, Keys.filterRight);
             }
 
-        } else if (!(collector.getPower()<0&&filterLeft.getPosition()==Keys.FILTER_UP)) {
+        } else if (!(collector.getPower()<0&&filterLeft.getPosition()== Keys.FILTER_UP)) {
             //left trigger is not pressed
             //stop collector
             collector.setPower(0);
@@ -177,7 +177,7 @@ public class PostNNTeleOp extends OpMode {
        //3= "zip_left";
       //4 = "zip_right";
        //5= "climber";
-        String [] mArray = {Keys.filterLeft,Keys.filterRight,Keys.score,Keys.climber};
+        String [] mArray = {Keys.filterLeft, Keys.filterRight, Keys.score, Keys.climber};
         for (int j = 0; j<mArray.length;j++) {
             for (int i = 0; i < arrayOfServosToExclude.length; i++) {
                 if (arrayOfServosToExclude[i].equals(mArray[j])) {
@@ -226,8 +226,8 @@ public class PostNNTeleOp extends OpMode {
     }
 
     public void liftMove(double power) {
-        liftLeft.setPower(Range.clip(power*Keys.MAX_SPEED, -1, 1));
-        liftRight.setPower(Range.clip(power*Keys.MAX_SPEED, -1, 1));
+        liftLeft.setPower(Range.clip(power* Keys.MAX_SPEED, -1, 1));
+        liftRight.setPower(Range.clip(power* Keys.MAX_SPEED, -1, 1));
     }
 
     public void stop() {

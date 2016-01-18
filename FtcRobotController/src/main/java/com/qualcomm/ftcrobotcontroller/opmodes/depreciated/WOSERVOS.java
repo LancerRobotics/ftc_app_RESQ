@@ -173,7 +173,7 @@ public class WOSERVOS extends OpMode {
         //3= "zip_left";
         //4 = "zip_right";
         //5= "climber";
-        String [] mArray = {Keys.filterLeft,Keys.filterRight,Keys.score,Keys.climber};
+        String [] mArray = {Keys.filterLeft, Keys.filterRight, Keys.score, Keys.climber};
         for (int j = 0; j<mArray.length;j++) {
             for (int i = 0; i < arrayOfServosToExclude.length; i++) {
                 if (arrayOfServosToExclude[i].equals(mArray[j])) {
@@ -222,8 +222,8 @@ public class WOSERVOS extends OpMode {
     }
 
     public void liftMove(double power) {
-        liftLeft.setPower(Range.clip(power*Keys.MAX_SPEED, -1, 1));
-        liftRight.setPower(Range.clip(power*Keys.MAX_SPEED, -1, 1));
+        liftLeft.setPower(Range.clip(power* Keys.MAX_SPEED, -1, 1));
+        liftRight.setPower(Range.clip(power* Keys.MAX_SPEED, -1, 1));
     }
 
     public void stop() {

@@ -74,7 +74,7 @@ public class NorthernNightmaresTeleop extends OpMode {
                 //assuming the ranges are from 0 to 1
                 filterLeft.setPosition(Keys.FILTER_UP);
                 filterRight.setPosition(Keys.FILTER_UP);
-                freezeAllOtherServosToWhereverTheyAreExceptFor(Keys.filterLeft,Keys.filterRight);
+                freezeAllOtherServosToWhereverTheyAreExceptFor(Keys.filterLeft, Keys.filterRight);
             } else {
 
 
@@ -110,7 +110,7 @@ public class NorthernNightmaresTeleop extends OpMode {
                 //switch collector to forward
                 collector.setPower(.5);
                 //assuming positive is forward
-                freezeAllOtherServosToWhereverTheyAreExceptFor(Keys.filterLeft,Keys.filterRight);
+                freezeAllOtherServosToWhereverTheyAreExceptFor(Keys.filterLeft, Keys.filterRight);
             }
             //else if it's still true, but filter is alraedy in position, dont do anything!
         } else {
@@ -164,7 +164,7 @@ public class NorthernNightmaresTeleop extends OpMode {
        //3= "zip_left";
       //4 = "zip_right";
        //5= "climber";
-        String [] mArray = {Keys.filterLeft,Keys.filterRight,Keys.score,Keys.climber};
+        String [] mArray = {Keys.filterLeft, Keys.filterRight, Keys.score, Keys.climber};
         for (int j = 0; j<mArray.length;j++) {
             for (int i = 0; i < arrayOfServosToExclude.length; i++) {
                 if (arrayOfServosToExclude[i].equals(mArray[j])) {

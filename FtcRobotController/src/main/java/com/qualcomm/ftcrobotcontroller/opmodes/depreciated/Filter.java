@@ -74,7 +74,7 @@ public class Filter extends OpMode {
                 //switch collector to forward
                 collector.setPower(-.5);
                 //assuming positive is forward
-                freezeAllOtherServosToWhereverTheyAreExceptFor(Keys.filterLeft,Keys.filterRight);
+                freezeAllOtherServosToWhereverTheyAreExceptFor(Keys.filterLeft, Keys.filterRight);
             }
             //else if it's still true, but filter is alraedy in position, dont do anything!
         } else {
@@ -93,7 +93,7 @@ public class Filter extends OpMode {
         //3= "zip_left";
         //4 = "zip_right";
         //5= "climber";
-        String [] mArray = {Keys.filterLeft,Keys.filterRight,Keys.score,Keys.climber};
+        String [] mArray = {Keys.filterLeft, Keys.filterRight, Keys.score, Keys.climber};
         for (int j = 0; j<mArray.length;j++) {
             for (int i = 0; i < arrayOfServosToExclude.length; i++) {
                 if (arrayOfServosToExclude[i].equals(mArray[j])) {

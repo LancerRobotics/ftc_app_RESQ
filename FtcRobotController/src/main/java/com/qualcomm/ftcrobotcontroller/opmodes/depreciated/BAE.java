@@ -151,7 +151,7 @@ public class BAE extends OpMode{
             if (gamepad2.right_stick_x<.3) {
                 //less than 0 is negative, negative is that the stick was moved to the left
 
-                if (adjustedPosition==Keys.SWIVEL_CENTER||adjustedPosition==Keys.SWIVEL_RIGHT) {
+                if (adjustedPosition== Keys.SWIVEL_CENTER||adjustedPosition== Keys.SWIVEL_RIGHT) {
                     //we are going to multiply everything by 100 because we are doing all position values to two decimal places
                     //conevrt to int because switch case only works with ints
                     //we could use if/else but swtich case makes more sense to me
@@ -173,7 +173,7 @@ public class BAE extends OpMode{
             }
             else if (gamepad2.right_stick_x>.3) {
                 //means that the right stick was moved to the right
-                if (adjustedPosition==Keys.SWIVEL_CENTER||adjustedPosition==Keys.SWIVEL_LEFT) {
+                if (adjustedPosition== Keys.SWIVEL_CENTER||adjustedPosition== Keys.SWIVEL_LEFT) {
                     //int pos = (int)(swivel.getPosition()*100);
                     telemetry.addData(Keys.SWIVEL_TELEMETRY,swivel.getPosition());
                     switch ((int)(adjustedPosition*100)) {
@@ -202,7 +202,7 @@ public class BAE extends OpMode{
             //2= "score";
             //3="climber";
             //4 = "swivel"
-            String [] mArray = {Keys.filterLeft,Keys.filterRight,Keys.score,Keys.climber,Keys.swivel};
+            String [] mArray = {Keys.filterLeft, Keys.filterRight, Keys.score, Keys.climber, Keys.swivel};
             for (int j = 0; j<mArray.length;j++) {
                 for (int i = 0; i < arrayOfServosToExclude.length; i++) {
                     if (arrayOfServosToExclude[i].equals(mArray[j])) {
@@ -250,8 +250,8 @@ public class BAE extends OpMode{
         }
 
         public void liftMove(double power) {
-            liftLeft.setPower(Range.clip(power*Keys.MAX_SPEED, -1, 1));
-            liftRight.setPower(Range.clip(power*Keys.MAX_SPEED, -1, 1));
+            liftLeft.setPower(Range.clip(power* Keys.MAX_SPEED, -1, 1));
+            liftRight.setPower(Range.clip(power* Keys.MAX_SPEED, -1, 1));
         }
 
         public void stop() {

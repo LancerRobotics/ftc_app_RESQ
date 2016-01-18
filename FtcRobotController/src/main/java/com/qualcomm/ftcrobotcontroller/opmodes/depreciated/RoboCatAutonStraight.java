@@ -52,7 +52,7 @@ public class RoboCatAutonStraight extends LinearOpMode {
         //2= "score";
         //3="climber";
         //4 = "swivel"
-        String [] mArray = {Keys.filterLeft,Keys.filterRight,Keys.score,Keys.climber,Keys.swivel};
+        String [] mArray = {Keys.filterLeft, Keys.filterRight, Keys.score, Keys.climber, Keys.swivel};
         for (int j = 0; j<mArray.length;j++) {
             for (int i = 0; i < arrayOfServosToExclude.length; i++) {
                 if (arrayOfServosToExclude[i].equals(mArray[j])) {
