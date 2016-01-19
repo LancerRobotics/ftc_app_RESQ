@@ -1,5 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.states;
 
+import com.kauailabs.navx.ftc.AHRS;
+import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,6 +12,8 @@ import com.qualcomm.robotcore.util.Range;
  * Created by jakew on 1/18/2016.
  */
 public class TeleOp extends OpMode{
+    private AHRS navx_device;
+    private navXPIDController yawPIDController;
     //Motors
     DcMotor fr, fl, bl, br, liftLeft, liftRight, collector, winch;
     double pwrLeft, pwrRight;
@@ -76,6 +80,8 @@ public class TeleOp extends OpMode{
         hanging = false;
         clamped = false;
         climbers = false;
+
+        navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
     }
 
     public void loop() {

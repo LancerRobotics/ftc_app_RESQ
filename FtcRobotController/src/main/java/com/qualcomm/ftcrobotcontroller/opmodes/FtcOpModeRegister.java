@@ -36,6 +36,7 @@ import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Mecanum;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Treads;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
@@ -62,8 +63,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Autonomous",Autonomous.class);
     manager.register("Encoded Rotate Testing", GyroAuton.class);
     manager.register("Mecanum",Mecanum.class);
-    manager.register("Treads",Treads.class);
-    manager.register("Sonar Telemetry", AnalogSonar.class);
+    manager.register("Teleop", TeleOp.class);
     //manager.register("Limit Switch Telemetry", AnalogLimitSwitch.class);
     manager.register("Camera", CameraTestOp.class);
     manager.register("Example Rotate", com.qualcomm.ftcrobotcontroller.opmodes.navX.navXRotateToAnglePIDLinearOp.class);
