@@ -27,6 +27,11 @@ public class TeleOp extends OpMode{
     boolean gamepad2LeftTrigger;
     boolean gamepad2LeftBumper;
 
+    boolean dumpDown;
+    boolean hanging;
+    boolean clamped;
+    boolean climbers;
+
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
@@ -58,42 +63,93 @@ public class TeleOp extends OpMode{
         hang.setPosition(Keys.HANG_INIT);
         dump1.setPosition(Keys.DUMP_INIT);
         dump2.setPosition(Keys.DUMP_INIT);
-        clamp1.setPosition(Keys.CLAMP_INIT);
-        clamp2.setPosition(Keys.CLAMP_INIT);
+        clamp1.setPosition(Keys.CL_INIT);
+        clamp2.setPosition(Keys.CR_INIT);
+
+        dumpDown = false;
+        hanging = false;
+        clamped = false;
+        climbers = false;
     }
 
     public void loop() {
         //TODO deadzones and test values
         /*
         DRIVER:
-         - movement
-         - clamps
+         - movement DONE TODO NEEDS DEADZONES
+         - clamps DONE
+         - climbers DONE
 
         GUNNER:
-         - lift
+         - lift DONE TODO NEEDS DEADZONES
          - swivel
-         - dump
-         - collector
+         - dump DONE
+         - collector DONE
          */
 
         gamepad1LeftStickY = Range.clip(gamepad1.left_stick_y, -1, 1);
         gamepad1RightStickY = Range.clip(gamepad1.right_stick_y, -1, 1);
         gamepad2LeftStickY = Range.clip(gamepad2.left_stick_y, -1, 1);
-        gamepad2LeftTrigger = gamepad2.left_trigger > 0;
+        gamepad2LeftTrigger = gamepad2.left_trigger > .15;
         gamepad2LeftBumper = gamepad2.left_bumper;
 
         pwrLeft = Range.clip(gamepad1LeftStickY * .78, -1, 1);
         pwrRight = Range.clip(gamepad1RightStickY * .78, -1, 1);
         liftPwr = Range.clip(gamepad2LeftStickY * .78, -1, 1);
 
+        //Movement
         powerSplit(pwrLeft, pwrRight);
+
+        //Lift
         liftMove(liftPwr);
 
+        //Collector
         if (gamepad2LeftBumper)
             collectorMovement(false);
         else if (gamepad2LeftTrigger)
             collectorMovement(true);
 
+        //Dump
+        if (gamepad2.a && !dumpDown) {
+            dump1.setPosition(Keys.DUMP_DOWN);
+            dump2.setPosition(-Keys.DUMP_DOWN);
+            dumpDown = true;
+        } else if (gamepad2.a && dumpDown){
+            dump1.setPosition(Keys.DUMP_INIT);
+            dump2.setPosition(-Keys.DUMP_INIT);
+            dumpDown = true;
+        }
+
+        //Hang
+        if (gamepad2.b && !hanging) {
+            hang.setPosition(Keys.HANG_NOW);
+            hanging = true;
+        } else if (gamepad2.a && hanging){
+            hang.setPosition(Keys.HANG_INIT);
+            hanging = false;
+        }
+
+        //Clamps (for ramp)
+        if (gamepad1.a && !clamped) {
+            clamp1.setPosition(Keys.CL_DOWN);
+            clamp2.setPosition(-Keys.CR_DOWN);
+            clamped = true;
+        } else if (gamepad1.a && clamped) {
+            clamp1.setPosition(Keys.CL_INIT);
+            clamp2.setPosition(-Keys.CR_INIT);
+            clamped = false;
+        }
+
+        //Climbers
+        if (gamepad1.x && !climbers) {
+            clamp1.setPosition(Keys.CLIMBER_DUMP);
+            clamp2.setPosition(-Keys.CLIMBER_DUMP);
+            clamped = true;
+        } else if (gamepad1.x && climbers) {
+            clamp1.setPosition(Keys.CL_INIT);
+            clamp2.setPosition(-Keys.CL_INIT);
+            clamped = false;
+        }
     }
 
 
@@ -111,10 +167,11 @@ public class TeleOp extends OpMode{
 
     //Clips the power that the lift motors can recieve and sets them to this clipped power.
     public void liftMove(double power) {
-        liftLeft.setPower(Range.clip(power* Keys.MAX_SPEED, -1, 1));
+        liftLeft.setPower(Range.clip(power * Keys.MAX_SPEED, -1, 1));
         liftRight.setPower(Range.clip(power* Keys.MAX_SPEED, -1, 1));
     }
 
+    //Method for collection system
     public void collectorMovement(boolean backward) {
         if (backward)
             collector.setPower(-Keys.COLLECTOR);
