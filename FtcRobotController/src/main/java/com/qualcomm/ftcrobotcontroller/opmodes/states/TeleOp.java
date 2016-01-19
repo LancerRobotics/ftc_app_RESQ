@@ -11,19 +11,22 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class TeleOp extends OpMode{
     //Motors
-    DcMotor fr, fl, bl, br, liftLeft, liftRight, collector;
+    DcMotor fr, fl, bl, br, liftLeft, liftRight, collector, winch;
     double pwrLeft, pwrRight;
 
     //Servos
-    Servo swivel, dump1, dump2, score, climber, hang, clamp1, clamp2;
+    Servo swivel, dump, hopperLeft, climber, hang, clampRight, clampLeft, hopperRight, triggerRight, triggerLeft;
 
     //Lift
     double liftPwr;
 
+    //Pull
+    double pullPwr;
+
     //Joystick 1 --> DRIVER
     float gamepad1LeftStickY, gamepad1RightStickY;
     //Joystick 2 --> GUNNER
-    float gamepad2LeftStickY;
+    float gamepad2LeftStickY, gamepad2RightStickY;
     boolean gamepad2LeftTrigger;
     boolean gamepad2LeftBumper;
 
@@ -41,30 +44,33 @@ public class TeleOp extends OpMode{
         collector = hardwareMap.dcMotor.get(Keys.collector);
         liftLeft = hardwareMap.dcMotor.get(Keys.liftLeft);
         liftRight = hardwareMap.dcMotor.get(Keys.liftRight);
+        winch = hardwareMap.dcMotor.get(Keys.winch);
 
-        score = hardwareMap.servo.get(Keys.score);
         climber = hardwareMap.servo.get(Keys.climber);
         swivel = hardwareMap.servo.get(Keys.swivel);
         hang = hardwareMap.servo.get(Keys.hang);
-        dump1 = hardwareMap.servo.get(Keys.dump2);
-        dump2 = hardwareMap.servo.get(Keys.dump1);
-        clamp1 = hardwareMap.servo.get(Keys.clamp1);
-        clamp2 = hardwareMap.servo.get(Keys.clamp2);
+        hopperLeft = hardwareMap.servo.get(Keys.hopperLeft);
+        hopperRight = hardwareMap.servo.get(Keys.hopperRight);
+        clampLeft = hardwareMap.servo.get(Keys.clampLeft);
+        clampRight = hardwareMap.servo.get(Keys.clampRight);
+        dump = hardwareMap.servo.get(Keys.dump);
+        triggerLeft = hardwareMap.servo.get(Keys.triggerLeft);
+        triggerRight = hardwareMap.servo.get(Keys.triggerRight);
 
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         liftRight.setDirection(DcMotor.Direction.REVERSE);
-        clamp2.setDirection(Servo.Direction.REVERSE);
-        dump2.setDirection(Servo.Direction.REVERSE);
 
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        score.setPosition(Keys.SCORE_CLOSE);
+        dump.setPosition(Keys.DUMP_INIT);
         swivel.setPosition(Keys.SWIVEL_CENTER);
         hang.setPosition(Keys.HANG_INIT);
-        dump1.setPosition(Keys.DUMP_INIT);
-        dump2.setPosition(Keys.DUMP_INIT);
-        clamp1.setPosition(Keys.CL_INIT);
-        clamp2.setPosition(Keys.CR_INIT);
+        hopperLeft.setPosition(Keys.HL_STORE);
+        hopperRight.setPosition(Keys.HR_STORE);
+        clampLeft.setPosition(Keys.CL_INIT);
+        clampRight.setPosition(Keys.CR_INIT);
+        triggerLeft.setPosition(Keys.LT_INIT);
+        triggerRight.setPosition(Keys.RT_INIT);
 
         dumpDown = false;
         hanging = false;
@@ -73,35 +79,52 @@ public class TeleOp extends OpMode{
     }
 
     public void loop() {
-        //TODO deadzones and test values
+        //TODO test values
         /*
         DRIVER:
-         - movement DONE TODO NEEDS DEADZONES
+         - movement DONE
          - clamps DONE
          - climbers DONE
 
         GUNNER:
-         - lift DONE TODO NEEDS DEADZONES
+         - lift DONE
          - swivel
          - dump DONE
          - collector DONE
          */
 
         gamepad1LeftStickY = Range.clip(gamepad1.left_stick_y, -1, 1);
+        if(Math.abs(gamepad1LeftStickY) < .15) {
+            gamepad1LeftStickY = 0;
+        }
         gamepad1RightStickY = Range.clip(gamepad1.right_stick_y, -1, 1);
+        if(Math.abs(gamepad1RightStickY) < .15) {
+            gamepad1LeftStickY = 0;
+        }
         gamepad2LeftStickY = Range.clip(gamepad2.left_stick_y, -1, 1);
+        if(Math.abs(gamepad2LeftStickY) < .15) {
+            gamepad1LeftStickY = 0;
+        }
+        gamepad2RightStickY = Range.clip(gamepad2.right_stick_y, -1, 1);
+        if(Math.abs(gamepad1RightStickY) < .15) {
+            gamepad2RightStickY = 0;
+        }
         gamepad2LeftTrigger = gamepad2.left_trigger > .15;
         gamepad2LeftBumper = gamepad2.left_bumper;
 
         pwrLeft = Range.clip(gamepad1LeftStickY * .78, -1, 1);
         pwrRight = Range.clip(gamepad1RightStickY * .78, -1, 1);
         liftPwr = Range.clip(gamepad2LeftStickY * .78, -1, 1);
+        pullPwr = Range.clip(gamepad2RightStickY * .78, -1, 1);
 
         //Movement
         powerSplit(pwrLeft, pwrRight);
 
         //Lift
         liftMove(liftPwr);
+
+        //Pull Up
+        pullUp(pullPwr);
 
         //Collector
         if (gamepad2LeftBumper)
@@ -111,12 +134,12 @@ public class TeleOp extends OpMode{
 
         //Dump
         if (gamepad2.a && !dumpDown) {
-            dump1.setPosition(Keys.DUMP_DOWN);
-            dump2.setPosition(-Keys.DUMP_DOWN);
+            hopperLeft.setPosition(Keys.HL_DUMP);
+            hopperRight.setPosition(Keys.HR_DUMP);
             dumpDown = true;
         } else if (gamepad2.a && dumpDown){
-            dump1.setPosition(Keys.DUMP_INIT);
-            dump2.setPosition(-Keys.DUMP_INIT);
+            hopperLeft.setPosition(Keys.HL_STORE);
+            hopperRight.setPosition(Keys.HR_STORE);
             dumpDown = true;
         }
 
@@ -124,31 +147,29 @@ public class TeleOp extends OpMode{
         if (gamepad2.b && !hanging) {
             hang.setPosition(Keys.HANG_NOW);
             hanging = true;
-        } else if (gamepad2.a && hanging){
+        } else if (gamepad2.b && hanging){
             hang.setPosition(Keys.HANG_INIT);
             hanging = false;
         }
 
         //Clamps (for ramp)
         if (gamepad1.a && !clamped) {
-            clamp1.setPosition(Keys.CL_DOWN);
-            clamp2.setPosition(-Keys.CR_DOWN);
+            clampLeft.setPosition(Keys.CL_DOWN);
+            clampRight.setPosition(-Keys.CR_DOWN);
             clamped = true;
         } else if (gamepad1.a && clamped) {
-            clamp1.setPosition(Keys.CL_INIT);
-            clamp2.setPosition(-Keys.CR_INIT);
+            clampLeft.setPosition(Keys.CL_INIT);
+            clampRight.setPosition(-Keys.CR_INIT);
             clamped = false;
         }
 
         //Climbers
         if (gamepad1.x && !climbers) {
-            clamp1.setPosition(Keys.CLIMBER_DUMP);
-            clamp2.setPosition(-Keys.CLIMBER_DUMP);
-            clamped = true;
+            climber.setPosition(Keys.CLIMBER_DUMP);
+            climbers = true;
         } else if (gamepad1.x && climbers) {
-            clamp1.setPosition(Keys.CL_INIT);
-            clamp2.setPosition(-Keys.CL_INIT);
-            clamped = false;
+            climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+            climbers = false;
         }
     }
 
@@ -177,5 +198,10 @@ public class TeleOp extends OpMode{
             collector.setPower(-Keys.COLLECTOR);
         else
             collector.setPower((Keys.COLLECTOR));
+    }
+
+    //Method for pulling bot up mountain when hanging
+    public void pullUp(double power) {
+        winch.setPower(power);
     }
 }
