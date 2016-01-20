@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.hardware.Camera;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.ftcrobotcontroller.VisionV1;
 
 import java.io.File;
 import java.util.ArrayList;

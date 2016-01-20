@@ -119,5 +119,9 @@ public class Keys {
     public static final double FILTER_ACTIVE = 0.07;
     public static final double FILTER_CLOSE = .1;
     public static final double FILTER_UP = .7;
+    public static final String score = "score";
+    public static final double SCORE_SCORING = .5;
+    public static final double SCORE_CLOSE = .5;
+    public static final double CLIMBER_HALFWAY = .5;
 
 }

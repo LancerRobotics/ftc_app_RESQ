@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class TeleOp extends OpMode{
     private AHRS navx_device;
-    private navXPIDController yawPIDController;
     //Motors
     DcMotor fr, fl, bl, br, liftLeft, liftRight, collector, winch;
     double pwrLeft, pwrRight;
@@ -38,6 +37,9 @@ public class TeleOp extends OpMode{
     boolean hanging;
     boolean clamped;
     boolean climbers;
+    boolean autoTrigger;
+    boolean rightTriggerManual;
+    boolean leftTriggerManual;
 
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
@@ -80,6 +82,9 @@ public class TeleOp extends OpMode{
         hanging = false;
         clamped = false;
         climbers = false;
+        rightTriggerManual = false;
+        leftTriggerManual = false;
+        autoTrigger = true;
 
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
     }
@@ -176,6 +181,42 @@ public class TeleOp extends OpMode{
         } else if (gamepad1.x && climbers) {
             climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
             climbers = false;
+        }
+
+        //Triggers
+        if(gamepad2.y && autoTrigger) {
+            autoTrigger = false;
+        }
+        else if(gamepad2.y && !autoTrigger) {
+            autoTrigger = true;
+        }
+        if(autoTrigger) {
+            if(navx_device.getPitch() > 0) {
+                triggerRight.setPosition(Keys.RT_TRIGGER);
+                triggerLeft.setPosition(Keys.LT_TRIGGER);
+            }
+            else {
+                triggerRight.setPosition(Keys.RT_INIT);
+                triggerLeft.setPosition(Keys.LT_INIT);
+            }
+        }
+        else {
+            if(gamepad2.right_bumper && !rightTriggerManual) {
+                triggerRight.setPosition(Keys.RT_TRIGGER);
+                rightTriggerManual = true;
+            }
+            else if (gamepad2.right_bumper && rightTriggerManual) {
+                triggerRight.setPosition(Keys.RT_INIT);
+                rightTriggerManual = false;
+            }
+            if(gamepad2.right_trigger > .15 && !leftTriggerManual) {
+                triggerLeft.setPosition(Keys.LT_TRIGGER);
+                leftTriggerManual = true;
+            }
+            else if (gamepad2.right_trigger > .15 && leftTriggerManual) {
+                triggerLeft.setPosition(Keys.LT_INIT);
+                leftTriggerManual = false;
+            }
         }
     }
 
