@@ -2,53 +2,53 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\exploded-aar\Hardware-release\jars\classes.jar"
+        jar="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\exploded-aar\WirelessP2p-release\jars\classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="55ecd0b0517650a2cffd06137a40de8af3bbbde3">
-        <dex dex="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\pre-dexed\debug\classes-8c28abee9fbb04bddd9ad205900d7a83ce0a6bc7.jar" />
-    </item>
-    <item
-        jar="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\exploded-aar\WirelessP2p-release\jars\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
+        revision="23.0.2"
         sha1="ebf8372b5bc9dc9f596ed438df36481099d51c41">
-        <dex dex="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\pre-dexed\debug\classes-43c65a4dc1aa595ec751bba434316e8766a3ed2a.jar" />
+        <dex dex="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\intermediates-exploded-aar-WirelessP2p-release_63a206ddd07a748de6f55aa9497df837ce76cc63.jar" />
     </item>
     <item
-        jar="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\exploded-aar\Analytics-release\jars\classes.jar"
+        jar="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\exploded-aar\Analytics-release\jars\classes.jar"
         jumboMode="false"
-        revision="21.1.2"
+        revision="23.0.2"
         sha1="23c74caa2b901107adc4d0aec343c5b8e8be86fb">
-        <dex dex="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\pre-dexed\debug\classes-218298929f2e6eec3afc398527f24124d21e70bb.jar" />
+        <dex dex="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\intermediates-exploded-aar-Analytics-release_d6154bb268f8c73f007de4d019433a2156757879.jar" />
     </item>
     <item
-        jar="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\exploded-aar\RobotCore-release\jars\classes.jar"
+        jar="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\exploded-aar\FtcCommon-release\jars\classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="2ec6f06847bccfe30fb8f8f75ce888721e4fd275">
-        <dex dex="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\pre-dexed\debug\classes-214a52add4bf91ea436127f20ad5f7a5e6573055.jar" />
-    </item>
-    <item
-        jar="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\exploded-aar\ModernRobotics-release\jars\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="ad4adcdf8eb6ff2b3b4fe9f1d676f099db621d60">
-        <dex dex="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\pre-dexed\debug\classes-2cb920e2ba1945fa6d7fba7089f152e50d13fa7f.jar" />
-    </item>
-    <item
-        jar="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\exploded-aar\navx_ftc-release\jars\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="eaddb63c5e208c3b664727d0285dfbe672cce899">
-        <dex dex="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\pre-dexed\debug\classes-0d7951126f3f900e1e35534b3823c6ef049f49d7.jar" />
-    </item>
-    <item
-        jar="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\exploded-aar\FtcCommon-release\jars\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
+        revision="23.0.2"
         sha1="6da7d9bc8c9a82321450b6b4273d1746b6cade21">
-        <dex dex="C:\Users\Matt\Desktop\ftc_app-master\ftc_app-master\FtcRobotController\build\intermediates\pre-dexed\debug\classes-7193d36703b94e08df2ed8706b1a91c956beaf13.jar" />
+        <dex dex="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\intermediates-exploded-aar-FtcCommon-release_6783d45df39e9dbf89c75411af07ca083e4fa4bb.jar" />
+    </item>
+    <item
+        jar="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\exploded-aar\navx_ftc-release\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="eaddb63c5e208c3b664727d0285dfbe672cce899">
+        <dex dex="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\intermediates-exploded-aar-navx_ftc-release_1a5918bf742947a976a1cf80432f4231422df610.jar" />
+    </item>
+    <item
+        jar="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\exploded-aar\ModernRobotics-release\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="ad4adcdf8eb6ff2b3b4fe9f1d676f099db621d60">
+        <dex dex="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\intermediates-exploded-aar-ModernRobotics-release_f526c70634506efb7cbd7bbeb62bfa2a45ed2691.jar" />
+    </item>
+    <item
+        jar="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\exploded-aar\Hardware-release\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="55ecd0b0517650a2cffd06137a40de8af3bbbde3">
+        <dex dex="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\intermediates-exploded-aar-Hardware-release_18fefbc44f8423610f770ba9cdd5751cf4c86fc8.jar" />
+    </item>
+    <item
+        jar="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\exploded-aar\RobotCore-release\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="2ec6f06847bccfe30fb8f8f75ce888721e4fd275">
+        <dex dex="C:\Users\spork\Desktop\ftc_app\FtcRobotController\build\intermediates\pre-dexed\debug\intermediates-exploded-aar-RobotCore-release_fa05f36821c743f7b2bb7a97c336408cf65f6450.jar" />
     </item>
 
 </items>
