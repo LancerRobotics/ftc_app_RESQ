@@ -4,6 +4,7 @@ import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -13,6 +14,8 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class TeleOp extends OpMode{
     private AHRS navx_device;
+    AnalogInput limitLeft;
+    AnalogInput limitRight;
     //Motors
     DcMotor fr, fl, bl, br, liftLeft, liftRight, collector, winch;
     double pwrLeft, pwrRight;
@@ -30,16 +33,13 @@ public class TeleOp extends OpMode{
     float gamepad1LeftStickY, gamepad1RightStickY;
     //Joystick 2 --> GUNNER
     float gamepad2LeftStickY, gamepad2RightStickY;
-    boolean gamepad2LeftTrigger;
-    boolean gamepad2LeftBumper;
 
     boolean dumpDown;
     boolean hanging;
     boolean clamped;
     boolean climbers;
-    boolean autoTrigger;
-    boolean rightTriggerManual;
-    boolean leftTriggerManual;
+    boolean rightTrigger;
+    boolean leftTrigger;
 
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
@@ -82,11 +82,12 @@ public class TeleOp extends OpMode{
         hanging = false;
         clamped = false;
         climbers = false;
-        rightTriggerManual = false;
-        leftTriggerManual = false;
-        autoTrigger = true;
+        rightTrigger = false;
+        leftTrigger = false;
 
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
+        limitLeft = hardwareMap.analogInput.get(Keys.LIMIT_LEFT);
+        limitRight = hardwareMap.analogInput.get(Keys.LIMIT_RIGHT);
     }
 
     public void loop() {
@@ -120,8 +121,6 @@ public class TeleOp extends OpMode{
         if(Math.abs(gamepad1RightStickY) < .15) {
             gamepad2RightStickY = 0;
         }
-        gamepad2LeftTrigger = gamepad2.left_trigger > .15;
-        gamepad2LeftBumper = gamepad2.left_bumper;
 
         pwrLeft = Range.clip(gamepad1LeftStickY * .78, -1, 1);
         pwrRight = Range.clip(gamepad1RightStickY * .78, -1, 1);
@@ -138,10 +137,11 @@ public class TeleOp extends OpMode{
         pullUp(pullPwr);
 
         //Collector
-        if (gamepad2LeftBumper)
+        if (gamepad2.left_bumper)
             collectorMovement(false);
-        else if (gamepad2LeftTrigger)
+        else if (gamepad2.right_bumper) {
             collectorMovement(true);
+        }
 
         //Dump
         if (gamepad2.a && !dumpDown) {
@@ -155,10 +155,10 @@ public class TeleOp extends OpMode{
         }
 
         //Hang
-        if (gamepad2.b && !hanging) {
+        if (gamepad2.x && !hanging) {
             hang.setPosition(Keys.HANG_NOW);
             hanging = true;
-        } else if (gamepad2.b && hanging){
+        } else if (gamepad2.x && hanging){
             hang.setPosition(Keys.HANG_INIT);
             hanging = false;
         }
@@ -184,39 +184,21 @@ public class TeleOp extends OpMode{
         }
 
         //Triggers
-        if(gamepad2.y && autoTrigger) {
-            autoTrigger = false;
+        if(gamepad2.right_trigger > .15 && !rightTrigger) {
+            triggerRight.setPosition(Keys.RT_TRIGGER);
+            rightTrigger = true;
         }
-        else if(gamepad2.y && !autoTrigger) {
-            autoTrigger = true;
+        else if(gamepad2.right_trigger > .15 && rightTrigger) {
+            triggerRight.setPosition(Keys.RT_INIT);
+            rightTrigger = false;
         }
-        if(autoTrigger) {
-            if(navx_device.getPitch() > 0) {
-                triggerRight.setPosition(Keys.RT_TRIGGER);
-                triggerLeft.setPosition(Keys.LT_TRIGGER);
-            }
-            else {
-                triggerRight.setPosition(Keys.RT_INIT);
-                triggerLeft.setPosition(Keys.LT_INIT);
-            }
+        if(gamepad2.left_trigger > .15 && !leftTrigger) {
+            triggerLeft.setPosition(Keys.LT_TRIGGER);
+            leftTrigger = true;
         }
-        else {
-            if(gamepad2.right_bumper && !rightTriggerManual) {
-                triggerRight.setPosition(Keys.RT_TRIGGER);
-                rightTriggerManual = true;
-            }
-            else if (gamepad2.right_bumper && rightTriggerManual) {
-                triggerRight.setPosition(Keys.RT_INIT);
-                rightTriggerManual = false;
-            }
-            if(gamepad2.right_trigger > .15 && !leftTriggerManual) {
-                triggerLeft.setPosition(Keys.LT_TRIGGER);
-                leftTriggerManual = true;
-            }
-            else if (gamepad2.right_trigger > .15 && leftTriggerManual) {
-                triggerLeft.setPosition(Keys.LT_INIT);
-                leftTriggerManual = false;
-            }
+        else if(gamepad2.left_trigger > .15 && leftTrigger) {
+            triggerLeft.setPosition(Keys.LT_INIT);
+            leftTrigger = false;
         }
     }
 
@@ -235,8 +217,20 @@ public class TeleOp extends OpMode{
 
     //Clips the power that the lift motors can recieve and sets them to this clipped power.
     public void liftMove(double power) {
-        liftLeft.setPower(Range.clip(power * Keys.MAX_SPEED, -1, 1));
-        liftRight.setPower(Range.clip(power* Keys.MAX_SPEED, -1, 1));
+        if (power >= 0) {
+            liftLeft.setPower(Range.clip(power * Keys.MAX_SPEED, -1, 1));
+            liftRight.setPower(Range.clip(power * Keys.MAX_SPEED, -1, 1));
+        }
+        else {
+            if(!getState(limitLeft) || !getState(limitRight)) {
+                liftLeft.setPower(Range.clip(power * Keys.MAX_SPEED, -1, 1));
+                liftRight.setPower(Range.clip(power * Keys.MAX_SPEED, -1, 1));
+            }
+            else {
+                liftLeft.setPower(0);
+                liftRight.setPower(0);
+            }
+        }
     }
 
     //Method for collection system
@@ -250,5 +244,14 @@ public class TeleOp extends OpMode{
     //Method for pulling bot up mountain when hanging
     public void pullUp(double power) {
         winch.setPower(power);
+    }
+
+    public boolean getState(AnalogInput limitSwitch) {
+        if(limitSwitch.getValue() > 100) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

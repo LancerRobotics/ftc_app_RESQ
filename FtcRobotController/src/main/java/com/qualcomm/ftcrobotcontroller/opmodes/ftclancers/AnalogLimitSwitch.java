@@ -12,7 +12,7 @@ public class AnalogLimitSwitch extends OpMode {
 
     @Override
     public void init() {
-        limit1 = hardwareMap.analogInput.get(Keys.LIMIT_ONE);
+        limit1 = hardwareMap.analogInput.get(Keys.LIMIT_LEFT);
     }
     public void loop() {
         telemetry.addData("Limit switch is pressed: ", getState());

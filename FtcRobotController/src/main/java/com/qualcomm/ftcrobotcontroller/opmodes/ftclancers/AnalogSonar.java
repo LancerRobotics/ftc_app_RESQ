@@ -12,7 +12,7 @@ public class AnalogSonar extends OpMode {
 
     @Override
     public void init() {
-        sonar1 = hardwareMap.analogInput.get(Keys.SONAR_ONE);
+        sonar1 = hardwareMap.analogInput.get(Keys.SONAR_LEFT);
     }
     public void loop() {
         double s1 = readSonar(sonar1);

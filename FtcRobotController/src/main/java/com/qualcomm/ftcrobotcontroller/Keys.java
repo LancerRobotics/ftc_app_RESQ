@@ -17,8 +17,12 @@ public class Keys {
     public static final String clampRight = "clamp_right";
     public static final String hang = "hang";
     public static final String advancedSensorModule = "asm";
-    public static final String LIMIT_ONE = "ls1";
-    public static final String SONAR_ONE = "sona1";
+    public static final String LIMIT_LEFT = "lsl";
+    public static final String LIMIT_RIGHT = "lsr";
+    public static final String SONAR_RIGHT = "sonaR";
+    public static final String SONAR_LEFT = "sonaL";
+    public static final String SONAR_FRONT = "sonaF";
+    public static final String SONAR_BACK = "sonaB";
     public static final String dump = "dump";
     public static final String triggerLeft = "trigger_left";
     public static final String triggerRight = "trigger_right";
