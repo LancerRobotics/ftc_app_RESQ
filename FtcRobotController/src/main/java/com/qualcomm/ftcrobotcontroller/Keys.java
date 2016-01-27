@@ -19,10 +19,10 @@ public class Keys {
     public static final String advancedSensorModule = "asm";
     public static final String LIMIT_LEFT = "lsl";
     public static final String LIMIT_RIGHT = "lsr";
-    public static final String SONAR_RIGHT = "sonaR";
-    public static final String SONAR_LEFT = "sonaL";
-    public static final String SONAR_FRONT = "sonaF";
-    public static final String SONAR_BACK = "sonaB";
+    public static final String SONAR_BACK_RIGHT = "sonaBR";
+    public static final String SONAR_FRONT_LEFT = "sonaFL";
+    public static final String SONAR_FRONT_RIGHT = "sonaFR";
+    public static final String SONAR_BACK_LEFT = "sonaBL";
     public static final String dump = "dump";
     public static final String triggerLeft = "trigger_left";
     public static final String triggerRight = "trigger_right";

@@ -8,19 +8,28 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
  * Created on 1/4/2016.
  */
 public class AnalogSonar extends OpMode {
-    AnalogInput sonar1;
+    static AnalogInput sonarFrontLeft, sonarFrontRight, sonarBackRight, sonarBackLeft;
 
     @Override
     public void init() {
-        sonar1 = hardwareMap.analogInput.get(Keys.SONAR_LEFT);
+        sonarFrontLeft = hardwareMap.analogInput.get(Keys.SONAR_FRONT_LEFT);
+        sonarFrontRight = hardwareMap.analogInput.get(Keys.SONAR_FRONT_RIGHT);
+        sonarBackLeft = hardwareMap.analogInput.get(Keys.SONAR_BACK_LEFT);
+        sonarBackRight = hardwareMap.analogInput.get(Keys.SONAR_BACK_RIGHT);
     }
+
     public void loop() {
-        double s1 = readSonar(sonar1);
-        telemetry.addData("Sonar report (in inches yippy): ", s1);
+        telemetry.addData("Object Behind? ", objectBehind());
+        telemetry.addData("Object In Front? ", objectInFront());
+
+
     }
 
     public void stop() {
-        sonar1.close();
+        sonarFrontLeft.close();
+        sonarFrontRight.close();
+        sonarBackLeft.close();
+        sonarBackRight.close();
     }
 
     //returns sonar values in inches!!!
@@ -28,5 +37,27 @@ public class AnalogSonar extends OpMode {
         double sValue = sonar.getValue();
         sValue = sValue/2;
         return sValue;
+    }
+
+    public static boolean objectBehind () {
+        double sonarBL = readSonar(sonarBackLeft);
+        double sonarBR = readSonar(sonarBackRight);
+        if (sonarBL < 10 || sonarBR < 10) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public static boolean objectInFront () {
+        double sonarFL = readSonar(sonarFrontLeft);
+        double sonarFR = readSonar(sonarFrontRight);
+        if (sonarFL < 10 || sonarFR < 10) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

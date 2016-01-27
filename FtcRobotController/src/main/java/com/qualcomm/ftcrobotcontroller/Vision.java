@@ -20,7 +20,7 @@ import java.util.Date;
  * Created by Matt on 12/27/2015.
  */
 public class Vision {
-    public static double EDGE_THRESHOLD = 50;
+    public static double EDGE_THRESHOLD = 125;
     public static double LOWER_BOUNDS_BLUE_HUE = 172;
     public static double UPPER_BOUNDS_BLUE_HUE = 240;
     //red is right where the circle turns around

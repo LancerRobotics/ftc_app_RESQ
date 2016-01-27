@@ -41,14 +41,16 @@ public class GyroAuton extends LinearOpMode {
         yawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
         yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
         yawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
+        boolean onTarget = false;
         try {
             yawPIDController.enable(true);
             int DEVICE_TIMEOUT_MS = 500;
             navXPIDController.PIDResult yawPIDResult = new navXPIDController.PIDResult();
-            while (true) {
+            while (!onTarget) {
                 if (yawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {;
                     if(yawPIDResult.isOnTarget()) {
-                        break;
+                        rest();
+                        onTarget = true;
                     }
                     else {
                         if (60<=navx_device.getYaw()&&navx_device.getYaw()<=120)
@@ -63,7 +65,7 @@ public class GyroAuton extends LinearOpMode {
                 telemetry.addData("Yaw", navx_device.getYaw());
                 telemetry.addData("Motor Power", yawPIDResult.getOutput());
                 telemetry.addData("End Point", yawPIDController.getSetpoint());
-                telemetry.addData("Finished Turn?", "No");
+                telemetry.addData("Finished Turn?", onTarget);
             }
             telemetry.addData("Finished Turn?", "Yes");
         }
