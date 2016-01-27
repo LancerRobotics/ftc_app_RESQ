@@ -496,4 +496,26 @@ public class Vision {
 
         return mediaFile;
     }
+
+    public static Bitmap filter(Bitmap edge) {
+        int white = 255;
+        for (int r=0; r<edge.getWidth(); r++) {
+            for(int c=0; c<edge.getHeight(); c++) {
+                for (int a = -1; a<=1;a++) {
+                    for (int b = -1; b <= 1; b++) {
+                        int x = r + a;
+                        int y = c + b;
+                        if (!(x < 0 || y < 0 || x >= edge.getWidth() || y >= edge.getHeight() || (a == 0 && b == 0))) {
+                            //check for neighboring edges
+                            //if there are less than 3 then delete
+                            //idk how to do this so I just put the for loops to get through the pixels
+                            //MAAAAATTTTT
+                        }
+                    }
+                }
+            }
+        }
+        return edge;
+    }
+
 }
