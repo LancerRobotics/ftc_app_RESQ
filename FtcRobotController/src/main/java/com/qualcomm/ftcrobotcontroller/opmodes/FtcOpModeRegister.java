@@ -33,7 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.AnalogSonar;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.Autonomous;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.StatesAutonomous;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
@@ -64,6 +64,6 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Teleop", TeleOp.class);
     //manager.register("Limit Switch Telemetry", AnalogLimitSwitch.class);
     manager.register("Camera", CameraTestOp.class);
-    manager.register("Autonomous", Autonomous.class);
+    manager.register("Autonomous", StatesAutonomous.class);
   }
 }
