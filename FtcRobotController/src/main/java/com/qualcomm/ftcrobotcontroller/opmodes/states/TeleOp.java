@@ -66,7 +66,7 @@ public class TeleOp extends OpMode{
 
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
-        liftRight.setDirection(DcMotor.Direction.REVERSE);
+        liftLeft.setDirection(DcMotor.Direction.REVERSE);
 
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
         dump.setPosition(Keys.DUMP_INIT);
@@ -116,10 +116,10 @@ public class TeleOp extends OpMode{
         }
         gamepad2LeftStickY = Range.clip(gamepad2.left_stick_y, -1, 1);
         if(Math.abs(gamepad2LeftStickY) < .15) {
-            gamepad1LeftStickY = 0;
+            gamepad2LeftStickY = 0;
         }
         gamepad2RightStickY = Range.clip(gamepad2.right_stick_y, -1, 1);
-        if(Math.abs(gamepad1RightStickY) < .15) {
+        if(Math.abs(gamepad2RightStickY) < .15) {
             gamepad2RightStickY = 0;
         }
 
