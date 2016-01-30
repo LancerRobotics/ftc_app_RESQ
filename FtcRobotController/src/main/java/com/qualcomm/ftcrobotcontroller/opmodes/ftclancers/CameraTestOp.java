@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import com.qualcomm.ftcrobotcontroller.CameraPreview;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by Matt on 12/27/2015.
@@ -30,8 +32,8 @@ public class CameraTestOp extends LinearOpMode {
 
         ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
 
-        //wait 6 seconds, because I have handler wait three seconds b4 it'll take a picture, in initCamera
-        sleep(6000);
+        //wait, because I have handler wait three seconds b4 it'll take a picture, in initCamera
+        sleep(Vision.RETRIEVE_FILE_TIME);
         //now we are going to retreive the image and convert it to bitmap
         SharedPreferences prefs = hardwareMap.appContext.getApplicationContext().getSharedPreferences(
                 "com.quan.companion", Context.MODE_PRIVATE);
@@ -60,14 +62,16 @@ public class CameraTestOp extends LinearOpMode {
         //String returnedStringViaCutAndWhite = Vision.findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(image, hardwareMap.appContext);
         //telemetry.addData("Vision2","white out "+returnedStringViaCutAndWhite);
         //Log.e("whiteout",returnedStringViaCutAndWhite);
-        String returnedStringViaCutAndWhite = Vision.findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(image, hardwareMap.appContext);
-        telemetry.addData("Vision2","white out "+returnedStringViaCutAndWhite);
-        Log.e("whiteout", returnedStringViaCutAndWhite);
-        Bitmap grayscaleBitmap = Vision.toGrayscaleBitmap(image);
-        telemetry.addData("grayscale image", Vision.savePicture(grayscaleBitmap, hardwareMap.appContext,"GRAYSCALE"));
-        Bitmap edged = Vision.convertGrayscaleToEdged(grayscaleBitmap);
-        telemetry.addData("edged image",Vision.savePicture(edged,hardwareMap.appContext,"EDGED"));
-        Bitmap filtered = Vision.filter(edged);
-        telemetry.addData("filtered image",Vision.savePicture(filtered,hardwareMap.appContext,"FILTERED"));
+        Bitmap contrastedImage = Vision.applyContrastBrightnessFilter(image, Vision.CONTRAST_ADJUSTMENT, Vision.BRIGHTNESS_ADJUSTMENT);
+        telemetry.addData("contrast/brightness filter", Vision.savePicture(image, hardwareMap.appContext, "CONTRAST_BRIGHTNESS_FILTERED"));
+        Bitmap grayscaleBitmap = Vision.toGrayscaleBitmap(contrastedImage);
+        telemetry.addData("grayscale image", Vision.savePicture(grayscaleBitmap, hardwareMap.appContext, "GRAYSCALE"));
+        ArrayList<Object> data = Vision.convertGrayscaleToEdged(grayscaleBitmap);
+        int totalLabel = (Integer) data.get(0);
+        telemetry.addData("totalLabel",totalLabel);
+        Bitmap edged = (Bitmap)data.get(1);
+        telemetry.addData("edged image", Vision.savePicture(edged, hardwareMap.appContext, "PRETTY_EDGED"));
+
+        Vision.savePicture((Bitmap) Vision.convertGrayscaleToEdged(Vision.toGrayscaleBitmap(image)).get(1), hardwareMap.appContext, "TEST");
     }
 }

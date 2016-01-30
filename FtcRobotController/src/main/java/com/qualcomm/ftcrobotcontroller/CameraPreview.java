@@ -102,13 +102,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     }
                 }
             };
-           Handler handler = new Handler();
+            Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
                     mCamera.takePicture(null, null, mPicture);
                     Log.e("picture taken", "picture taken");
                 }
-            }, 3000);
+            }, Vision.FOCUS_TIME);
 
         } catch (IOException e) {
         }

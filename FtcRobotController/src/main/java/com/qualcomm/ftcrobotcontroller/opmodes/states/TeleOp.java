@@ -112,7 +112,7 @@ public class TeleOp extends OpMode{
         }
         gamepad1RightStickY = Range.clip(gamepad1.right_stick_y, -1, 1);
         if(Math.abs(gamepad1RightStickY) < .15) {
-            gamepad1LeftStickY = 0;
+            gamepad1RightStickY = 0;
         }
         gamepad2LeftStickY = Range.clip(gamepad2.left_stick_y, -1, 1);
         if(Math.abs(gamepad2LeftStickY) < .15) {
@@ -138,11 +138,15 @@ public class TeleOp extends OpMode{
         pullUp(pullPwr);
 
         //Collector
-        if (gamepad2.left_bumper)
-            collectorMovement(false);
-        else if (gamepad2.right_bumper) {
-            collectorMovement(true);
+        if (gamepad2.left_bumper && !gamepad2.right_bumper)
+            collectorMovement(false, false);
+        else if (gamepad2.right_bumper && !gamepad2.left_bumper) {
+            collectorMovement(true, false);
         }
+        else if(gamepad2.right_bumper && gamepad2.left_bumper) {
+            collectorMovement(true, true);
+        }
+
 
         //Dump
         if (gamepad2.a && !hopperDown) {
@@ -176,11 +180,11 @@ public class TeleOp extends OpMode{
         //Clamps (for ramp)
         if (gamepad1.a && !clamped) {
             clampLeft.setPosition(Keys.CL_DOWN);
-            clampRight.setPosition(-Keys.CR_DOWN);
+            clampRight.setPosition(Keys.CR_DOWN);
             clamped = true;
         } else if (gamepad1.a && clamped) {
             clampLeft.setPosition(Keys.CL_INIT);
-            clampRight.setPosition(-Keys.CR_INIT);
+            clampRight.setPosition(Keys.CR_INIT);
             clamped = false;
         }
 
@@ -244,11 +248,16 @@ public class TeleOp extends OpMode{
     }
 
     //Method for collection system
-    public void collectorMovement(boolean backward) {
-        if (backward)
-            collector.setPower(-Keys.COLLECTOR);
-        else
-            collector.setPower((Keys.COLLECTOR));
+    public void collectorMovement(boolean backward, boolean stop) {
+        if(!stop) {
+            if (backward)
+                collector.setPower(-Keys.COLLECTOR);
+            else
+                collector.setPower((Keys.COLLECTOR));
+        }
+        else {
+            collector.setPower(0);
+        }
     }
 
     //Method for pulling bot up mountain when hanging

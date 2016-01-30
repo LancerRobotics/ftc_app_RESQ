@@ -14,13 +14,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by Matt on 12/27/2015.
  */
 public class Vision {
-    public static double EDGE_THRESHOLD = 125;
+    public static int FOCUS_TIME = 2400;
+    public static int RETRIEVE_FILE_TIME = FOCUS_TIME+1500;
+
+    public static double EDGE_THRESHOLD = 100;
+    public static double CONTRAST_ADJUSTMENT = .85;
+    public static int BRIGHTNESS_ADJUSTMENT = 0;
     public static double LOWER_BOUNDS_BLUE_HUE = 172;
     public static double UPPER_BOUNDS_BLUE_HUE = 240;
     //red is right where the circle turns around
@@ -169,7 +176,7 @@ public class Vision {
 
     }
 
-    public static Bitmap convertGrayscaleToEdged (Bitmap grayscale) {
+    public static ArrayList<Object> convertGrayscaleToEdged (Bitmap grayscale) {
         //sort through image matrix pixxel by pixel
         //for each pixel, analyze each of the 8 pixels surrounding it
 
@@ -189,7 +196,7 @@ public class Vision {
             }
         }
         Log.e("Done with clean","DONE");
-       int label = 1;
+        int label = 1;
         for (int i = 0; i <grayscale.getWidth();i++) {
             for (int j  = 0 ; j <grayscale.getHeight();j++) {
                 int max = 0;
@@ -250,6 +257,9 @@ public class Vision {
 
             }
         }
+        ArrayList<Object> data = new ArrayList();
+        //let the first bitmap be raw, second be made pretty
+        data.add(0,label);
         //ok so now you have a graph with a bunch of labeled pixels.
         if (label>255) {
             //we have a problem because then we cant scale values to different shades of grade
@@ -277,8 +287,36 @@ public class Vision {
 
         }
         //beautiful. now you've got a shaded grayed image.
-        return clean;   //not clean anymore doe
+        data.add(1,clean);
+        return data;   //not clean anymore doe
     }
+
+    public static Bitmap applyContrastBrightnessFilter (Bitmap coloredImage,  double contrastFactor, int brightnessFactor) {
+        //f(x) = ax + B, where a>1 means more contrast and 0<a<1 means less contrast
+        //b = brightness
+        //for easier separation of "brightness" and contrast" do
+        //f(x) = a(x-128) +128+b, where x = rgb value
+        // contrast correction factor = 259(C+255)/ 255(259-c)
+        //where C = the desried level of contrast, negative = less contrast
+        //formula from http://math.stackexchange.com/questions/906240/algorithms-to-increase-or-decrease-the-contrast-of-an-image
+        //and http://www.dfstudios.co.uk/articles/programming/image-programming-algorithms/image-processing-algorithms-part-5-contrast-adjustment/
+        Bitmap mutableEdited = coloredImage.copy(Bitmap.Config.ARGB_8888,true);
+        for (int i =0; i <mutableEdited.getWidth();i++) {
+            for (int j = 0; j<mutableEdited.getHeight();j++) {
+                int red = Color.red(coloredImage.getPixel(i, j)) ;
+                int green = Color.green(coloredImage.getPixel(i, j));
+                int blue = Color.blue(coloredImage.getPixel(i, j));
+
+                int improvedRed = (int)(contrastFactor*(red-128) + 128 + brightnessFactor);
+                int improvedBlue = (int) (contrastFactor*(blue-128)+128+brightnessFactor);
+                int improvedGreen = (int) (contrastFactor*(green-128)+128+brightnessFactor);
+                mutableEdited.setPixel(i,j,Color.argb(255,improvedRed,improvedGreen,improvedBlue));
+                Log.e("contrastConstants","contrastFactor = "+contrastFactor+"brightnessFactor = "+brightnessFactor+"red"+red+"blue="+blue+"green"+green+"improved Red "+improvedRed+"improvedGreen"+improvedGreen+"iB"+improvedBlue);
+            }
+        }
+        return mutableEdited;
+    }
+
 
     public static String findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor (Bitmap image, Context context) {
         // a drop of 150 in all rgb (or at least two) means that relatively, the pixel is black, relative to all the other pixels
@@ -497,25 +535,6 @@ public class Vision {
         return mediaFile;
     }
 
-    public static Bitmap filter(Bitmap edge) {
-        int white = 255;
-        for (int r=0; r<edge.getWidth(); r++) {
-            for(int c=0; c<edge.getHeight(); c++) {
-                for (int a = -1; a<=1;a++) {
-                    for (int b = -1; b <= 1; b++) {
-                        int x = r + a;
-                        int y = c + b;
-                        if (!(x < 0 || y < 0 || x >= edge.getWidth() || y >= edge.getHeight() || (a == 0 && b == 0))) {
-                            //check for neighboring edges
-                            //if there are less than 3 then delete
-                            //idk how to do this so I just put the for loops to get through the pixels
-                            //MAAAAATTTTT
-                        }
-                    }
-                }
-            }
-        }
-        return edge;
-    }
+
 
 }
