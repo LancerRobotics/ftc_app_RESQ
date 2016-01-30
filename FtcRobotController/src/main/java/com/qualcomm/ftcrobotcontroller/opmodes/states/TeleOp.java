@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class TeleOp extends OpMode{
     private AHRS navx_device;
-    AnalogInput limitLeft;
+    //AnalogInput limitLeft;
     AnalogInput limitRight;
     //Motors
     DcMotor fr, fl, bl, br, liftLeft, liftRight, collector, winch;
@@ -40,6 +40,7 @@ public class TeleOp extends OpMode{
     boolean climbers;
     boolean rightTrigger;
     boolean leftTrigger;
+    boolean hopperDown = false;
 
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
@@ -86,7 +87,7 @@ public class TeleOp extends OpMode{
         leftTrigger = false;
 
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
-        limitLeft = hardwareMap.analogInput.get(Keys.LIMIT_LEFT);
+        //limitLeft = hardwareMap.analogInput.get(Keys.LIMIT_LEFT);
         limitRight = hardwareMap.analogInput.get(Keys.LIMIT_RIGHT);
     }
 
@@ -144,14 +145,23 @@ public class TeleOp extends OpMode{
         }
 
         //Dump
-        if (gamepad2.a && !dumpDown) {
+        if (gamepad2.a && !hopperDown) {
             hopperLeft.setPosition(Keys.HL_DUMP);
             hopperRight.setPosition(Keys.HR_DUMP);
-            dumpDown = true;
+            hopperDown = true;
         } else if (gamepad2.a && dumpDown){
             hopperLeft.setPosition(Keys.HL_STORE);
             hopperRight.setPosition(Keys.HR_STORE);
+            hopperDown = true;
+        }
+
+        if(gamepad2.y && !dumpDown) {
+            dump.setPosition(Keys.DUMP_DOWN);
             dumpDown = true;
+        }
+        else if (gamepad2.y && dumpDown) {
+            dump.setPosition(Keys.DUMP_INIT);
+            dumpDown = false;
         }
 
         //Hang
@@ -222,7 +232,7 @@ public class TeleOp extends OpMode{
             liftRight.setPower(Range.clip(power * Keys.MAX_SPEED, -1, 1));
         }
         else {
-            if(!getState(limitLeft) || !getState(limitRight)) {
+            if(!getState(limitRight)) {
                 liftLeft.setPower(Range.clip(power * Keys.MAX_SPEED, -1, 1));
                 liftRight.setPower(Range.clip(power * Keys.MAX_SPEED, -1, 1));
             }

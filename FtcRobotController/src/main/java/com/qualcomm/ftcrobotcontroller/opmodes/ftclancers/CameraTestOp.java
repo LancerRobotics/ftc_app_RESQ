@@ -57,15 +57,12 @@ public class CameraTestOp extends LinearOpMode {
         String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
         telemetry.addData("Vision1","half split color only" +returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
         Log.e("half split color", returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
-<<<<<<< HEAD
         //String returnedStringViaCutAndWhite = Vision.findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(image, hardwareMap.appContext);
         //telemetry.addData("Vision2","white out "+returnedStringViaCutAndWhite);
         //Log.e("whiteout",returnedStringViaCutAndWhite);
-=======
         String returnedStringViaCutAndWhite = Vision.findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(image, hardwareMap.appContext);
         telemetry.addData("Vision2","white out "+returnedStringViaCutAndWhite);
         Log.e("whiteout", returnedStringViaCutAndWhite);
->>>>>>> aa3de7cf5d8cd60bcab62dd7a19e8321d987b23c
         Bitmap grayscaleBitmap = Vision.toGrayscaleBitmap(image);
         telemetry.addData("grayscale image", Vision.savePicture(grayscaleBitmap, hardwareMap.appContext,"GRAYSCALE"));
         Bitmap edged = Vision.convertGrayscaleToEdged(grayscaleBitmap);

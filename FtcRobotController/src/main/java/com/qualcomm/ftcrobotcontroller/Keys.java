@@ -29,7 +29,7 @@ public class Keys {
     public static final String winch = "winch";
 
     //Ports
-    public static final int NAVX_DIM_I2C_PORT = 0;
+    public static final int NAVX_DIM_I2C_PORT = 6;
     public static final int SONAR_ONE_ANALOG_PORT = 0; //just in case, may not be needed
     public static final int LIMIT_ONE_ANALOG_PORT = 0; //just in case, may not be needed
 
@@ -67,7 +67,7 @@ public class Keys {
     public static final double RT_TRIGGER = 0.47;
 
     //Left Trigger Values
-    public static final double LT_INIT = 255;
+    public static final double LT_INIT = 1;
     public static final double LT_TRIGGER = 0.53;
 
     //NavX values
