@@ -15,6 +15,7 @@ import com.qualcomm.ftcrobotcontroller.CameraPreview;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -68,10 +69,20 @@ public class CameraTestOp extends LinearOpMode {
         telemetry.addData("grayscale image", Vision.savePicture(grayscaleBitmap, hardwareMap.appContext, "GRAYSCALE"));
         ArrayList<Object> data = Vision.convertGrayscaleToEdged(grayscaleBitmap);
         int totalLabel = (Integer) data.get(0);
-        telemetry.addData("totalLabel",totalLabel);
-        Bitmap edged = (Bitmap)data.get(1);
+        telemetry.addData("totalLabel", totalLabel);
+        Bitmap edged = (Bitmap)data.get(data.size()-1);
         telemetry.addData("edged image", Vision.savePicture(edged, hardwareMap.appContext, "PRETTY_EDGED"));
-
-        Vision.savePicture((Bitmap) Vision.convertGrayscaleToEdged(Vision.toGrayscaleBitmap(image)).get(1), hardwareMap.appContext, "TEST");
+        ArrayList<Object> consolidatedEdgeData = Vision.consolidateEdges(edged, totalLabel);
+        Vision.savePicture((Bitmap) Vision.convertGrayscaleToEdged(Vision.toGrayscaleBitmap(image)).get(1), hardwareMap.appContext, "WITHOUT CONTRAST");
+        telemetry.addData("numOfChange",consolidatedEdgeData.get(0));
+        telemetry.addData("labels","old"+totalLabel+"new"+consolidatedEdgeData.get(1));
+        totalLabel = (Integer)consolidatedEdgeData.get(1);
+        Bitmap consolidatedEdge = (Bitmap) consolidatedEdgeData.get(2);
+        telemetry.addData("consolidated Edge", Vision.savePicture(consolidatedEdge,hardwareMap.appContext,"CONSOLIDATED_EDGE"));
+        ArrayList<Object> removedRandomnessData=Vision.getRidOfRandomEdges(consolidatedEdge,totalLabel);
+        Bitmap removedRandomness = (Bitmap)removedRandomnessData.get(removedRandomnessData.size()-1);
+        telemetry.addData("removedRandomness",Vision.savePicture(removedRandomness,hardwareMap.appContext,"REMOVED_RANDOMNESS"));
+        telemetry.addData("labels","old"+totalLabel+"new"+removedRandomnessData.get(0));
+        totalLabel=(Integer)removedRandomnessData.get(0);
     }
 }
