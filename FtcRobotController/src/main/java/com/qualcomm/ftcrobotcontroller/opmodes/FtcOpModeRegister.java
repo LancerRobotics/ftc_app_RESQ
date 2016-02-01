@@ -31,9 +31,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.AnalogSonar;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.AutonomousOLD;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.StatesAutonomous;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.Autonomous;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
@@ -58,12 +59,12 @@ public class FtcOpModeRegister implements OpModeRegister {
      *
      * If two or more op modes are registered with the same name, the app will display an error.
      */
-    manager.register("Encoded Movement Testing", com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Autonomous.class);
+    manager.register("Encoded Movement Testing", AutonomousOLD.class);
     manager.register("Encoded Rotate Testing", GyroAuton.class);
     manager.register("Sonar Testing",AnalogSonar.class);
     manager.register("Teleop", TeleOp.class);
     //manager.register("Limit Switch Telemetry", AnalogLimitSwitch.class);
     manager.register("Camera", CameraTestOp.class);
-    manager.register("Autonomous", StatesAutonomous.class);
+    manager.register("Autonomous", Autonomous.class);
   }
 }
