@@ -41,6 +41,9 @@ public class TeleOp extends OpMode{
     boolean rightTrigger;
     boolean leftTrigger;
     boolean hopperDown = false;
+    boolean swivelLeft = false;
+    boolean swivelRight = false;
+    boolean swivelCenter = true;
 
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
@@ -153,7 +156,7 @@ public class TeleOp extends OpMode{
             hopperLeft.setPosition(Keys.HL_DUMP);
             hopperRight.setPosition(Keys.HR_DUMP);
             hopperDown = true;
-        } else if (gamepad2.a && dumpDown){
+        } else if (gamepad2.a && hopperDown){
             hopperLeft.setPosition(Keys.HL_STORE);
             hopperRight.setPosition(Keys.HR_STORE);
             hopperDown = true;
@@ -178,21 +181,21 @@ public class TeleOp extends OpMode{
         }
 
         //Clamps (for ramp)
-        if (gamepad1.a && !clamped) {
+        if (gamepad1.y && !clamped) {
             clampLeft.setPosition(Keys.CL_DOWN);
             clampRight.setPosition(Keys.CR_DOWN);
             clamped = true;
-        } else if (gamepad1.a && clamped) {
+        } else if (gamepad1.y && clamped) {
             clampLeft.setPosition(Keys.CL_INIT);
             clampRight.setPosition(Keys.CR_INIT);
             clamped = false;
         }
 
         //Climbers
-        if (gamepad1.x && !climbers) {
+        if (gamepad1.right_bumper && !climbers) {
             climber.setPosition(Keys.CLIMBER_DUMP);
             climbers = true;
-        } else if (gamepad1.x && climbers) {
+        } else if (gamepad1.right_bumper && climbers) {
             climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
             climbers = false;
         }
@@ -213,6 +216,26 @@ public class TeleOp extends OpMode{
         else if(gamepad2.left_trigger > .15 && leftTrigger) {
             triggerLeft.setPosition(Keys.LT_INIT);
             leftTrigger = false;
+        }
+
+        //Swivels
+        if(gamepad1.x && !swivelLeft) {
+            swivel.setPosition(Keys.SWIVEL_LEFT);
+            swivelLeft = true;
+            swivelCenter = false;
+            swivelRight = false;
+        }
+        else if(gamepad1.b && !swivelRight) {
+            swivel.setPosition(Keys.SWIVEL_RIGHT);
+            swivelLeft = false;
+            swivelCenter = false;
+            swivelRight = true;
+        }
+        else if(gamepad1.a && !swivelCenter) {
+            swivel.setPosition(Keys.SWIVEL_CENTER);
+            swivelLeft = false;
+            swivelCenter = true;
+            swivelRight = false;
         }
     }
 
