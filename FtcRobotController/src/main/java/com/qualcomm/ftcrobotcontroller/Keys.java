@@ -23,6 +23,8 @@ public class Keys {
     public static final String SONAR_FRONT_LEFT = "sonaFL";
     public static final String SONAR_FRONT_RIGHT = "sonaFR";
     public static final String SONAR_BACK_LEFT = "sonaBL";
+    public static final String COLOR_FRONT_RIGHT = "colorFR";
+    public static final String COLOR_FRONT_LEFT = "colorFL";
     public static final String dump = "dump";
     public static final String triggerLeft = "trigger_left";
     public static final String triggerRight = "trigger_right";
@@ -58,7 +60,7 @@ public class Keys {
 
 
     //Swivel values TODO FIX VALUES ONCE NEW SERVOS ARRIVE
-    public static final double SWIVEL_CENTER = .431;
+    public static final double SWIVEL_CENTER = .55;
     public static final double SWIVEL_LEFT = 0;
     public static final double SWIVEL_RIGHT = 1;
 
@@ -100,6 +102,17 @@ public class Keys {
 
     //Collector power
     public static final double COLLECTOR = .5;
+
+    //Color Sensor Thresholds
+    public static final int COLOR_RED_RED = 100;
+    public static final int COLOR_BLUE_RED = 50;
+    public static final int COLOR_GREEN_RED = 50;
+    public static final int COLOR_RED_BLUE = 50;
+    public static final int COLOR_GREEN_BLUE = 50;
+    public static final int COLOR_BLUE_BLUE = 100;
+    public static final int COLOR_RED_WHITE = 250;
+    public static final int COLOR_BLUE_WHITE = 250;
+    public static final int COLOR_GREEN_WHITE = 250;
 
     //Misc
     public static final double MAX_SPEED = .86;

@@ -159,7 +159,7 @@ public class TeleOp extends OpMode{
         } else if (gamepad2.a && hopperDown){
             hopperLeft.setPosition(Keys.HL_STORE);
             hopperRight.setPosition(Keys.HR_STORE);
-            hopperDown = true;
+            hopperDown = false;
         }
 
         if(gamepad2.y && !dumpDown) {
@@ -238,7 +238,6 @@ public class TeleOp extends OpMode{
             swivelRight = false;
         }
     }
-
 
     //Motor power for the wheels, for movement
     public void powerSplit(double left, double right) {

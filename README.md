@@ -1,46 +1,4 @@
 # ftc_app
-This is our 2015-2016 FTC app, where all of our opmodes and code will be written, do NOT push to master unless approved
-
-**************************************************************************************
-
-# IMPORTANT UPDATE
-To install fully on your own computer:
-* Download navX-micro from http://www.pdocs.kauailabs.com/navx-mxp/software/android-library-ftc/ by clicking on _latest build_, it is in purple
-MAKE SURE THERE IS A navX-micro FOLDER IN YOUR HOME DIRECTORY (C:\Users\YOURUSERNAME)
-* Extract the contents and run through setup.exe
-* Open your project in android studio
-* Change the directory in the *FTC ROBOT CONTROLLER* build.gradle located in Gradle Scripts
-  - When changing go to the repositories flat-dr placce
-  - Then change the directory to yours, you should only be changing your username (where it says jakew)
-
-
-**************************************************************************************
-
-IMPORTANT RESOURCE (ftc forum): http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
-
-Information and Future Plans
-
-* Autonomous Plans
- - Drive to button
- - Push button
- - Score climbers
- - Back up
- - Climb up mountain, possibly find a way to score climbers on the zipline
- 
-* TeleOp Updates
- - Treads teleop, movement only
- 
-* Sensors
- - navX-Micro --> to detect direction and open up the possibilities as to how we can use the raw, pitch, and roll values determined by the sensor. (VALUES: need to be tested)
- - Sonar --> (Maxbotix i2c/PWM/Analog Sonar) to detect distance, can be used in autonomous for more accurate movement (VALUES: need to be tested)
- - Motor Encoders --> to detect "ticks" or movement for the wheels, encoded movement in autonomous, move certain distances (VALUES: need to be tested) (Maybe 0-1400?)
- - ODS --> to detect distance in the Maxbotix's deadzone (VALUES: need to be tested)
- - Limit Switch --> to detect if we hit a wall, when our lift is back in our robot and ready to hold more debris, and other miscellaneous uses (VALUES: 0 or 1 (most likely))
-
-Swerve Robotics' Library will possibly be used in the code (Thanks to Swerve Robotics)
-
-**************************************************************************************
-
 FTC Android Studio project to create FTC Robot Controller app.
 
 This is the FTC SDK that can be used to create an FTC Robot Controller app, with custom op modes.
@@ -59,6 +17,41 @@ Documentation for the FTC SDK are included with this repository.  There is a sub
 For technical questions regarding the SDK, please visit the FTC Technology forum:
 
   http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
+
+**************************************************************************************
+
+Release 16.01.04
+
+ * Updated compileSdkVersion for apps
+ * Prevent Wifi from entering power saving mode
+ * removed unused import from driver station
+ * Corrrected "Dead zone" joystick code.
+ * LED.getDeviceName and .getConnectionInfo() return null
+ * apps check for ROBOCOL_VERSION mismatch
+ * Fix for Telemetry also has off-by-one errors in its data string sizing / short size limitations error
+ * User telemetry output is sorted.
+ * added formatting variants to DbgLog and RobotLog APIs
+ * code modified to allow for a long list of op mode names.
+ * changes to improve thread safety of RobocolDatagramSocket
+ * Fix for "missing hardware leaves robot controller disconnected from driver station" error
+ * fix for "fast tapping of Init/Start causes problems" (toast is now only instantiated on UI thread).
+ * added some log statements for thread life cycle.
+ * moved gamepad reset logic inside of initActiveOpMode() for robustness
+ * changes made to mitigate risk of race conditions on public methods.
+ * changes to try and flag when WiFi Direct name contains non-printable characters.
+ * fix to correct race condition between .run() and .close() in ReadWriteRunnableStandard.
+ * updated FTDI driver
+ * made ReadWriteRunnableStanard interface public.
+ * fixed off-by-one errors in Command constructor
+ * moved specific hardware implmentations into their own package.
+ * moved specific gamepad implemnatations to the hardware library.
+ * changed LICENSE file to new BSD version.
+ * fixed race condition when shutting down Modern Robotics USB devices.
+ * methods in the ColorSensor classes have been synchronized.
+ * corrected isBusy() status to reflect end of motion.
+ * corrected "back" button keycode.
+ * the notSupported() method of the GyroSensor class was changed to protected (it should not be public).
+
 
 **************************************************************************************
 

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created on 11/25/2015.
  */
 public class GyroAuton extends LinearOpMode {
-    DcMotor fr, fl;
+    DcMotor fr, fl, bl, br;
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
@@ -22,20 +22,32 @@ public class GyroAuton extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
+        bl = hardwareMap.dcMotor.get(Keys.backLeft);
+        br = hardwareMap.dcMotor.get(Keys.backRight);
         fr.setDirection(DcMotor.Direction.REVERSE);
+        br.setDirection(DcMotor.Direction.REVERSE);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         waitForStart();
         gyroTurn(90.0, true);
     }
+    public void rest() {
+        fr.setPower(0);
+        fl.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
+    }
     public void turn (double power) {
         fl.setPower(power);
+        bl.setPower(power);
         fr.setPower(-power);
+        br.setPower(-power);
     }
     public void gyroTurn(double degreesOfTurn, boolean right) {
-        if(right) {
+        if (right) {
             degreesOfTurn = degreesOfTurn * -1;
         }
-        yawPIDController = new navXPIDController( navx_device, navXPIDController.navXTimestampedDataSource.YAW);
+
+        yawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
         yawPIDController.setSetpoint(degreesOfTurn);
         yawPIDController.setContinuous(true);
         yawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
@@ -47,38 +59,29 @@ public class GyroAuton extends LinearOpMode {
             int DEVICE_TIMEOUT_MS = 500;
             navXPIDController.PIDResult yawPIDResult = new navXPIDController.PIDResult();
             while (!onTarget) {
-                if (yawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {;
-                    if(yawPIDResult.isOnTarget()) {
+                if (yawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {
+                    if (yawPIDResult.isOnTarget()) {
                         rest();
                         onTarget = true;
-                    }
-                    else {
-                        if (60<=navx_device.getYaw()&&navx_device.getYaw()<=120)
-                        turn(yawPIDResult.getOutput()/10);
+                    } else {
+                        if (yawPIDController.getSetpoint() - 30 <= navx_device.getYaw() && navx_device.getYaw() <= yawPIDController.getSetpoint() + 30)
+                            turn(yawPIDResult.getOutput() / 10);
                         else
                             turn(yawPIDResult.getOutput());
                     }
                 } else {
 			    /* A timeout occurred */
-                    //Log.w("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");
+                    telemetry.addData("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");
                 }
                 telemetry.addData("Yaw", navx_device.getYaw());
                 telemetry.addData("Motor Power", yawPIDResult.getOutput());
                 telemetry.addData("End Point", yawPIDController.getSetpoint());
                 telemetry.addData("Finished Turn?", onTarget);
             }
-            telemetry.addData("Finished Turn?", "Yes");
-        }
-        catch(InterruptedException ex) {
+        } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
-        }
-        finally {
+        } finally {
             navx_device.close();
         }
-
-    }
-    public void rest() {
-        fr.setPower(0);
-        fl.setPower(0);
     }
 }

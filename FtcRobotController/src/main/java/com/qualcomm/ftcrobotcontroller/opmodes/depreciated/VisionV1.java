@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller;
+package com.qualcomm.ftcrobotcontroller.opmodes.depreciated;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,8 +7,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.hardware.Camera;
 
+import com.qualcomm.ftcrobotcontroller.CameraPreview;
+import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
+import com.qualcomm.ftcrobotcontroller.Keys;
+import com.qualcomm.ftcrobotcontroller.XYCoor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.ftcrobotcontroller.VisionV1;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +53,7 @@ public class VisionV1 extends LinearOpMode{
         mCamera = ((FtcRobotControllerActivity)hardwareMap.appContext).mCamera;
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
 
-        ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
+        //TODO just in case((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
 
         //wait 6 seconds, because I have handler wait three seconds b4 it'll take a picture, in initCamera
         sleep(6000);
