@@ -67,8 +67,8 @@ public class TeleOp extends OpMode{
         triggerLeft = hardwareMap.servo.get(Keys.triggerLeft);
         triggerRight = hardwareMap.servo.get(Keys.triggerRight);
 
-        fl.setDirection(DcMotor.Direction.REVERSE);
-        bl.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.REVERSE);
+        br.setDirection(DcMotor.Direction.REVERSE);
         liftLeft.setDirection(DcMotor.Direction.REVERSE);
 
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
@@ -126,10 +126,10 @@ public class TeleOp extends OpMode{
             gamepad2RightStickY = 0;
         }
 
-        pwrLeft = Range.clip(gamepad1LeftStickY * .78, -1, 1);
-        pwrRight = Range.clip(gamepad1RightStickY * .78, -1, 1);
-        liftPwr = Range.clip(gamepad2LeftStickY * .78, -1, 1);
-        pullPwr = Range.clip(gamepad2RightStickY * .78, -1, 1);
+        pwrLeft = Range.clip(gamepad1LeftStickY * .86, -1, 1);
+        pwrRight = Range.clip(gamepad1RightStickY * .86, -1, 1);
+        liftPwr = Range.clip(gamepad2LeftStickY * .86, -1, 1);
+        pullPwr = Range.clip(gamepad2RightStickY * .86, -1, 1);
 
         //Movement
         powerSplit(pwrLeft, pwrRight);

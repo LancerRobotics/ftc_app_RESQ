@@ -93,8 +93,8 @@ public class Keys {
     public static final double CR_DOWN = 0;
 
     //Hopper Left TODO confirm with real servos
-    public static final double HL_STORE = .863;
-    public static final double HL_DUMP = 0.784;
+    public static final double HL_STORE = 1;
+    public static final double HL_DUMP = .85;
 
     //Hopper Right TODO confirm with real servos
     public static final double HR_STORE = 1- HL_STORE; //TO BE FIXED;
