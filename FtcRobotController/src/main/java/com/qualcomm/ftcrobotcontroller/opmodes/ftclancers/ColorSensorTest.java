@@ -15,7 +15,7 @@ public class ColorSensorTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         colorFR = hardwareMap.colorSensor.get(Keys.COLOR_FRONT_RIGHT);
         waitForStart();
-        while(true) {
+        while(opModeIsActive()) {
             telemetry.addData("RED", colorFR.red());
             telemetry.addData("BLUE", colorFR.blue());
             telemetry.addData("GREEN", colorFR.green());

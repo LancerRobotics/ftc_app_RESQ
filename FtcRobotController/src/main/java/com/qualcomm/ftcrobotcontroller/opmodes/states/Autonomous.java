@@ -1,5 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.states;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import com.kauailabs.navx.ftc.AHRS;
@@ -7,7 +8,10 @@ import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -23,6 +27,8 @@ public class Autonomous extends LinearOpMode {
     public static final double YAW_PID_P = 0.005;
     public static final double YAW_PID_I = 0.0;
     public static final double YAW_PID_D = 0.0;
+    ColorSensor colorFR;
+    DeviceInterfaceModule cdim;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -33,10 +39,25 @@ public class Autonomous extends LinearOpMode {
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
+        colorFR = hardwareMap.colorSensor.get(Keys.COLOR_FRONT_RIGHT);
+
+
+
+        /*
         waitForStart();
         gyroTurn(90, true);
         sleep(20000);
         gyroTurn(90, false);
+        */
+
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        //the hue is the actual color we want
+        float hsvValues[] = {0F,0F,0F};
+        while (this.opModeIsActive()) {
+            telemetry.addData("Color Method 1", colorSensorValue(hsvValues));
+            telemetry.addData("Color Method 2", altColorSensor());
+        }
+
     }
 
     public void moveStraight(double dist, boolean backwards) {
@@ -254,5 +275,15 @@ public class Autonomous extends LinearOpMode {
         } finally {
             navx_device.close();
         }
+    }
+
+    //return a float the just contains the *hue* which is the color value we want
+    public float colorSensorValue(float[] values) {
+        Color.RGBToHSV((colorFR.red() * 255) / 800, (colorFR.green() * 255) / 800, (colorFR.blue() * 255) / 800, values);
+        return values[0];
+    }
+    //alternative color sensor method to try as well
+    public int altColorSensor() {
+        return colorFR.argb();
     }
 }
