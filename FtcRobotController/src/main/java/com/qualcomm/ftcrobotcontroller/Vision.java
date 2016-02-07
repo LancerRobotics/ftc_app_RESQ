@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * Created by Matt on 12/27/2015.
@@ -24,6 +23,8 @@ import java.util.Objects;
 public class Vision {
     private static final int FIRST_LABEL = 0;
     private static final int MIN_NEEDED_TO_BE_AN_EDGE = 8;
+    private static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 2;
+    private static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
     public static int FOCUS_TIME = 2400;
     public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 1500;
 
@@ -197,7 +198,7 @@ public class Vision {
                 clean.setPixel(i, j, Color.WHITE);
             }
         }
-        Log.e("Done with clean", "DONE");
+        //Log.e("Done with clean", "DONE");
         int label = Vision.FIRST_LABEL;
         for (int i = 0; i < grayscale.getWidth(); i++) {
             for (int j = 0; j < grayscale.getHeight(); j++) {
@@ -350,19 +351,19 @@ public class Vision {
 
                 }
             }
-            Log.e("didMakEdit",String.valueOf(didIMakeAnEdit));
+            //Log.e("didMakEdit",String.valueOf(didIMakeAnEdit));
 
         } while (didIMakeAnEdit == true);
 
         ArrayList<Object>data = new ArrayList<Object>();
-        totalLabels =  getNumberOfLabels(clumpy);
+        totalLabels =  getNumberOfLabelsAssumingOrganized(clumpy);
         data.add(0,numberOfChanges);
         data.add(1,totalLabels);
         data.add(2,clumpy);
         return data;  //although not clumpy anymore
     }
 
-    public static int getNumberOfLabels(Bitmap image) {
+    public static int getNumberOfLabelsAssumingOrganized(Bitmap image) {
         int label = 0;
         for (int i =0; i< image.getWidth();i++) {
             for (int j =0; j< image.getHeight();j++) {
@@ -418,7 +419,7 @@ public class Vision {
             }
             //implicit else: then it has enough pixels to be an edge, leave it
         }
-        Log.e("labels","old:"+labels+"new"+(labels-howManyRemoved));
+        /*Log.e("labels","old:"+labels+"new"+(labels-howManyRemoved));
         labels = labels-howManyRemoved;
         //now we need to relabel everything...
         //relabel everything. gotta think of an algorithm first - done
@@ -462,12 +463,164 @@ public class Vision {
         for (int i =0;i<representsIfLabelIsRepresented.length;i++) {
             removedLabelsString+="("+i+","+String.valueOf(representsIfLabelIsRepresented[i])+")";
         }
-        Log.e("secondRemovedLabel",removedLabelsString);
+        Log.e("secondRemovedLabel",removedLabelsString);*/ //TODO so this method isn't working... if we just re-edge that obviously edged, it should rename it
+
+        //Log.e("labelsTestPre", getLabels(image).toString()); commented out because this was for debugging
+        //this will organize it
+        image =(Bitmap)convertGrayscaleToEdged(image).get(1);
+        //Log.e("labelsTest", getLabels(image).toString()); commented out because this was for debugging
+        labels = getNumberOfLabelsAssumingOrganized(image);
         ArrayList<Object> data = new ArrayList();
         data.add(0,labels);
         data.add(1,image);
         return data;
 
+    }
+
+    public static ArrayList<Integer> getLabels(Bitmap src) {
+        ArrayList<Integer> data = new ArrayList<Integer>();
+        for (int i =0; i <src.getWidth();i++) {
+            for (int j =0; j <src.getHeight();j++) {
+                if (!data.contains(Color.red(src.getPixel(i,j)))&&Color.red(src.getPixel(i,j))!=255) {
+                    data.add(Color.red(src.getPixel(i,j)));
+                }
+            }
+        }
+        return data;
+    }
+
+    public static Bitmap returnCircles (Bitmap image, int numOfLabels) {
+        Log.e("starting","circle");
+        //for each label, determine if it's a circle
+        //find a bounding rectangle to find the center and radius of the circle.
+        //calculate distance from edge to center
+        //if equal to radius or almost equal to radius, for ALL of them, then it's a circle.
+        //will have to check for tolerances
+        //also elminate radius equal to one
+
+        for (int label = 0; label <numOfLabels;label++) {
+            //so for each label, determine if it's a circle
+            //comb thru the image vertically first to determine left most pixel
+            image = image.copy(Bitmap.Config.ARGB_8888,true);
+            //make image mutable
+            XYCoor leftMost = new XYCoor();
+
+                for (int i =0; i <image.getWidth()&&leftMost.getX()==-1;i++) {
+                    for (int j =0; j<image.getHeight()&&leftMost.getX()==-1;j++) {
+                        //if leftMost.getX is set, exit out
+                        if( Color.red( image.getPixel(i,j)) ==label) {
+                            //cool u found the label
+                            //Log.e("found",leftMost.toString());
+                            leftMost= new XYCoor(i,j);
+                        }
+
+                    }
+                }
+            //now do for right most. so this, you will satrt from right side going to 0
+            XYCoor rightMost = new XYCoor();
+
+            for (int i =image.getWidth()-1; i >=0&&rightMost.getX()==-1;i--) {
+                for (int j =0; j<image.getHeight()&&rightMost.getX()==-1;j++) {
+                    //if rightMost.getX is set, exit out
+                    if( Color.red( image.getPixel(i,j)) ==label) {
+                        //cool u found the label
+                        rightMost= new XYCoor(i,j);
+                    }
+                }
+            }
+
+            XYCoor topMost = new XYCoor();
+
+            for (int i =0; i <image.getHeight()&&topMost.getX()==-1;i++) {
+                for (int j =0; j<image.getWidth()&&topMost.getX()==-1;j++) {
+                    //if topMost.getX is set, exit out
+                    if( Color.red( image.getPixel(j,i)) ==label) {
+                        //cool u found the label
+                        topMost= new XYCoor(j,i);
+                    }
+                }
+            }
+            XYCoor bottomMost = new XYCoor();
+
+            for (int i =image.getHeight()-1; i >=0&&bottomMost.getX()==-1;i--) {
+                for (int j =0; j<image.getWidth()&&bottomMost.getX()==-1;j++) {
+                    //if bottom.getX is set, exit out
+                    if( Color.red( image.getPixel(j,i)) ==label) {
+                        //cool u found the label
+                        bottomMost= new XYCoor(j,i);
+                    }
+                }
+            }
+            //ok so now u have all the corners set.
+            Log.e("coordinates","right"+rightMost.toString()+"left"+leftMost.toString()+"top"+topMost.toString()+"bottom"+bottomMost.toString());
+            //first check. if top and bottom is not equal to right and left radius, then it's not a circle
+            double leftRightDiameter = XYCoor.getDistance(leftMost,rightMost);
+            double topBottomDiameter = XYCoor.getDistance(topMost,bottomMost);
+            if (Math.abs(leftRightDiameter-topBottomDiameter)>=Vision.DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS) {
+                //then it isn't a cirlce
+                //so we'll white out and move on
+                image = removeLabel (image, label);
+                Log.e("not a circle","delete");
+
+            }
+            else {
+                //ok so if u made it thus far, u should still check the distance to the center
+                double radius = leftRightDiameter + topBottomDiameter / 2.0 / 2.0;
+                //midpoint of right/left
+                //midpoint of top/bottom
+                XYCoor center = new XYCoor(leftMost.getX() + leftRightDiameter / 2.0, topMost.getY() - topBottomDiameter / 2.0);
+                //we need to find all the edges
+                ArrayList<XYCoor> edgesOfShape = getCoordinatesOfEdges(image, label);
+                boolean litmustTest = true;
+                //if litmusTest comes out false, meaning we broke out of statement becuase one was out of ordinairy, then it's not a circle
+                for (int i = 0; i < edgesOfShape.size(); i++) {
+                    //retrieve each coordinate and test
+                    double distanceBetweenEdgeAndCenter = XYCoor.getDistance(center, edgesOfShape.get(i));
+                    if (distanceBetweenEdgeAndCenter - radius > Vision.TOLERANCE_FOR_RADIUS_DIFFERENCE) {
+                        //then ur not a circle
+                        litmustTest = false;
+                        break;
+                    }
+                    //implied else, ur good. check next pixel
+                }
+                if (litmustTest == false) {
+                    //failed that litmus test, one was out of the circle
+                    //not a circle
+                    image = removeLabel(image, label);
+                    Log.e("not a circle", "delete");
+                }
+                //implied else, ur a circle, let's keep you
+
+            }
+        }
+        //turn it into organized
+        image = (Bitmap) convertGrayscaleToEdged(image).get(1);
+        return image;
+    }
+
+    private static ArrayList<XYCoor> getCoordinatesOfEdges(Bitmap image, int label) {
+        ArrayList <XYCoor> data = new ArrayList<XYCoor>();
+        for (int i =0; i<image.getWidth();i++) {
+            for (int j = 0; j <image.getHeight();j++) {
+                if (Color.red(image.getPixel(i,j))==label) {
+                    data.add(new XYCoor(i,j));
+                }
+            }
+        }
+        return data;
+    }
+
+    private static Bitmap removeLabel(Bitmap image, int label) {
+        image = image.copy(Bitmap.Config.ARGB_8888,true);
+        for (int i =0; i<image.getWidth();i++) {
+            for (int j = 0; j <image.getHeight();j++) {
+                if (Color.red(image.getPixel(i,j))==label) {
+                    //white it out
+                    image.setPixel(i,j,Color.argb(255,255,255,255));
+                }
+            }
+        }
+        return image;
     }
 
 

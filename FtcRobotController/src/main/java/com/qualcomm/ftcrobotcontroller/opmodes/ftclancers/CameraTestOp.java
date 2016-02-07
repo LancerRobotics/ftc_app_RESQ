@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.hardware.Camera;
 import android.util.Log;
 
@@ -15,7 +14,6 @@ import com.qualcomm.ftcrobotcontroller.CameraPreview;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -84,5 +82,10 @@ public class CameraTestOp extends LinearOpMode {
         telemetry.addData("removedRandomness",Vision.savePicture(removedRandomness,hardwareMap.appContext,"REMOVED_RANDOMNESS"));
         telemetry.addData("labels","old"+totalLabel+"new"+removedRandomnessData.get(0));
         totalLabel=(Integer)removedRandomnessData.get(0);
+        Bitmap circles = Vision.returnCircles(removedRandomness,totalLabel);
+        telemetry.addData("circles",Vision.savePicture(circles,hardwareMap.appContext,"CIRCLES"));
+        //TODO that method below is incorrect use
+        telemetry.addData("circles found",Vision.getNumberOfLabelsAssumingOrganized(circles));
+
     }
 }
