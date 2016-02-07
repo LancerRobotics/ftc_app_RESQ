@@ -53,11 +53,8 @@ public class Autonomous extends LinearOpMode {
         // hsvValues is an array that will hold the hue, saturation, and value information.
         //the hue is the actual color we want
         float hsvValues[] = {0F,0F,0F};
-        while (this.opModeIsActive()) {
-            telemetry.addData("Color Method 1", colorSensorValue(hsvValues));
-            telemetry.addData("Color Method 2", altColorSensor());
-        }
-
+        telemetry.addData("Color Method 1", colorSensorValue(hsvValues));
+        telemetry.addData("Color Method 2", altColorSensor());
     }
 
     public void moveStraight(double dist, boolean backwards) {

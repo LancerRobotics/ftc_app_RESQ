@@ -4,15 +4,20 @@ package com.qualcomm.ftcrobotcontroller;
  * Created by daniel on 11/14/2015.
  */
 public class XYCoor {
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
-    public XYCoor(int x, int y) {
+    public XYCoor(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public int getX() {
+    public XYCoor() {
+        x = -1;
+        y = -1;
+    }
+
+    public double getX() {
         return x;
     }
 
@@ -28,12 +33,16 @@ public class XYCoor {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public static double getDistance (XYCoor one, XYCoor two) {
+        return Math.sqrt(Math.pow(one.getX()-two.getX(),2)+Math.pow(one.getY()-two.getY(),2));
     }
 
 }
