@@ -12,23 +12,28 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created on 11/25/2015.
  */
 public class Autonomous extends LinearOpMode {
-    DcMotor fr, fl, bl, br;
-    static AnalogInput sonarFrontLeft, sonarFrontRight, sonarBackRight, sonarBackLeft;
-    double a3, a4, a5;
+    DcMotor fr, fl, bl, br, collector;
+    AnalogInput sonarFrontLeft, sonarFrontRight, sonarBackRight, sonarBackLeft;
+    Servo climber, clampRight, clampLeft;
+    double a3, a4, a5, distanceToCheck;
+    float hsvValues[] = {0F,0F,0F};
     private AHRS navx_device;
-    private navXPIDController yawPIDController;
+    private navXPIDController leftYawPIDController, rightYawPIDController;
     private ElapsedTime runtime = new ElapsedTime();
     public static final double YAW_PID_P = 0.005;
     public static final double YAW_PID_I = 0.0;
     public static final double YAW_PID_D = 0.0;
-    ColorSensor colorFR;
+    boolean calibration_complete = false;
+    ColorSensor colorFR, colorFL;
     DeviceInterfaceModule cdim;
+    int movementCounter = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -36,25 +41,64 @@ public class Autonomous extends LinearOpMode {
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         br = hardwareMap.dcMotor.get(Keys.backRight);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
+        collector = hardwareMap.dcMotor.get(Keys.collector);
+        climber = hardwareMap.servo.get(Keys.climber);
+        clampLeft = hardwareMap.servo.get(Keys.clampLeft);
+        clampRight = hardwareMap.servo.get(Keys.clampRight);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
-        navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         colorFR = hardwareMap.colorSensor.get(Keys.COLOR_FRONT_RIGHT);
-
-
-
-        /*
+        //colorFL = hardwareMap.colorSensor.get(Keys.COLOR_FRONT_LEFT);
+        sonarFrontLeft = hardwareMap.analogInput.get(Keys.SONAR_FRONT_LEFT);
+        sonarBackLeft = hardwareMap.analogInput.get(Keys.SONAR_BACK_LEFT);
+        sonarBackRight = hardwareMap.analogInput.get(Keys.SONAR_BACK_RIGHT);
+        sonarFrontRight = hardwareMap.analogInput.get(Keys.SONAR_FRONT_RIGHT);
+        cdim = hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule);
+        navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
+        leftYawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
+        leftYawPIDController.setSetpoint(90);
+        leftYawPIDController.setContinuous(true);
+        leftYawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
+        leftYawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
+        leftYawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
+        rightYawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
+        rightYawPIDController.setSetpoint(-90);
+        rightYawPIDController.setContinuous(true);
+        rightYawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
+        rightYawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
+        rightYawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
+        while ( !calibration_complete ) {
+            calibration_complete = !navx_device.isCalibrating();
+            if (!calibration_complete) {
+                telemetry.addData("Start Autonomous?", "No");
+            }
+        }
+        telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        gyroTurn(90, true);
-        sleep(20000);
-        gyroTurn(90, false);
-        */
-
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-        //the hue is the actual color we want
-        float hsvValues[] = {0F,0F,0F};
-        telemetry.addData("Color Method 1", colorSensorValue(hsvValues));
-        telemetry.addData("Color Method 2", altColorSensor());
+        while(opModeIsActive()) {
+            moveAlteredSin(70, false);
+            distanceToCheck = 70;
+            if (!checkSonarPosition(distanceToCheck)) {
+                correctMovement(distanceToCheck);
+            }
+            gyroTurn(false);
+            moveAlteredSin(20, false);
+            distanceToCheck = 33;
+            if (!checkSonarPosition(distanceToCheck)) {
+                correctMovement(distanceToCheck);
+            }
+            gyroTurn(true);
+            moveAlteredSin(24.5, false);
+            distanceToCheck = 47;
+            if (!checkSonarPosition(distanceToCheck)) {
+                correctMovement(distanceToCheck);
+            }
+            gyroTurn(false);
+            distanceToCheck = 24;
+            if (!checkSonarPosition(distanceToCheck)) {
+                correctMovement(distanceToCheck);
+            }
+        }
     }
 
     public void moveStraight(double dist, boolean backwards) {
@@ -202,7 +246,12 @@ public class Autonomous extends LinearOpMode {
             }
 
             telemetry.addData("power", power);
-            setMotorPowerUniform(power, backwards);
+            if((objectInFront() && !backwards) || (objectBehind() && backwards)) {
+                rest();
+            }
+            else {
+                setMotorPowerUniform(power, backwards);
+            }
         }
         rest();
     }
@@ -231,46 +280,49 @@ public class Autonomous extends LinearOpMode {
         fr.setPower(-power);
         br.setPower(-power);
     }
-    public void gyroTurn(double degreesOfTurn, boolean right) {
-        if (right) {
-            degreesOfTurn = degreesOfTurn * -1;
-        }
-
-        yawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
-        yawPIDController.setSetpoint(degreesOfTurn);
-        yawPIDController.setContinuous(true);
-        yawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
-        yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
-        yawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
+    public void gyroTurn(boolean right) {
+        rest();
+        navx_device.zeroYaw();
         boolean onTarget = false;
         try {
-            yawPIDController.enable(true);
+            if (right) {
+                rightYawPIDController.enable(true);
+            }
+            else {
+                leftYawPIDController.enable(true);
+            }
             int DEVICE_TIMEOUT_MS = 500;
             navXPIDController.PIDResult yawPIDResult = new navXPIDController.PIDResult();
             while (!onTarget) {
-                if (yawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {
-                    if (yawPIDResult.isOnTarget()) {
-                        rest();
+                if (leftYawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS) || rightYawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {
+                    if (leftYawPIDController.isOnTarget() || rightYawPIDController.isOnTarget()) {
                         onTarget = true;
-                    } else {
-                        if (yawPIDController.getSetpoint() - 30 <= navx_device.getYaw() && navx_device.getYaw() <= yawPIDController.getSetpoint() + 30)
-                            turn(yawPIDResult.getOutput() / 10);
-                        else
-                            turn(yawPIDResult.getOutput());
+                    }
+                    else {
+                        turn(yawPIDResult.getOutput());
                     }
                 } else {
 			    /* A timeout occurred */
-                    telemetry.addData("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");
+                    Log.w("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");
                 }
                 telemetry.addData("Yaw", navx_device.getYaw());
+                if(leftYawPIDController.isEnabled())
+                    telemetry.addData("Setpoint", leftYawPIDController.getSetpoint());
+                else if(rightYawPIDController.isEnabled())
+                    telemetry.addData("Setpoint", rightYawPIDController.getSetpoint());
                 telemetry.addData("Motor Power", yawPIDResult.getOutput());
-                telemetry.addData("End Point", yawPIDController.getSetpoint());
                 telemetry.addData("Finished Turn?", onTarget);
             }
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
         } finally {
-            navx_device.close();
+            rest();
+            if (right) {
+                rightYawPIDController.enable(false);
+            }
+            else {
+                leftYawPIDController.enable(false);
+            }
         }
     }
 
@@ -282,5 +334,54 @@ public class Autonomous extends LinearOpMode {
     //alternative color sensor method to try as well
     public int altColorSensor() {
         return colorFR.argb();
+    }
+
+    public double readSonar(AnalogInput sonar) {
+        double sValue = sonar.getValue();
+        sValue = sValue/2;
+        return sValue;
+    }
+
+    public boolean objectBehind () {
+        double sonarBL = readSonar(sonarBackLeft);
+        double sonarBR = readSonar(sonarBackRight);
+        if (sonarBL < 10 || sonarBR < 10) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public boolean objectInFront () {
+        double sonarFL = readSonar(sonarFrontLeft);
+        double sonarFR = readSonar(sonarFrontRight);
+        if (sonarFL < 10 || sonarFR < 10) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public boolean checkSonarPosition(double distance) {
+        boolean allGood;
+                if(distance-4 <= readSonar(sonarFrontLeft) && readSonar(sonarFrontLeft)<= distance+4 && distance-4 <= readSonar(sonarFrontRight) && readSonar(sonarFrontRight)<= distance+4) {
+                    allGood = true;
+                }
+                else {
+                    allGood = false;
+                }
+        return allGood;
+    }
+    public void correctMovement(double distance) {
+        while (!checkSonarPosition(distance)) {
+            if (readSonar(sonarFrontRight) < distance-4 || readSonar(sonarFrontLeft) < distance-4) {
+                setMotorPowerUniform(.1, false);
+            } else if (readSonar(sonarFrontLeft) > distance+4 || readSonar(sonarFrontRight) > distance+4) {
+                setMotorPowerUniform(.1, true);
+            }
+        }
+        rest();
     }
 }
