@@ -13,14 +13,14 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 public class ColorSensorTest extends LinearOpMode {
     ColorSensor colorFR;
     public void runOpMode() throws InterruptedException {
+        hardwareMap.logDevices();
         colorFR = hardwareMap.colorSensor.get(Keys.COLOR_FRONT_RIGHT);
+        waitOneFullHardwareCycle();
         waitForStart();
-        while(opModeIsActive()) {
-            telemetry.addData("RED", colorFR.red());
-            telemetry.addData("BLUE", colorFR.blue());
-            telemetry.addData("GREEN", colorFR.green());
-            sleep(1000);
-            telemetry.clearData();
+        while(true) {
+            telemetry.addData("RED", (colorFR.red() * 255) / 800);
+            telemetry.addData("BLUE", (colorFR.blue() * 255) / 800);
+            telemetry.addData("GREEN", (colorFR.green() * 255) / 800);
         }
     }
 }
