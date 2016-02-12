@@ -23,7 +23,7 @@ import java.util.Date;
 public class Vision {
     private static final int FIRST_LABEL = 0;
     private static final int MIN_NEEDED_TO_BE_AN_EDGE = 8;
-    private static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 2;
+    private static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
     private static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
     public static int FOCUS_TIME = 2400;
     public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 1500;
@@ -315,6 +315,7 @@ public class Vision {
     }
 
     public static ArrayList<Object> consolidateEdges(Bitmap clumpy, int totalLabels) {
+        clumpy = clumpy.copy(Bitmap.Config.ARGB_8888,true);
         boolean didIMakeAnEdit;
         int numberOfChanges = 0;
         do {
@@ -505,17 +506,17 @@ public class Vision {
             //make image mutable
             XYCoor leftMost = new XYCoor();
 
-                for (int i =0; i <image.getWidth()&&leftMost.getX()==-1;i++) {
-                    for (int j =0; j<image.getHeight()&&leftMost.getX()==-1;j++) {
-                        //if leftMost.getX is set, exit out
-                        if( Color.red( image.getPixel(i,j)) ==label) {
-                            //cool u found the label
-                            //Log.e("found",leftMost.toString());
-                            leftMost= new XYCoor(i,j);
-                        }
-
+            for (int i =0; i <image.getWidth()&&leftMost.getX()==-1;i++) {
+                for (int j =0; j<image.getHeight()&&leftMost.getX()==-1;j++) {
+                    //if leftMost.getX is set, exit out
+                    if( Color.red( image.getPixel(i,j)) ==label) {
+                        //cool u found the label
+                        //Log.e("found",leftMost.toString());
+                        leftMost= new XYCoor(i,j);
                     }
+
                 }
+            }
             //now do for right most. so this, you will satrt from right side going to 0
             XYCoor rightMost = new XYCoor();
 
@@ -552,23 +553,27 @@ public class Vision {
                 }
             }
             //ok so now u have all the corners set.
-            Log.e("coordinates","right"+rightMost.toString()+"left"+leftMost.toString()+"top"+topMost.toString()+"bottom"+bottomMost.toString());
+
             //first check. if top and bottom is not equal to right and left radius, then it's not a circle
-            double leftRightDiameter = XYCoor.getDistance(leftMost,rightMost);
-            double topBottomDiameter = XYCoor.getDistance(topMost,bottomMost);
-            if (Math.abs(leftRightDiameter-topBottomDiameter)>=Vision.DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS) {
+            double leftRightRadius = Math.abs(rightMost.getX()-leftMost.getX());
+            double topBottomRadius = Math.abs(bottomMost.getY()-topMost.getY());
+
+            if (Math.abs(leftRightRadius-topBottomRadius)>=Vision.DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS) {
                 //then it isn't a cirlce
                 //so we'll white out and move on
                 image = removeLabel (image, label);
-                Log.e("not a circle","delete");
+                Log.e("not a circle"," radius - delete");
 
             }
             else {
                 //ok so if u made it thus far, u should still check the distance to the center
-                double radius = leftRightDiameter + topBottomDiameter / 2.0 / 2.0;
                 //midpoint of right/left
                 //midpoint of top/bottom
-                XYCoor center = new XYCoor(leftMost.getX() + leftRightDiameter / 2.0, topMost.getY() - topBottomDiameter / 2.0);
+                double centerX = (leftMost.getX()+rightMost.getX())/2.0;
+                double centerY = (topMost.getY()+bottomMost.getY())/2.0;
+                XYCoor center = new XYCoor(centerX,centerY);
+                double radius = (leftRightRadius+topBottomRadius)/2.0;
+                Log.e("coordinates","right"+rightMost.toString()+"left"+leftMost.toString()+"top"+topMost.toString()+"bottom"+bottomMost.toString()+"center"+center.toString()+"radius"+radius);
                 //we need to find all the edges
                 ArrayList<XYCoor> edgesOfShape = getCoordinatesOfEdges(image, label);
                 boolean litmustTest = true;
@@ -603,7 +608,7 @@ public class Vision {
         for (int i =0; i<image.getWidth();i++) {
             for (int j = 0; j <image.getHeight();j++) {
                 if (Color.red(image.getPixel(i,j))==label) {
-                    data.add(new XYCoor(i,j));
+                    data.add(new XYCoor(i, j));
                 }
             }
         }
@@ -616,7 +621,7 @@ public class Vision {
             for (int j = 0; j <image.getHeight();j++) {
                 if (Color.red(image.getPixel(i,j))==label) {
                     //white it out
-                    image.setPixel(i,j,Color.argb(255,255,255,255));
+                    image.setPixel(i, j, Color.argb(255, 255, 255, 255));
                 }
             }
         }
@@ -685,7 +690,7 @@ public class Vision {
         //ok so now you have a corrected image.
         //save the image for logging and debugging
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + " EditedWhiteRows";
-        File pictureFile = getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, timeStamp, context);
+        File pictureFile = getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, timeStamp, context, false);
         if (pictureFile == null) {
             Log.d("ERROR", "Error creating media file, check storage permissions: "
             );
@@ -732,7 +737,7 @@ public class Vision {
             }
         }
         String timeStamp2 = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + " EditedWhiteAll";
-        File pictureFile2 = getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, timeStamp, context);
+        File pictureFile2 = getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, timeStamp, context, false);
         if (pictureFile == null) {
             Log.d("ERROR", "Error creating media file, check storage permissions: "
             );
@@ -778,10 +783,12 @@ public class Vision {
 
         return returnThis;
     }
-
-    public static String savePicture(Bitmap bitmap, Context context, String tag) {
+    public static String savePictureOuput (Bitmap bitmap, Context context) {
+        return savePicture(bitmap, context, "OUTPUT", true);
+    }
+    public static String savePicture(Bitmap bitmap, Context context, String tag, boolean debug) {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + tag;
-        File pictureFile = getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, timeStamp, context);
+        File pictureFile = getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, timeStamp, context, debug);
         if (pictureFile == null) {
             Log.d("ERROR", "Error creating media file, check storage permissions: "
             );
@@ -790,7 +797,8 @@ public class Vision {
         try {
 
             FileOutputStream fos = new FileOutputStream(pictureFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+
             fos.close();
 
 
@@ -802,12 +810,17 @@ public class Vision {
         return pictureFile.getName();
     }
 
-    private static File getOutputMediaFile(int type, String timeStamp, Context context) {
+    private static File getOutputMediaFile(int type, String timeStamp, Context context, boolean debug) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "Matt Quan is a boss");
+        if (debug) {
+            mediaStorageDir =  new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES), "Testing");
+
+        }
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
@@ -824,7 +837,7 @@ public class Vision {
         File mediaFile;
         if (type == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE) {
             String path = mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg";
+                    "IMG_" + timeStamp + ".png";
             Log.e("savedPath", path);
             SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(
                     "com.quan.companion", Context.MODE_PRIVATE);
