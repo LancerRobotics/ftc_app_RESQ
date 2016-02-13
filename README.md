@@ -1,4 +1,33 @@
 # ftc_app
+This is our 2015-2016 FTC app, where all of our opmodes and code will be written, do NOT push to master unless approved
+
+IMPORTANT UPDATE
+To install fully on your own computer:
+
+Download navX-micro from http://www.pdocs.kauailabs.com/navx-mxp/software/android-library-ftc/ by clicking on latest build, it is in purple MAKE SURE THERE IS A navX-micro FOLDER IN YOUR HOME DIRECTORY (C:\Users\YOURUSERNAME)
+Extract the contents and run through setup.exe
+
+IMPORTANT RESOURCE (ftc forum): http://ftcforum.usfirst.org/forumdisplay.php?156-FTC-Technology
+
+Information and Future Plans
+
+Autonomous Plans
+
+Drive to button
+Push button
+Score climbers
+Back up
+Climb up mountain, possibly find a way to score climbers on the zipline
+TeleOp Updates
+
+Treads teleop, movement only
+Sensors
+
+navX-Micro --> to detect direction and open up the possibilities as to how we can use the raw, pitch, and roll values determined by the sensor.(VALUES: -180 to 180 degrees for yaw)
+Sonar --> (Maxbotix Analog Sonar) to detect distance, can be used in autonomous for more accurate movement (VALUES: 6" - 200")
+Motor Encoders --> to detect "ticks" or movement for the wheels, encoded movement in autonomous, move certain distances (VALUES: need to be tested) (Maybe 0-1400?)
+Limit Switch --> to detect when our lift is back in our robot and ready to hold more debris (VALUES: 0 or some other number)
+
 FTC Android Studio project to create FTC Robot Controller app.
 
 This is the FTC SDK that can be used to create an FTC Robot Controller app, with custom op modes.
