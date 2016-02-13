@@ -8,6 +8,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.qualcomm.ftcrobotcontroller.opmodes.depreciated.PostNNTeleOp;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,6 +27,7 @@ public class Vision {
     private static final int MIN_NEEDED_TO_BE_AN_EDGE = 8;
     private static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
     private static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
+
     public static int FOCUS_TIME = 2400;
     public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 1500;
 
@@ -39,6 +42,17 @@ public class Vision {
     public static double UPPER_BOUNDS_BLUE_VIBRANCY = 50;
     public static double UPPER_BOUNDS_BLUE_SATURATION = 50;
     public static double UPPER_BOUNDS_RED_VIBRANCY = 80;
+    public static int CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS = 0;
+    public static int CONVERTGRAYSCALETOEDGED_DATA_BITMAP = 1;
+    public static int CONVERTGRAYSCALETOEDGED_DATA_EDGETHRESHOLDUSED=2;
+    public static int CONSOLIDATEEDGES_DATA_NUMBEROFCHANGES = 0;
+    public static int CONSOLIDATEEDGES_DATA_TOTALLABELS = 1;
+    public static int CONSOLDIATEEDGES_DATA_BITMAP = 2;
+    public static int REMOVERANDOMNESS_DATA_LABELS = 0;
+    public static  int REMOVERANDOMNESS_DATA_BITMAP = 1 ;
+    public static int RETURNCIRCLES_DATA_BITMAP = 0;
+    public static int RETURNCIRCLES_DATA_XYCOORSCENTER = 1;
+    public static double THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS = 2;
 
     //these values are all based off of the color wheel
     public static String findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(Bitmap image) {
@@ -179,7 +193,7 @@ public class Vision {
 
     }
 
-    public static ArrayList<Object> convertGrayscaleToEdged(Bitmap grayscale) {
+    public static ArrayList<Object> convertGrayscaleToEdged(Bitmap grayscale, double edgeThresholdUsed) {
         //sort through image matrix pixxel by pixel
         //for each pixel, analyze each of the 8 pixels surrounding it
 
@@ -226,7 +240,7 @@ public class Vision {
                 }
                 //ok so now u set max/min for this group of surrounding pixels
                 //if darkest - lightest > threshold, then it's an edge
-                if (max - min > EDGE_THRESHOLD) {
+                if (max - min > edgeThresholdUsed) {
                     //his is an edge
                     //mark i,j as an edge
 
@@ -260,7 +274,7 @@ public class Vision {
         }
         ArrayList<Object> data = new ArrayList();
         //let the first bitmap be raw, second be made pretty
-        data.add(0, label);
+        data.add(CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS, label);
         //add in a raw edge with no shading
         //ok so now you have a graph with a bunch of labeled pixels.
         if (label > 255) {
@@ -284,7 +298,8 @@ public class Vision {
 
         }*/
         //beautiful. now you've got a shaded grayed image. EDITED: WE DONT WANT BEAUTY ANYMORE, it was screwing around. plus black = 0 so whatever
-        data.add(clean);
+        data.add(CONVERTGRAYSCALETOEDGED_DATA_BITMAP, clean);
+        data.add(CONVERTGRAYSCALETOEDGED_DATA_EDGETHRESHOLDUSED, edgeThresholdUsed);
         return data;   //not clean anymore doe
     }
 
@@ -358,9 +373,9 @@ public class Vision {
 
         ArrayList<Object>data = new ArrayList<Object>();
         totalLabels =  getNumberOfLabelsAssumingOrganized(clumpy);
-        data.add(0,numberOfChanges);
-        data.add(1,totalLabels);
-        data.add(2,clumpy);
+        data.add(CONSOLIDATEEDGES_DATA_NUMBEROFCHANGES,numberOfChanges);
+        data.add(CONSOLIDATEEDGES_DATA_TOTALLABELS,totalLabels);
+        data.add(CONSOLDIATEEDGES_DATA_BITMAP,clumpy);
         return data;  //although not clumpy anymore
     }
 
@@ -420,60 +435,14 @@ public class Vision {
             }
             //implicit else: then it has enough pixels to be an edge, leave it
         }
-        /*Log.e("labels","old:"+labels+"new"+(labels-howManyRemoved));
-        labels = labels-howManyRemoved;
-        //now we need to relabel everything...
-        //relabel everything. gotta think of an algorithm first - done
-        //let's log out results from which labels were removed
-        String removedLabelsString ="";
-        for (int i =0;i<representsIfLabelIsRepresented.length;i++) {
-            removedLabelsString+="("+i+","+String.valueOf(representsIfLabelIsRepresented[i])+")";
-        }
-        Log.e("firstRemovedLabel",removedLabelsString);
-        int pointerFalse= 0;
-        int pointerTrue = representsIfLabelIsRepresented.length-1;
-        for (int i  = 0 ;i<howManyRemoved;i++) {
 
-            for (int j=pointerFalse;j<representsIfLabelIsRepresented.length;j++) {
-                if (representsIfLabelIsRepresented[j]==false) {
-                    pointerFalse = j;
-                    //now speed in and find first true
-                    for (int y = pointerTrue; y >= 0; y--) {
-                        if (representsIfLabelIsRepresented[y] == true) {
-                            pointerTrue = y;
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-            //k now we've got a point false and point true, now swap the values in bitmap form
-            representsIfLabelIsRepresented[pointerFalse]=true;
-            representsIfLabelIsRepresented[pointerTrue]=false;
-            for (int a =0; a<image.getWidth();a++) {
-                for (int b =0;b<image.getHeight();b++) {
-                    if (Color.red(image.getPixel(a,b))==pointerTrue) {
-                        image.setPixel(a,b,Color.argb(255,pointerFalse,pointerFalse,pointerFalse));
-                    }
-                }
-            }
-        }
 
-        //k should be done now
-        removedLabelsString ="";
-        for (int i =0;i<representsIfLabelIsRepresented.length;i++) {
-            removedLabelsString+="("+i+","+String.valueOf(representsIfLabelIsRepresented[i])+")";
-        }
-        Log.e("secondRemovedLabel",removedLabelsString);*/ //TODO so this method isn't working... if we just re-edge that obviously edged, it should rename it
-
-        //Log.e("labelsTestPre", getLabels(image).toString()); commented out because this was for debugging
         //this will organize it
-        image =(Bitmap)convertGrayscaleToEdged(image).get(1);
-        //Log.e("labelsTest", getLabels(image).toString()); commented out because this was for debugging
+        image =(Bitmap)convertGrayscaleToEdged(image, EDGE_THRESHOLD).get(1);
         labels = getNumberOfLabelsAssumingOrganized(image);
         ArrayList<Object> data = new ArrayList();
-        data.add(0,labels);
-        data.add(1,image);
+        data.add(REMOVERANDOMNESS_DATA_LABELS,labels);
+        data.add(REMOVERANDOMNESS_DATA_BITMAP,image);
         return data;
 
     }
@@ -490,7 +459,7 @@ public class Vision {
         return data;
     }
 
-    public static Bitmap returnCircles (Bitmap image, int numOfLabels) {
+    public static ArrayList<Object> returnCircles (Bitmap image, int numOfLabels) {
         Log.e("starting","circle");
         //for each label, determine if it's a circle
         //find a bounding rectangle to find the center and radius of the circle.
@@ -498,7 +467,7 @@ public class Vision {
         //if equal to radius or almost equal to radius, for ALL of them, then it's a circle.
         //will have to check for tolerances
         //also elminate radius equal to one
-
+        ArrayList<XYCoor> centers = new ArrayList<XYCoor>();
         for (int label = 0; label <numOfLabels;label++) {
             //so for each label, determine if it's a circle
             //comb thru the image vertically first to determine left most pixel
@@ -594,13 +563,21 @@ public class Vision {
                     image = removeLabel(image, label);
                     Log.e("not a circle", "delete");
                 }
-                //implied else, ur a circle, let's keep you
+
+                else {
+                    //implied else, ur a circle, let's keep you
+                    //also type in the center
+                    centers.add(center);
+                }
 
             }
         }
         //turn it into organized
-        image = (Bitmap) convertGrayscaleToEdged(image).get(1);
-        return image;
+        ArrayList <Object> imageRecountedByEdge = convertGrayscaleToEdged(image,EDGE_THRESHOLD);
+        ArrayList <Object> data = new ArrayList<Object>();
+        data.add(RETURNCIRCLES_DATA_BITMAP, (Bitmap)consolidateEdges((Bitmap)imageRecountedByEdge.get(CONVERTGRAYSCALETOEDGED_DATA_BITMAP),(Integer)imageRecountedByEdge.get(CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS)).get(CONSOLDIATEEDGES_DATA_BITMAP));
+        data.add(RETURNCIRCLES_DATA_XYCOORSCENTER, centers);
+        return data;
     }
 
     private static ArrayList<XYCoor> getCoordinatesOfEdges(Bitmap image, int label) {
@@ -628,6 +605,106 @@ public class Vision {
         return image;
     }
 
+    public static Bitmap findAndIsolateBeaconButtons (Bitmap image, ArrayList<XYCoor> centersOfCircles) {
+        if (centersOfCircles.size()<2) {
+            return Bitmap.createBitmap(image.getWidth(),image.getHeight(), Bitmap.Config.ARGB_8888);
+            //returns a new (blank) bitmap. there were less than one, so return an image with no circles, since no set of buttons were found
+        }
+        if (centersOfCircles.size()==2) {
+            //check to make sure the two x values are equal
+            if (Math.abs(centersOfCircles.get(0).getY()-centersOfCircles.get(1).getY())> THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS) {
+                //check y's. the x's will have a huge diff. but the y placement should be about the same
+                return image;
+                //you already had the two
+            }
+            else {
+                return Bitmap.createBitmap(image.getWidth(),image.getHeight(), Bitmap.Config.ARGB_8888);
+                //else those two werent the buttons, so send empty
+            }
+        }
+        else {
+            //more than 2. check to see if any two y's are equal
+            int[][] numberOfMatchesPerCircle = new int[centersOfCircles.size()][centersOfCircles.size()];
+            ArrayList<XYCoor> pairsOfCircles = new ArrayList<XYCoor>();
+            //we can use XYCoor to represnt the pair
+            for (int i =0; i <centersOfCircles.size()-1;i++) {
+                for (int j =i+1;j<centersOfCircles.size();j++) {
+                    //compare i and j y values. note the number of matches
+                    if (Math.abs(centersOfCircles.get(i).getY()-centersOfCircles.get(j).getY())>THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS) {
+                        numberOfMatchesPerCircle[i][j]++;
+                    }
+                }
+            }
+            //k so now we've got that half triangle adjacency matrix
+            int[] sumOfRows = new int[centersOfCircles.size()];
+            for (int i =0; i <centersOfCircles.size();i++) {
+                int sumOfI = 0;
+                for (int j =0; j<centersOfCircles.size();j++) {
+                    sumOfI+=numberOfMatchesPerCircle[i][j];
+                }
+                sumOfRows[i]=sumOfI;
+            }
+            //now check to see which ones have a sum of 1. then check the one
+            for (int i =0; i<centersOfCircles.size();i++) {
+                if (sumOfRows[i]==1) {
+                    //check the sum of Column associated with that match
+                    int matchOfI = findPair (numberOfMatchesPerCircle,i);
+                    //now check for sum
+                    int sumOfMatchPair = sumOfPairColumn(matchOfI, numberOfMatchesPerCircle);
+                    if (sumOfMatchPair==1) {
+                        //then we found the pair
+                        Log.e("found pair!","circle one label: "+i+"circle two label:"+matchOfI);
+                        pairsOfCircles.add(new XYCoor(i,matchOfI));
+                    }
+                    //implied else, didn't work out, don't save
+                }
+            }
+            //remove everything from the picture but the paired circles
+            for (int label =0; label <centersOfCircles.size();label++) {
+                if (!ArrayListOfXYCoorsIncludes(pairsOfCircles,label)) {
+                    removeLabel(image,label);
+                }
+            }
+            if (pairsOfCircles.size()==1) {
+                //awesomeee my job is easy
+                return image;
+            }
+            else {
+                //TODO find the best fit ie. what is the usual button size, radius size
+                //now u have to rule out circles :/
+
+                return image;
+            }
+        }
+    }
+
+    private static boolean ArrayListOfXYCoorsIncludes(ArrayList<XYCoor> pairsOfCircles, int label) {
+        for (int i =0; i <pairsOfCircles.size();i++) {
+            if (pairsOfCircles.get(i).getX()==label||pairsOfCircles.get(i).getY()==label) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static int sumOfPairColumn(int matchOfI, int[][] fullAdjacencyMatrix) {
+        int sum = 0;
+        for (int i =0; i <fullAdjacencyMatrix.length;i++) {
+            sum+=fullAdjacencyMatrix[i][matchOfI];
+        }
+        return sum;
+    }
+
+    private static int findPair(int[][] fullAdjacencyMatrix, int rowThatHasOneMatch) {
+        for (int i = 0; i< fullAdjacencyMatrix.length;i++) {
+            //go to that row and search until it's not 0
+            if (fullAdjacencyMatrix[rowThatHasOneMatch][i]==1) {
+                return i;
+            }
+        }
+        //this should never happen...
+        return -1;
+    }
 
     public static String findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(Bitmap image, Context context) {
         // a drop of 150 in all rgb (or at least two) means that relatively, the pixel is black, relative to all the other pixels
