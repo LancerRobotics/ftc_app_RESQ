@@ -56,13 +56,11 @@ public class Autonomous extends LinearOpMode {
         cdim = hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         leftYawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
-        leftYawPIDController.setSetpoint(90);
         leftYawPIDController.setContinuous(true);
         leftYawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
         leftYawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
         leftYawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
         rightYawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
-        rightYawPIDController.setSetpoint(-90);
         rightYawPIDController.setContinuous(true);
         rightYawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
         rightYawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
@@ -81,19 +79,19 @@ public class Autonomous extends LinearOpMode {
             if (!checkSonarPosition(distanceToCheck)) {
                 correctMovement(distanceToCheck);
             }
-            gyroTurn(false);
+            gyroTurn(90, false);
             moveAlteredSin(20, false);
             distanceToCheck = 33;
             if (!checkSonarPosition(distanceToCheck)) {
                 correctMovement(distanceToCheck);
             }
-            gyroTurn(true);
+            gyroTurn(90, true);
             moveAlteredSin(24.5, false);
             distanceToCheck = 47;
             if (!checkSonarPosition(distanceToCheck)) {
                 correctMovement(distanceToCheck);
             }
-            gyroTurn(false);
+            gyroTurn(90, false);
             distanceToCheck = 24;
             if (!checkSonarPosition(distanceToCheck)) {
                 correctMovement(distanceToCheck);
@@ -280,15 +278,17 @@ public class Autonomous extends LinearOpMode {
         fr.setPower(-power);
         br.setPower(-power);
     }
-    public void gyroTurn(boolean right) {
+    public void gyroTurn(double degrees, boolean right) {
         rest();
         navx_device.zeroYaw();
         boolean onTarget = false;
         try {
             if (right) {
+                rightYawPIDController.setSetpoint(-1 * degrees);
                 rightYawPIDController.enable(true);
             }
             else {
+                leftYawPIDController.setSetpoint(degrees);
                 leftYawPIDController.enable(true);
             }
             int DEVICE_TIMEOUT_MS = 500;
