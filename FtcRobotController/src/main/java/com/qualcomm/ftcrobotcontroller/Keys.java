@@ -55,14 +55,14 @@ public class Keys {
 
 
     //Climber values
-    public static final double CLIMBER_DUMP = .863;
-    public static final double CLIMBER_INITIAL_STATE = 0;
+    public static final double CLIMBER_DUMP = .6;
+    public static final double CLIMBER_INITIAL_STATE = .2;
 
 
     //Swivel values TODO FIX VALUES ONCE NEW SERVOS ARRIVE
-    public static final double SWIVEL_CENTER = .55;
-    public static final double SWIVEL_LEFT = 0;
-    public static final double SWIVEL_RIGHT = 1;
+    public static final double SWIVEL_CENTER = .475;
+    public static final double SWIVEL_LEFT = .2;
+    public static final double SWIVEL_RIGHT = .7;
 
     //Right Trigger Values
     public static final double RT_INIT = 0;

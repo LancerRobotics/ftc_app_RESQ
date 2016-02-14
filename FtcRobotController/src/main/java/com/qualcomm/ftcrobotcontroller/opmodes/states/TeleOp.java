@@ -36,7 +36,8 @@ public class TeleOp extends OpMode{
 
     boolean dumpDown;
     boolean hanging;
-    boolean clamped;
+    boolean leftClamped;
+    boolean rightClamped;
     boolean climbers;
     boolean rightTrigger;
     boolean leftTrigger;
@@ -84,7 +85,8 @@ public class TeleOp extends OpMode{
 
         dumpDown = false;
         hanging = false;
-        clamped = false;
+        leftClamped = false;
+        rightClamped = false;
         climbers = false;
         rightTrigger = false;
         leftTrigger = false;
@@ -151,7 +153,7 @@ public class TeleOp extends OpMode{
         }
 
 
-        //Dump
+        //Hopper
         if (gamepad2.a && !hopperDown) {
             hopperLeft.setPosition(Keys.HL_DUMP);
             hopperRight.setPosition(Keys.HR_DUMP);
@@ -162,6 +164,7 @@ public class TeleOp extends OpMode{
             hopperDown = false;
         }
 
+        //Dump
         if(gamepad2.y && !dumpDown) {
             dump.setPosition(Keys.DUMP_DOWN);
             dumpDown = true;
@@ -181,21 +184,26 @@ public class TeleOp extends OpMode{
         }
 
         //Clamps (for ramp)
-        if (gamepad1.y && !clamped) {
-            clampLeft.setPosition(Keys.CL_DOWN);
+        if (gamepad1.right_bumper && !rightClamped) {
             clampRight.setPosition(Keys.CR_DOWN);
-            clamped = true;
-        } else if (gamepad1.y && clamped) {
-            clampLeft.setPosition(Keys.CL_INIT);
+            rightClamped = true;
+        } else if (gamepad1.right_bumper && rightClamped) {
             clampRight.setPosition(Keys.CR_INIT);
-            clamped = false;
+            rightClamped = false;
+        }
+        if(gamepad1.left_bumper && !leftClamped) {
+            clampLeft.setPosition(Keys.CL_DOWN);
+            leftClamped = true;
+        } else if (gamepad1.left_bumper && leftClamped) {
+            clampLeft.setPosition(Keys.CL_INIT);
+            leftClamped = false;
         }
 
         //Climbers
-        if (gamepad1.right_bumper && !climbers) {
+        if (gamepad1.y && !climbers) {
             climber.setPosition(Keys.CLIMBER_DUMP);
             climbers = true;
-        } else if (gamepad1.right_bumper && climbers) {
+        } else if (gamepad1.y && climbers) {
             climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
             climbers = false;
         }
