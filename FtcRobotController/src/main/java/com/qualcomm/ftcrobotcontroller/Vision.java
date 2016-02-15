@@ -27,12 +27,12 @@ public class Vision {
     public static final int MIN_NEEDED_TO_BE_AN_EDGE = 8;
     public static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
     public static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
-    public static final int MIN_RADIUS_LENGTH = 1;
+    public static final int MIN_RADIUS_LENGTH = 2;
     public static final int MAX_RADIUS_LENGTH = 7;
 
 
     public static int FOCUS_TIME = 2400;
-    public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 1500;
+    public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 1750;
 
     public static double EDGE_THRESHOLD = 85;
     public static double CONTRAST_ADJUSTMENT = .85;
@@ -494,6 +494,12 @@ public class Vision {
                     double distanceBetweenEdgeAndCenter = XYCoor.getDistance(center, edgesOfShape.get(i));
                     if (distanceBetweenEdgeAndCenter - radius > Vision.TOLERANCE_FOR_RADIUS_DIFFERENCE) {
                         //then ur not a circle
+                        litmustTest = false;
+                        break;
+                    }
+                    if (edgesOfShape.get(i).getX()==0||edgesOfShape.get(i).getY()==0) {
+                        //if any parto f the image is on the edge, it's most likely not a beacon... they are usually in the middlee
+                        //so this will eliminate any edge stuff (which we found during testing)
                         litmustTest = false;
                         break;
                     }
