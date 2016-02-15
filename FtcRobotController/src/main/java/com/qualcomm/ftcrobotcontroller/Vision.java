@@ -23,10 +23,13 @@ import java.util.Date;
  * Created by Matt on 12/27/2015.
  */
 public class Vision {
-    private static final int FIRST_LABEL = 0;
-    private static final int MIN_NEEDED_TO_BE_AN_EDGE = 8;
-    private static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
-    private static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
+    public static final int FIRST_LABEL = 0;
+    public static final int MIN_NEEDED_TO_BE_AN_EDGE = 8;
+    public static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
+    public static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
+    public static final int MIN_RADIUS_LENGTH = 1;
+    public static final int MAX_RADIUS_LENGTH = 7;
+
 
     public static int FOCUS_TIME = 2400;
     public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 1500;
@@ -38,7 +41,7 @@ public class Vision {
     public static double UPPER_BOUNDS_BLUE_HUE = 240;
     //red is right where the circle turns around
     public static double LOWER_BOUNDS_PINK_HUE = 290;
-    public static double UPPER_BOUNDS_RED_HUE = 15;
+    public static double UPPER_BOUNDS_RED_HUE = 16;
     public static double UPPER_BOUNDS_BLUE_VIBRANCY = 50;
     public static double UPPER_BOUNDS_BLUE_SATURATION = 50;
     public static double UPPER_BOUNDS_RED_VIBRANCY = 80;
@@ -54,77 +57,7 @@ public class Vision {
     public static int RETURNCIRCLES_DATA_XYCOORSCENTER = 1;
     public static double THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS = 2;
 
-    //these values are all based off of the color wheel
-    public static String findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(Bitmap image) {
-        //find the avg hue for right side, find avg hue for left side
-        //compare
-        //blue hues tend to be unvariably 180, so like 170 - 190
-        //red hues tend to be pink or purple, so somehwere around 295 higher (inaccurate from our testing). but, they can also be very low numbereed hued reds so like 15
-        //so basically we can say that blues will be less than reds, since the red comes out as pink
-        int xMidPoint = image.getWidth() / 2;
-        double avgHueLeft = 0;
-        int pixelCounter = 0;
-        for (int i = 0; i < xMidPoint; i++) {
-            for (int j = 0; j < image.getHeight(); j++) {
-                int pixel = image.getPixel(i, j);
-                //pixel is in rgb value. let's break this into hsv values
-                // hsv[0] is Hue [0 .. 360)
-                // hsv[1] is Saturation [0...1]
-                // hsv[2] is Value [0...1]
-                pixelCounter++;
-                float[] hsv = new float[3];
-                Color.colorToHSV(pixel, hsv);
-                avgHueLeft += hsv[0];
-            }
-        }
-        //done getting left side
-        avgHueLeft = avgHueLeft / pixelCounter;
-        //let's do for right side
-        double avgHueRight = 0;
-        pixelCounter = 0;
-        for (int i = image.getWidth() - 1; i > xMidPoint; i--) {
-            for (int j = 0; j < image.getHeight(); j++) {
-                int pixel = image.getPixel(i, j);
-                //pixel is in rgb value. let's break this into hsv values
-                // hsv[0] is Hue [0 .. 360)
-                // hsv[1] is Saturation [0...1]
-                // hsv[2] is Value [0...1]
-                pixelCounter++;
-                float[] hsv = new float[3];
-                Color.colorToHSV(pixel, hsv);
-                avgHueRight += hsv[0];
-            }
-        }
-        //done getting right side
-        //compare and return
-        String returnThis = "avgHueLeft:" + avgHueLeft + "avgHueRight:" + avgHueRight;
-        if (isRedHue(avgHueLeft)) {
-            //left was red
-            returnThis += "left=red";
-            return returnThis;
-        } else if (isBlueHue(avgHueLeft)) {
-            returnThis += "left=blue";
-            return returnThis;
-        } else {
-            returnThis += "left=unknown";
-        }
-        //if you're here, it means we're unknown
-        //so let's check the right side
-        if (isRedHue(avgHueRight)) {
-            //right was red
-            returnThis += "right=red";
-            return returnThis;
-        } else if (isBlueHue(avgHueRight)) {
-            returnThis += "right=blue";
-            return returnThis;
-        } else {
-            returnThis += "right=unknown";
-            //well that's not good
 
-        }
-        return returnThis;
-
-    }
 
     public static boolean isRedHue(double hue) {
         //returns if the color is red, based solely on hue. inaccuracies with saturataion/vibrancy variables
@@ -138,7 +71,7 @@ public class Vision {
 
     public static boolean isRed(double hue, double V) {
         //it is too dark to be red, lightness doesnt really matter for red since lighter red is pink which is basically red
-        return V >= UPPER_BOUNDS_BLUE_VIBRANCY && (0 < hue && hue < UPPER_BOUNDS_RED_HUE || hue > LOWER_BOUNDS_PINK_HUE);
+        return V >= UPPER_BOUNDS_RED_VIBRANCY && (0 < hue && hue < UPPER_BOUNDS_RED_HUE || hue > LOWER_BOUNDS_PINK_HUE);
         /* UNSIMPLIFIED CODE cuz this makes more sense then the random stuff up there
         if (V<UPPER_BOUNDS_BLUE_VIBRANCY) {
             //it is too dark to be red, lightness doesnt really matter for red since lighter red is pink which is basically red
@@ -531,8 +464,17 @@ public class Vision {
                 //then it isn't a cirlce
                 //so we'll white out and move on
                 image = removeLabel (image, label);
-                Log.e("not a circle"," radius - delete");
+                Log.e("not a circle"," radius = not square - delete");
 
+            }
+            else if (leftRightRadius<=MIN_RADIUS_LENGTH||topBottomRadius<=MIN_RADIUS_LENGTH) {
+                //not a circle because it's too small... we don't want small circles
+                Log.e("not a circle","radius = too small");
+                image = removeLabel(image, label);
+            }
+            else if (leftRightRadius>-MAX_RADIUS_LENGTH||topBottomRadius>=MAX_RADIUS_LENGTH) {
+                //too big to be a beacon circle...
+                Log.e("not a circle we like","radius - too large");
             }
             else {
                 //ok so if u made it thus far, u should still check the distance to the center
@@ -561,7 +503,7 @@ public class Vision {
                     //failed that litmus test, one was out of the circle
                     //not a circle
                     image = removeLabel(image, label);
-                    Log.e("not a circle", "delete");
+                    Log.e("not a circle", "def. of circle/litmus test fail");
                 }
 
                 else {
@@ -575,7 +517,7 @@ public class Vision {
         //turn it into organized
         ArrayList <Object> imageRecountedByEdge = convertGrayscaleToEdged(image,EDGE_THRESHOLD);
         ArrayList <Object> data = new ArrayList<Object>();
-        data.add(RETURNCIRCLES_DATA_BITMAP, (Bitmap)consolidateEdges((Bitmap)imageRecountedByEdge.get(CONVERTGRAYSCALETOEDGED_DATA_BITMAP),(Integer)imageRecountedByEdge.get(CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS)).get(CONSOLDIATEEDGES_DATA_BITMAP));
+        data.add(RETURNCIRCLES_DATA_BITMAP, consolidateEdges((Bitmap)imageRecountedByEdge.get(CONVERTGRAYSCALETOEDGED_DATA_BITMAP),(Integer)imageRecountedByEdge.get(CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS)).get(CONSOLDIATEEDGES_DATA_BITMAP));
         data.add(RETURNCIRCLES_DATA_XYCOORSCENTER, centers);
         return data;
     }
@@ -704,6 +646,78 @@ public class Vision {
         }
         //this should never happen...
         return -1;
+    }
+
+    //these values are all based off of the color wheel
+    public static String findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(Bitmap image) {
+        //find the avg hue for right side, find avg hue for left side
+        //compare
+        //blue hues tend to be unvariably 180, so like 170 - 190
+        //red hues tend to be pink or purple, so somehwere around 295 higher (inaccurate from our testing). but, they can also be very low numbereed hued reds so like 15
+        //so basically we can say that blues will be less than reds, since the red comes out as pink
+        int xMidPoint = image.getWidth() / 2;
+        double avgHueLeft = 0;
+        int pixelCounter = 0;
+        for (int i = 0; i < xMidPoint; i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
+                int pixel = image.getPixel(i, j);
+                //pixel is in rgb value. let's break this into hsv values
+                // hsv[0] is Hue [0 .. 360)
+                // hsv[1] is Saturation [0...1]
+                // hsv[2] is Value [0...1]
+                pixelCounter++;
+                float[] hsv = new float[3];
+                Color.colorToHSV(pixel, hsv);
+                avgHueLeft += hsv[0];
+            }
+        }
+        //done getting left side
+        avgHueLeft = avgHueLeft / pixelCounter;
+        //let's do for right side
+        double avgHueRight = 0;
+        pixelCounter = 0;
+        for (int i = image.getWidth() - 1; i > xMidPoint; i--) {
+            for (int j = 0; j < image.getHeight(); j++) {
+                int pixel = image.getPixel(i, j);
+                //pixel is in rgb value. let's break this into hsv values
+                // hsv[0] is Hue [0 .. 360)
+                // hsv[1] is Saturation [0...1]
+                // hsv[2] is Value [0...1]
+                pixelCounter++;
+                float[] hsv = new float[3];
+                Color.colorToHSV(pixel, hsv);
+                avgHueRight += hsv[0];
+            }
+        }
+        //done getting right side
+        //compare and return
+        String returnThis = "avgHueLeft:" + avgHueLeft + "avgHueRight:" + avgHueRight;
+        if (isRedHue(avgHueLeft)) {
+            //left was red
+            returnThis += "left=red";
+            return returnThis;
+        } else if (isBlueHue(avgHueLeft)) {
+            returnThis += "left=blue";
+            return returnThis;
+        } else {
+            returnThis += "left=unknown";
+        }
+        //if you're here, it means we're unknown
+        //so let's check the right side
+        if (isRedHue(avgHueRight)) {
+            //right was red
+            returnThis += "right=red";
+            return returnThis;
+        } else if (isBlueHue(avgHueRight)) {
+            returnThis += "right=blue";
+            return returnThis;
+        } else {
+            returnThis += "right=unknown";
+            //well that's not good
+
+        }
+        return returnThis;
+
     }
 
     public static String findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(Bitmap image, Context context) {
