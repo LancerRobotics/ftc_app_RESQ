@@ -73,7 +73,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
             Camera.Parameters params = mCamera.getParameters();
-            params.setRotation(90);
+            //params.setRotation(90);
             mCamera.setParameters(params);
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();
