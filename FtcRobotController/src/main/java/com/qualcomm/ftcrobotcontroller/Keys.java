@@ -62,7 +62,7 @@ public class Keys {
     //Swivel values TODO FIX VALUES ONCE NEW SERVOS ARRIVE
     public static final double SWIVEL_CENTER = .475;
     public static final double SWIVEL_LEFT = .2;
-    public static final double SWIVEL_RIGHT = .7;
+    public static final double SWIVEL_RIGHT = .75;
 
     //Right Trigger Values
     public static final double RT_INIT = 0;

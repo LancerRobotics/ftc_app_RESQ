@@ -271,8 +271,7 @@ public class Autonomous extends LinearOpMode {
         fl.setPower(0);
         bl.setPower(0);
         br.setPower(0);
-    }
-    public void turn (double power) {
+    }public void turn (double power) {
         fl.setPower(power);
         bl.setPower(power);
         fr.setPower(-power);
@@ -325,6 +324,7 @@ public class Autonomous extends LinearOpMode {
             }
         }
     }
+
 
     //return a float the just contains the *hue* which is the color value we want
     public float colorSensorValue(float[] values) {

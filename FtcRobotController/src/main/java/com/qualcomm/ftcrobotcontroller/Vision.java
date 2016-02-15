@@ -28,11 +28,11 @@ public class Vision {
     public static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
     public static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
     public static final int MIN_RADIUS_LENGTH = 2;
-    public static final int MAX_RADIUS_LENGTH = 10;
+    public static final int MAX_RADIUS_LENGTH = 7;
 
 
     public static int FOCUS_TIME = 2400;
-    public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 1900;
+    public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 1750;
 
     public static double EDGE_THRESHOLD = 85;
     public static double CONTRAST_ADJUSTMENT = .85;
@@ -948,6 +948,4 @@ public class Vision {
 
         return mediaFile;
     }
-
-
 }

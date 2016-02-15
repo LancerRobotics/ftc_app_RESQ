@@ -1,12 +1,12 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.ftclancers;
-import android.util.Log;
+        import android.util.Log;
 
-import com.kauailabs.navx.ftc.AHRS;
-import com.kauailabs.navx.ftc.navXPIDController;
-import com.qualcomm.ftcrobotcontroller.Keys;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
+        import com.kauailabs.navx.ftc.AHRS;
+        import com.kauailabs.navx.ftc.navXPIDController;
+        import com.qualcomm.ftcrobotcontroller.Keys;
+        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+        import com.qualcomm.robotcore.hardware.DcMotor;
+        import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created on 11/25/2015.
@@ -31,13 +31,11 @@ public class GyroAuton extends LinearOpMode {
         br.setDirection(DcMotor.Direction.REVERSE);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         leftYawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
-        leftYawPIDController.setSetpoint(90);
         leftYawPIDController.setContinuous(true);
         leftYawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
         leftYawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
         leftYawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
         rightYawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
-        rightYawPIDController.setSetpoint(-90);
         rightYawPIDController.setContinuous(true);
         rightYawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
         rightYawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
@@ -51,10 +49,10 @@ public class GyroAuton extends LinearOpMode {
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         telemetry.clearData();
-        gyroTurn(true);
+        gyroTurn(90, true);
         telemetry.addData("Done", "HALFWAY");
         sleep(10000);
-        gyroTurn(false);
+        gyroTurn(90, false);
         telemetry.addData("Done", "DONE");
         navx_device.close();
     }
@@ -64,21 +62,27 @@ public class GyroAuton extends LinearOpMode {
         bl.setPower(0);
         br.setPower(0);
     }
-    public void turn (double power) {
-        fl.setPower(power);
-        bl.setPower(power);
-        fr.setPower(-power);
-        br.setPower(-power);
+    public void turn (double power, boolean right) {
+        if(right) {
+            fl.setPower(power);
+            bl.setPower(power);
+        }
+        else {
+            fr.setPower(power);
+            br.setPower(power);
+        }
     }
-    public void gyroTurn(boolean right) {
+    public void gyroTurn(double degrees, boolean right) {
         rest();
         navx_device.zeroYaw();
         boolean onTarget = false;
         try {
             if (right) {
+                rightYawPIDController.setSetpoint(-1 * degrees);
                 rightYawPIDController.enable(true);
             }
             else {
+                leftYawPIDController.setSetpoint(degrees);
                 leftYawPIDController.enable(true);
             }
             int DEVICE_TIMEOUT_MS = 500;
@@ -89,7 +93,7 @@ public class GyroAuton extends LinearOpMode {
                         onTarget = true;
                     }
                     else {
-                        turn(yawPIDResult.getOutput());
+                        turn(yawPIDResult.getOutput(), right);
                     }
                 } else {
 			    /* A timeout occurred */
