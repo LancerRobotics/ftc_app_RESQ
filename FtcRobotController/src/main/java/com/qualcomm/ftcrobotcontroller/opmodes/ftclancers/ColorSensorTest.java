@@ -19,9 +19,11 @@ public class ColorSensorTest extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Hue", altColorSensor());
             telemetry.addData("HSV", colorSensorValue(new float[3]));
-            telemetry.addData("Red", colorFR.red());
-            telemetry.addData("Green", colorFR.green());
-            telemetry.addData("Blue", colorFR.blue());
+            telemetry.addData("Red", colorFR.red()*255/800);
+            telemetry.addData("Green", colorFR.green()*255/800);
+            telemetry.addData("Blue", colorFR.blue()*255/800);
+            telemetry.addData("Alpha Unscaled", colorFR.alpha());
+            telemetry.addData("Alpha Scaled", colorFR.alpha()*255/800);
         }
     }
 
