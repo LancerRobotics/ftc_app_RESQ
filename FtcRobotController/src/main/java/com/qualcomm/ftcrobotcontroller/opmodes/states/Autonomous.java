@@ -332,9 +332,7 @@ public class Autonomous extends LinearOpMode {
         return values[0];
     }
     //alternative color sensor method to try as well
-    public int altColorSensor() {
-        return colorFR.argb();
-    }
+
 
     public double readSonar(AnalogInput sonar) {
         double sValue = sonar.getValue();
