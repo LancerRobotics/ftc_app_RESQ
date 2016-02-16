@@ -245,6 +245,9 @@ public class TeleOp extends OpMode{
             swivelCenter = true;
             swivelRight = false;
         }
+
+        telemetry.addData("Gamepad 2 Left Bumper Pressed?", gamepad2.left_bumper);
+        telemetry.addData("Gamepad 2 Right Bumper Pressed?", gamepad2.right_bumper);
     }
 
     //Motor power for the wheels, for movement
