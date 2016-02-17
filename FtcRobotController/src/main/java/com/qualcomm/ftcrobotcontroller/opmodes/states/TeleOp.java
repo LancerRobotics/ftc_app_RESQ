@@ -145,10 +145,10 @@ public class TeleOp extends OpMode{
         //Collector
         if (gamepad2.left_bumper && !gamepad2.right_bumper)
             collectorMovement(false, false);
-        else if (gamepad2.right_bumper && !gamepad2.left_bumper) {
+        if (gamepad2.right_bumper && !gamepad2.left_bumper) {
             collectorMovement(true, false);
         }
-        else if(gamepad2.right_bumper && gamepad2.left_bumper) {
+        if(gamepad2.right_bumper && gamepad2.left_bumper) {
             collectorMovement(true, true);
         }
 
