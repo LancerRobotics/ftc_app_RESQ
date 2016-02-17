@@ -143,14 +143,12 @@ public class TeleOp extends OpMode{
         pullUp(pullPwr);
 
         //Collector
-        if (gamepad2.left_bumper && !gamepad2.right_bumper)
+        if (gamepad2.left_bumper)
             collectorMovement(false, false);
-        if (gamepad2.right_bumper && !gamepad2.left_bumper) {
+        if (gamepad2.left_bumper)
             collectorMovement(true, false);
-        }
-        if(gamepad2.right_bumper && gamepad2.left_bumper) {
+        else
             collectorMovement(true, true);
-        }
 
 
         //Hopper
