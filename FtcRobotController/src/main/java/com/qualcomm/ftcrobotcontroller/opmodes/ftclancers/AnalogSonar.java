@@ -21,8 +21,6 @@ public class AnalogSonar extends OpMode {
     public void loop() {
         telemetry.addData("Object Behind? ", objectBehind());
         telemetry.addData("Object In Front? ", objectInFront());
-
-
     }
 
     public void stop() {

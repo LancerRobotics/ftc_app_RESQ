@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * Created by jakew on 1/18/2016.
+ * Created by AJ on 1/18/2016.
  */
 public class TeleOp extends OpMode{
     private AHRS navx_device;
@@ -41,10 +41,7 @@ public class TeleOp extends OpMode{
     boolean climbers;
     boolean rightTrigger;
     boolean leftTrigger;
-    boolean hopperDown = false;
-    boolean swivelLeft = false;
-    boolean swivelRight = false;
-    boolean swivelCenter = true;
+    int hangPressCount = 0;
 
     public void init() {
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
@@ -143,58 +140,46 @@ public class TeleOp extends OpMode{
         pullUp(pullPwr);
 
         //Collector
-        if (gamepad2.left_bumper)
+        if(gamepad2.left_bumper)
             collectorMovement(false, false);
-        if (gamepad2.left_bumper)
+        else if (gamepad2.left_trigger > .15)
             collectorMovement(true, false);
         else
             collectorMovement(true, true);
 
-
-        //Hopper
-        if (gamepad2.a && !hopperDown) {
-            hopperLeft.setPosition(Keys.HL_DUMP);
-            hopperRight.setPosition(Keys.HR_DUMP);
-            hopperDown = true;
-        } else if (gamepad2.a && hopperDown){
-            hopperLeft.setPosition(Keys.HL_STORE);
-            hopperRight.setPosition(Keys.HR_STORE);
-            hopperDown = false;
-        }
-
         //Dump
-        if(gamepad2.y && !dumpDown) {
+        if(gamepad2.right_bumper) {
             dump.setPosition(Keys.DUMP_DOWN);
-            dumpDown = true;
         }
-        else if (gamepad2.y && dumpDown) {
+        else if (gamepad2.right_trigger > .15) {
             dump.setPosition(Keys.DUMP_INIT);
-            dumpDown = false;
         }
 
         //Hang
-        if (gamepad2.x && !hanging) {
+        if (gamepad2.y && hangPressCount == 0) {
+            hang.setPosition(Keys.HANG_HALFWAY);
+            hangPressCount++;
+        } else if (gamepad2.y && hangPressCount == 1){
             hang.setPosition(Keys.HANG_NOW);
-            hanging = true;
-        } else if (gamepad2.x && hanging){
+            hangPressCount++;
+        } else if (gamepad2.y && hangPressCount == 2) {
             hang.setPosition(Keys.HANG_INIT);
-            hanging = false;
+            hangPressCount = 0;
         }
 
         //Clamps (for ramp)
-        if (gamepad1.right_bumper && !rightClamped) {
-            clampRight.setPosition(Keys.CR_DOWN);
-            rightClamped = true;
-        } else if (gamepad1.right_bumper && rightClamped) {
-            clampRight.setPosition(Keys.CR_INIT);
-            rightClamped = false;
-        }
-        if(gamepad1.left_bumper && !leftClamped) {
+        if (gamepad1.right_trigger > .15) {
             clampLeft.setPosition(Keys.CL_DOWN);
-            leftClamped = true;
-        } else if (gamepad1.left_bumper && leftClamped) {
-            clampLeft.setPosition(Keys.CL_INIT);
-            leftClamped = false;
+            while(clampLeft.getPosition() != Keys.CL_DOWN) {
+                clampRight.setPosition(Keys.CR_INIT);
+            }
+            clampRight.setPosition(Keys.CR_DOWN);
+        } else if (gamepad1.right_bumper) {
+            clampRight.setPosition(Keys.CR_INIT);
+            while(clampRight.getPosition() != Keys.CR_INIT) {
+                clampLeft.setPosition(Keys.CL_DOWN);
+            }
+            clampLeft.setPosition(Keys.CL_DOWN);
         }
 
         //Climbers
@@ -207,41 +192,32 @@ public class TeleOp extends OpMode{
         }
 
         //Triggers
-        if(gamepad2.right_trigger > .15 && !rightTrigger) {
+        if(gamepad2.b && !rightTrigger) {
             triggerRight.setPosition(Keys.RT_TRIGGER);
             rightTrigger = true;
         }
-        else if(gamepad2.right_trigger > .15 && rightTrigger) {
+        else if(gamepad2.b && rightTrigger) {
             triggerRight.setPosition(Keys.RT_INIT);
             rightTrigger = false;
         }
-        if(gamepad2.left_trigger > .15 && !leftTrigger) {
+        if(gamepad2.x && !leftTrigger) {
             triggerLeft.setPosition(Keys.LT_TRIGGER);
             leftTrigger = true;
         }
-        else if(gamepad2.left_trigger > .15 && leftTrigger) {
+        else if(gamepad2.x && leftTrigger) {
             triggerLeft.setPosition(Keys.LT_INIT);
             leftTrigger = false;
         }
 
         //Swivels
-        if(gamepad1.x && !swivelLeft) {
+        if(gamepad1.x) {
             swivel.setPosition(Keys.SWIVEL_LEFT);
-            swivelLeft = true;
-            swivelCenter = false;
-            swivelRight = false;
         }
-        else if(gamepad1.b && !swivelRight) {
+        else if(gamepad1.b) {
             swivel.setPosition(Keys.SWIVEL_RIGHT);
-            swivelLeft = false;
-            swivelCenter = false;
-            swivelRight = true;
         }
-        else if(gamepad1.a && !swivelCenter) {
+        else if(gamepad1.a) {
             swivel.setPosition(Keys.SWIVEL_CENTER);
-            swivelLeft = false;
-            swivelCenter = true;
-            swivelRight = false;
         }
 
         telemetry.addData("Gamepad 2 Left Bumper Pressed?", gamepad2.left_bumper);

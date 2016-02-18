@@ -74,11 +74,12 @@ public class Keys {
 
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
-    public static final double TOLERANCE_DEGREES = 2.0;
+    public static final double TOLERANCE_DEGREES = 5.0;
 
     //Hanging values
-    public static final double HANG_INIT = 1; //HANG UP AS WELL
-    public static final double HANG_NOW = .196;
+    public static final double HANG_INIT = 1;
+    public static final double HANG_NOW = .1;
+    public static final double HANG_HALFWAY = .196;
 
     //Dump values,
     public static final double DUMP_INIT = 1;
