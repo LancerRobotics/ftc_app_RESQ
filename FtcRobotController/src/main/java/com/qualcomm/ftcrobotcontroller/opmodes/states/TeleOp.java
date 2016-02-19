@@ -43,6 +43,7 @@ public class TeleOp extends OpMode{
     boolean leftTrigger;
     boolean clampTrig;
     boolean clampBump;
+    boolean calibration_complete;
     int hangPressCount = 0;
 
     public void init() {
@@ -93,6 +94,13 @@ public class TeleOp extends OpMode{
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         //limitLeft = hardwareMap.analogInput.get(Keys.LIMIT_LEFT);
         limitRight = hardwareMap.analogInput.get(Keys.LIMIT_RIGHT);
+        while ( !calibration_complete ) {
+            calibration_complete = !navx_device.isCalibrating();
+            if (!calibration_complete) {
+                telemetry.addData("Start Teleop?", "No");
+            }
+        }
+        telemetry.addData("Start Teleop?", "Yes");
     }
 
     public void loop() {
@@ -200,6 +208,16 @@ public class TeleOp extends OpMode{
             triggerLeft.setPosition(Keys.LT_INIT);
             rightTrigger = false;
             leftTrigger = false;
+        }
+        if(!gamepad2.x && !gamepad2.b && !gamepad2.a) {
+            if (navx_device.getPitch() > 5) {
+                triggerLeft.setPosition(Keys.LT_TRIGGER);
+                triggerRight.setPosition(Keys.RT_TRIGGER);
+            }
+            else {
+                triggerLeft.setPosition(Keys.LT_INIT);
+                triggerRight.setPosition(Keys.RT_INIT);
+            }
         }
 
         //Swivels
