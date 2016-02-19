@@ -209,8 +209,8 @@ public class TeleOp extends OpMode{
             rightTrigger = false;
             leftTrigger = false;
         }
-        if(!gamepad2.x && !gamepad2.b && !gamepad2.a) {
-            if (navx_device.getPitch() > 5) {
+        if(!gamepad2.x && !gamepad2.b && !gamepad2.a && !rightTrigger && !leftTrigger) {
+            if (navx_device.getPitch() > 15) {
                 triggerLeft.setPosition(Keys.LT_TRIGGER);
                 triggerRight.setPosition(Keys.RT_TRIGGER);
             }
