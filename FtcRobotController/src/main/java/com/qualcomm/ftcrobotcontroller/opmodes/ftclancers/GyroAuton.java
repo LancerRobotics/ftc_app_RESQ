@@ -49,12 +49,12 @@ public class GyroAuton extends LinearOpMode {
         bl.setPower(power);
     }
     public void gyroTurn (double degrees) {
-        degrees=degrees*-1;
+        //degrees=degrees*-1;
         yawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
         yawPIDController.setSetpoint(degrees);
         yawPIDController.setContinuous(true);
         yawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
-        yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE,Keys.TOLERANCE_DEGREES);
+        yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE,Keys.TOLERANCE_LEVEL_2);
 
         yawPIDController.enable(true);
         int DEVICE_TIMEOUT_MS = 500;
@@ -69,21 +69,44 @@ public class GyroAuton extends LinearOpMode {
         telemetry.addData("boolean",navx_device.getYaw()<degreesToGo);
         if (navx_device.getYaw()>degreesToGo) {
             telemetry.addData("if","getYaw>degrees");
-            while (!(degreesToGo-Keys.TOLERANCE_DEGREES<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_DEGREES));
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_1<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_1));
             {
-                telemetry.addData("while","turningLeft");
-                turnLeft(.6);
+                telemetry.addData("while","turningLeft1");
+                turnRight(Keys.MAX_SPEED);
+                telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
+            }
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_2<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_2));
+            {
+                telemetry.addData("while","turningLeft2");
+                turnRight(.65);
+                telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
+            }
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3));
+            {
+                telemetry.addData("while","turningLeft3");
+                turnRight(.35);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
             }
             telemetry.addData("while","done");
         }
         else if (navx_device.getYaw()<degreesToGo) {
             telemetry.addData("if","getYaw<degrees");
-            while (!(degreesToGo-Keys.TOLERANCE_DEGREES<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_DEGREES)) {
-                turnRight(.6);
-                telemetry.addData("while","turningRight");
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_1<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_1)) {
+                turnLeft(Keys.MAX_SPEED);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
+                telemetry.addData("while","turningRight");
             }
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_2<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_2)) {
+                turnLeft(.65);
+                telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
+                telemetry.addData("while","turningRight");
+            }
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3)) {
+                turnLeft(.35);
+                telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
+                telemetry.addData("while","turningRight");
+            }
+
             telemetry.addData("whileD","done");
         }
         telemetry.addData("ifD","done");

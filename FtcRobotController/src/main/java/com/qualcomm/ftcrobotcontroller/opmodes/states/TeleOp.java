@@ -41,6 +41,8 @@ public class TeleOp extends OpMode{
     boolean climbers;
     boolean rightTrigger;
     boolean leftTrigger;
+    boolean clampTrig;
+    boolean clampBump;
     int hangPressCount = 0;
 
     public void init() {
@@ -140,72 +142,63 @@ public class TeleOp extends OpMode{
         pullUp(pullPwr);
 
         //Collector
-        if(gamepad2.left_bumper)
+        if(gamepad2.left_trigger > .15)
             collectorMovement(false, false);
-        else if (gamepad2.left_trigger > .15)
+        else if (gamepad2.left_bumper)
             collectorMovement(true, false);
         else
             collectorMovement(true, true);
 
         //Dump
-        if(gamepad2.right_bumper) {
+        if(gamepad2.right_trigger > .15 && !dumpDown) {
             dump.setPosition(Keys.DUMP_DOWN);
+            dumpDown = true;
         }
-        else if (gamepad2.right_trigger > .15) {
+        else if (gamepad2.right_bumper && dumpDown) {
             dump.setPosition(Keys.DUMP_INIT);
+            dumpDown = false;
         }
 
         //Hang
-        if (gamepad2.y && hangPressCount == 0) {
+        if (gamepad2.dpad_left || gamepad2.dpad_right) {
             hang.setPosition(Keys.HANG_HALFWAY);
-            hangPressCount++;
-        } else if (gamepad2.y && hangPressCount == 1){
+        } else if (gamepad2.dpad_up){
             hang.setPosition(Keys.HANG_NOW);
-            hangPressCount++;
-        } else if (gamepad2.y && hangPressCount == 2) {
+        } else if (gamepad2.dpad_down) {
             hang.setPosition(Keys.HANG_INIT);
-            hangPressCount = 0;
         }
 
         //Clamps (for ramp)
         if (gamepad1.right_trigger > .15) {
-            clampLeft.setPosition(Keys.CL_DOWN);
-            while(clampLeft.getPosition() != Keys.CL_DOWN) {
-                clampRight.setPosition(Keys.CR_INIT);
-            }
             clampRight.setPosition(Keys.CR_DOWN);
         } else if (gamepad1.right_bumper) {
             clampRight.setPosition(Keys.CR_INIT);
-            while(clampRight.getPosition() != Keys.CR_INIT) {
-                clampLeft.setPosition(Keys.CL_DOWN);
-            }
+        } else if (gamepad1.left_trigger > .15) {
             clampLeft.setPosition(Keys.CL_DOWN);
+        } else if (gamepad1.left_bumper) {
+            clampLeft.setPosition(Keys.CL_INIT);
         }
 
         //Climbers
-        if (gamepad1.y && !climbers) {
+        if (gamepad1.y) {
             climber.setPosition(Keys.CLIMBER_DUMP);
-            climbers = true;
-        } else if (gamepad1.y && climbers) {
+        } else if (gamepad2.y) {
             climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-            climbers = false;
         }
 
         //Triggers
-        if(gamepad2.b && !rightTrigger) {
+        if(gamepad2.x && !rightTrigger) {
             triggerRight.setPosition(Keys.RT_TRIGGER);
             rightTrigger = true;
         }
-        else if(gamepad2.b && rightTrigger) {
-            triggerRight.setPosition(Keys.RT_INIT);
-            rightTrigger = false;
-        }
-        if(gamepad2.x && !leftTrigger) {
+        else if(gamepad2.b && !leftTrigger) {
             triggerLeft.setPosition(Keys.LT_TRIGGER);
             leftTrigger = true;
         }
-        else if(gamepad2.x && leftTrigger) {
+        else if(gamepad2.a && (rightTrigger || leftTrigger)) {
+            triggerRight.setPosition(Keys.RT_INIT);
             triggerLeft.setPosition(Keys.LT_INIT);
+            rightTrigger = false;
             leftTrigger = false;
         }
 

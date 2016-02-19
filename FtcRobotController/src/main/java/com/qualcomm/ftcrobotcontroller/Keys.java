@@ -19,10 +19,9 @@ public class Keys {
     public static final String advancedSensorModule = "asm";
     public static final String LIMIT_LEFT = "lsl";
     public static final String LIMIT_RIGHT = "lsr";
-    public static final String SONAR_BACK_RIGHT = "sonaBR";
+    public static final String SONAR_TOP = "sonaT";
     public static final String SONAR_FRONT_LEFT = "sonaFL";
     public static final String SONAR_FRONT_RIGHT = "sonaFR";
-    public static final String SONAR_BACK_LEFT = "sonaBL";
     public static final String COLOR_FRONT_RIGHT = "colorFR";
     public static final String COLOR_FRONT_LEFT = "colorFL";
     public static final String dump = "dump";
@@ -74,11 +73,14 @@ public class Keys {
 
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
-    public static final double TOLERANCE_DEGREES = 5.0;
+    public static final double TOLERANCE_DEGREES = 2.0;
+    public static final double TOLERANCE_LEVEL_1 = 15;
+    public static final double TOLERANCE_LEVEL_2 = 7.5;
+    public static final double TOLERANCE_LEVEL_3 = 3.5;
 
     //Hanging values
     public static final double HANG_INIT = 1;
-    public static final double HANG_NOW = .1;
+    public static final double HANG_NOW = 0;
     public static final double HANG_HALFWAY = .196;
 
     //Dump values,

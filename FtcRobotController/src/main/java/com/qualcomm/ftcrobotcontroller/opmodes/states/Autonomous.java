@@ -1,70 +1,46 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.states;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.hardware.Camera;
 import android.util.Log;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
+import com.qualcomm.ftcrobotcontroller.CameraPreview;
+import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.ftcrobotcontroller.Keys;
+import com.qualcomm.ftcrobotcontroller.Vision;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-import com.qualcomm.robotcore.hardware.I2cDevice;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
- * Created on 11/25/2015.
+ * Created by daniel on 2/18/2016.
  */
 public class Autonomous extends LinearOpMode {
-    DcMotor fr, fl, bl, br, collector;
-    AnalogInput sonarFrontLeft, sonarFrontRight, sonarBackRight, sonarBackLeft;
-    Servo climber, clampRight, clampLeft;
-    double a3, a4, a5, distanceToCheck;
-    float hsvValues[] = {0F,0F,0F};
+    DcMotor fr, fl, bl, br;
+    //double a3,a4,a5;
     private AHRS navx_device;
-    private navXPIDController leftYawPIDController, rightYawPIDController;
-    private ElapsedTime runtime = new ElapsedTime();
-    public static final double YAW_PID_P = 0.005;
-    public static final double YAW_PID_I = 0.0;
-    public static final double YAW_PID_D = 0.0;
+    private navXPIDController yawPIDController;
     boolean calibration_complete = false;
-    ColorSensor colorFR, colorFL;
-    DeviceInterfaceModule cdim;
-    int movementCounter = 0;
-
+    private Camera mCamera;
+    public CameraPreview preview;
+    public Bitmap image;
     @Override
     public void runOpMode() throws InterruptedException {
+        mCamera = ((FtcRobotControllerActivity) hardwareMap.appContext).mCamera;
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
-        br = hardwareMap.dcMotor.get(Keys.backRight);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
-        collector = hardwareMap.dcMotor.get(Keys.collector);
-        climber = hardwareMap.servo.get(Keys.climber);
-        clampLeft = hardwareMap.servo.get(Keys.clampLeft);
-        clampRight = hardwareMap.servo.get(Keys.clampRight);
+        br = hardwareMap.dcMotor.get(Keys.backRight);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
-        colorFR = hardwareMap.colorSensor.get(Keys.COLOR_FRONT_RIGHT);
-        //colorFL = hardwareMap.colorSensor.get(Keys.COLOR_FRONT_LEFT);
-        sonarFrontLeft = hardwareMap.analogInput.get(Keys.SONAR_FRONT_LEFT);
-        sonarBackLeft = hardwareMap.analogInput.get(Keys.SONAR_BACK_LEFT);
-        sonarBackRight = hardwareMap.analogInput.get(Keys.SONAR_BACK_RIGHT);
-        sonarFrontRight = hardwareMap.analogInput.get(Keys.SONAR_FRONT_RIGHT);
-        cdim = hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
-        leftYawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
-        leftYawPIDController.setContinuous(true);
-        leftYawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
-        leftYawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
-        leftYawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
-        rightYawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
-        rightYawPIDController.setContinuous(true);
-        rightYawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
-        rightYawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE, Keys.TOLERANCE_DEGREES);
-        rightYawPIDController.setPID(YAW_PID_P, YAW_PID_I, YAW_PID_D);
         while ( !calibration_complete ) {
             calibration_complete = !navx_device.isCalibrating();
             if (!calibration_complete) {
@@ -73,140 +49,95 @@ public class Autonomous extends LinearOpMode {
         }
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        while(opModeIsActive()) {
-            moveAlteredSin(70, false);
-            distanceToCheck = 70;
-            if (!checkSonarPosition(distanceToCheck)) {
-                correctMovement(distanceToCheck);
-            }
-            gyroTurn(90, false);
-            moveAlteredSin(20, false);
-            distanceToCheck = 33;
-            if (!checkSonarPosition(distanceToCheck)) {
-                correctMovement(distanceToCheck);
-            }
-            gyroTurn(90, true);
-            moveAlteredSin(24.5, false);
-            distanceToCheck = 47;
-            if (!checkSonarPosition(distanceToCheck)) {
-                correctMovement(distanceToCheck);
-            }
-            gyroTurn(90, false);
-            distanceToCheck = 24;
-            if (!checkSonarPosition(distanceToCheck)) {
-                correctMovement(distanceToCheck);
-            }
+        moveAlteredSin(53, false);
+        gyroTurn(-90);
+
+        //i need to init the camera and also get the instance of the camera        //on pic take protocol
+
+        ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
+
+        //wait, because I have handler wait three seconds b4 it'll take a picture, in initCamera
+        sleep(Vision.RETRIEVE_FILE_TIME);
+        //now we are going to retreive the image and convert it to bitmap
+        SharedPreferences prefs = hardwareMap.appContext.getApplicationContext().getSharedPreferences(
+                "com.quan.companion", Context.MODE_PRIVATE);
+        String path = prefs.getString(Keys.pictureImagePathSharedPrefsKeys, "No path found");
+
+        //debug stuff - telemetry.addData("camera", "path: " + path);
+        File imgFile = new File(path);
+        image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+        telemetry.addData("image", image.toString());
+        //cool now u have the image file u just took the picture of
+        //debug stuff - ((FtcRobotControllerActivity) hardwareMap.appContext).initImageTakenPreview(image);
+        //ok so now I have the image
+
+        //scale image down to 216 height if needed
+        if (image.getHeight()>216||image.getWidth()>216) {
+            //too large to be uploaded into a texture
+            int nh = (int) ( image.getHeight() * (216.0 / image.getWidth()) );
+            Log.e("nh", nh + " h" + image.getHeight() + " w" + image.getWidth());
+            image = Bitmap.createScaledBitmap(image,216,nh,true);
+            //original will be same size as everything else
+            //the saved version of the pic is original size, however
+            Vision.savePicture(image,hardwareMap.appContext,"SHRUNKEN", false);
+            telemetry.addData("bitmap shrunk","shrunk");
         }
-    }
 
-    public void moveStraight(double dist, boolean backwards) {
-        //inches
-        //at speed .5, it goes over four inches
-        //dist = dist - 4;
-        double rotations = dist / (6 * Math.PI);
-        double addTheseTicks = rotations * 1120;
-        int positionBeforeMovement = fl.getCurrentPosition();
-        while (fl.getCurrentPosition() < positionBeforeMovement + addTheseTicks) {
-            //telemetry.addData("front left encoder: ", fl.getCurrentPosition());
-            telemetry.addData("power", .5);
-            //telemetry.addData("ticksFor", addTheseTicks);
-            setMotorPowerUniform(.1, backwards);
+        // deprecated - String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
+        // deprecated telemetry.addData("Vision1","half split color only" +returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
+        // deprecated  Log.e("half split color", returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
+        //deprecated String returnedStringViaCutAndWhite = Vision.findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(image, hardwareMap.appContext);
+        //deprecated telemetry.addData("Vision2","white out "+returnedStringViaCutAndWhite);
+        //deprecated Log.e("whiteout",returnedStringViaCutAndWhite);
+
+        //make image less contrast
+        Bitmap contrastedImage = Vision.applyContrastBrightnessFilter(image, Vision.CONTRAST_ADJUSTMENT, Vision.BRIGHTNESS_ADJUSTMENT);
+        telemetry.addData("contrast/brightness filter", Vision.savePicture(image, hardwareMap.appContext, "CONTRAST_BRIGHTNESS_FILTERED", false));
+        //convert to grayscale/luminance
+        Bitmap grayscaleBitmap = Vision.toGrayscaleBitmap(contrastedImage);
+        telemetry.addData("grayscale image", Vision.savePicture(grayscaleBitmap, hardwareMap.appContext, "GRAYSCALE", false));
+
+        //conver to edge
+        ArrayList<Object> data = Vision.convertGrayscaleToEdged(grayscaleBitmap,Vision.EDGE_THRESHOLD);
+        int totalLabel = (Integer) data.get(Vision.CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS);
+        telemetry.addData("totalLabel", totalLabel);
+        //catching label overflows
+        while (totalLabel>=255) {
+            //label overflow. redo edge with a higher edge threshold
+            int prevUsedThreshold = (Integer)data.get(Vision.CONVERTGRAYSCALETOEDGED_DATA_EDGETHRESHOLDUSED);
+            Log.e("OVERFLOW","correcting... prevUsed="+prevUsedThreshold+"new:"+prevUsedThreshold+20);
+            data = Vision.convertGrayscaleToEdged(grayscaleBitmap,prevUsedThreshold+20);
+            totalLabel = (Integer)data.get(Vision.CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS);
+            Log.e("totalLabel","redone:"+totalLabel);
         }
-        rest();
+        telemetry.addData("totalLabel","corrected:"+totalLabel);
+        Bitmap edged = (Bitmap)data.get(Vision.CONVERTGRAYSCALETOEDGED_DATA_BITMAP);
+        telemetry.addData("edged image", Vision.savePicture(edged, hardwareMap.appContext, "PRETTY_EDGED",false));
+
+        //consolidating edges
+        ArrayList<Object> consolidatedEdgeData = Vision.consolidateEdges(edged, totalLabel);
+        //without contrast for comparison... disabling because it has already proven to be more effective
+        //Vision.savePicture((Bitmap) Vision.convertGrayscaleToEdged(Vision.toGrayscaleBitmap(image)).get(1), hardwareMap.appContext, "WITHOUT CONTRAST", false);
+
+        //debug stuff - telemetry.addData("numOfChange",consolidatedEdgeData.get(Vision.CONSOLIDATEEDGES_DATA_NUMBEROFCHANGES));
+        //debug stuff - telemetry.addData("labels","old"+totalLabel+"new"+consolidatedEdgeData.get(Vision.CONSOLIDATEEDGES_DATA_TOTALLABELS));
+        totalLabel = (Integer)consolidatedEdgeData.get(Vision.CONSOLIDATEEDGES_DATA_TOTALLABELS);
+        Bitmap consolidatedEdge = (Bitmap) consolidatedEdgeData.get(Vision.CONSOLDIATEEDGES_DATA_BITMAP);
+        telemetry.addData("consolidated Edge", Vision.savePicture(consolidatedEdge,hardwareMap.appContext,"CONSOLIDATED_EDGE", false) );
+
+        //removing random edges
+        ArrayList<Object> removedRandomnessData=Vision.getRidOfRandomEdges(consolidatedEdge,totalLabel);
+        Bitmap removedRandomness = (Bitmap)removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_BITMAP);
+        telemetry.addData("removedRandomness",Vision.savePicture(removedRandomness,hardwareMap.appContext,"REMOVED_RANDOMNESS", false) );
+        //debug stuff - telemetry.addData("labels","old"+totalLabel+"new"+removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_LABELS));
+        totalLabel=(Integer)removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_LABELS);
+        ArrayList <Object> returnedCirclesData = Vision.returnCircles(removedRandomness,totalLabel);
+
+        //finding the circles
+        Bitmap circles = (Bitmap)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_BITMAP);
+        telemetry.addData("circles",Vision.savePicture(circles,hardwareMap.appContext,"CIRCLES", false));
+        telemetry.addData("circles found",Vision.getNumberOfLabelsAssumingOrganized(circles));
     }
-
-    public void moveSmooth(double dist, boolean backwards) {
-        double rotations = dist / (6 * Math.PI);
-        double totalTicksNeeded = rotations * 1120;
-        //telemetry.addData("ticksneed",totalTicksNeeded);
-        //based off of totalTicksNeeded, you can find the correct function to minimize jerk
-        //v(ticksNeed) = 0
-        //v(ticksNeed-1) = low power, at the second to last tick, have it at the lowest power possible
-        //v(ticksNeed/2) = max power, at the half way point, you should be at max
-        //v(t) = 3a3t^2 - 4a4t^3 + 5a5t^4 --> this function will generate a velocity/function that minimizes jerk
-        //based on the top three conditions, solve for a3, a4, and a5 of the function. Use Cramer's rule
-        double D =
-                3 * Math.pow(totalTicksNeeded, 2) * -4 * Math.pow(totalTicksNeeded - 1, 3) * 5 * Math.pow(totalTicksNeeded / 2, 4)
-                        + -4 * Math.pow(totalTicksNeeded, 3) * 5 * Math.pow(totalTicksNeeded - 1, 4) * 3 * Math.pow(totalTicksNeeded / 2, 2)
-                        + 5 * Math.pow(totalTicksNeeded, 4) * 3 * Math.pow(totalTicksNeeded - 1, 2) * -4 * Math.pow(totalTicksNeeded / 2, 3)
-                        - (
-                        3 * Math.pow(totalTicksNeeded / 2, 2) * -4 * Math.pow(totalTicksNeeded - 1, 3) * 5 * Math.pow(totalTicksNeeded, 4)
-                                + -4 * Math.pow(totalTicksNeeded / 2, 3) * 5 * Math.pow(totalTicksNeeded - 1, 4) * 3 * Math.pow(totalTicksNeeded, 2)
-                                + 5 * Math.pow(totalTicksNeeded / 2, 4) * 3 * Math.pow(totalTicksNeeded - 1, 2) * -4 * Math.pow(totalTicksNeeded, 3)
-                );
-
-
-        double Da3 =
-                0
-                        + -4 * Math.pow(totalTicksNeeded, 3) * 5 * Math.pow(totalTicksNeeded - 1, 4) * Keys.MAX_SPEED_SMOOTH_MOVE
-                        + 5 * Math.pow(totalTicksNeeded, 4) * Keys.MIN_SPEED_SMOOTH_MOVE * -4 * Math.pow(totalTicksNeeded / 2, 3)
-                        - (
-                        Keys.MAX_SPEED_SMOOTH_MOVE * -4 * Math.pow(totalTicksNeeded - 1, 3) * 5 * Math.pow(totalTicksNeeded, 4)
-                                + 0
-                                + 5 * Math.pow(totalTicksNeeded / 2, 4) * Keys.MIN_SPEED_SMOOTH_MOVE * -4 * Math.pow(totalTicksNeeded, 3)
-                );
-        double Da4 =
-                3 * Math.pow(totalTicksNeeded, 2) * Keys.MIN_SPEED_SMOOTH_MOVE * 5 * Math.pow(totalTicksNeeded / 2, 4)
-                        + 0
-                        + 5 * Math.pow(totalTicksNeeded, 4) * 3 * Math.pow(totalTicksNeeded - 1, 2) * Keys.MAX_SPEED_SMOOTH_MOVE
-                        - (
-                        3 * Math.pow(totalTicksNeeded / 2, 2) * Keys.MIN_SPEED_SMOOTH_MOVE * 5 * Math.pow(totalTicksNeeded, 4)
-                                + Keys.MAX_SPEED_SMOOTH_MOVE * 5 * Math.pow(totalTicksNeeded - 1, 4) * 3 * Math.pow(totalTicksNeeded, 2)
-                                + 0
-
-                );
-        double Da5 =
-                3 * Math.pow(totalTicksNeeded, 2) * -4 * Math.pow(totalTicksNeeded - 1, 3) * Keys.MAX_SPEED_SMOOTH_MOVE
-                        + -4 * Math.pow(totalTicksNeeded, 3) * Keys.MIN_SPEED_SMOOTH_MOVE * 3 * Math.pow(totalTicksNeeded / 2, 2)
-                        + 0
-                        - (
-                        0
-                                + -4 * Math.pow(totalTicksNeeded / 2, 3) * Keys.MIN_SPEED_SMOOTH_MOVE * 3 * Math.pow(totalTicksNeeded, 2)
-                                + Keys.MAX_SPEED_SMOOTH_MOVE * 3 * Math.pow(totalTicksNeeded - 1, 2) * -4 * Math.pow(totalTicksNeeded, 3)
-
-                );
-
-        a3 = Da3 / D;
-        a4 = Da4 / D;
-        a5 = Da5 / D;
-        //telemetry.addData("Math","D: "+D+", Da3: "+Da3+", Da4: "+Da4+", Da5: "+Da5+", a3: "+a3+", a4: "+a4+", a5: "+a5);
-
-        //ok so now you know the coefficients of the v(t), formualted so that encoder is time, and eevrything is scaled in terms of motor power
-
-        int positionBeforeMovement = fl.getCurrentPosition();
-        while (fl.getCurrentPosition() < positionBeforeMovement + totalTicksNeeded) {
-            int currentTick = fl.getCurrentPosition() - positionBeforeMovement;
-            telemetry.addData("power", functionThisAndReturnPowerBasedOnEncodedTime(currentTick));
-            telemetry.addData("Math", "D: " + D + ", Da3: " + Da3 + ", Da4: " + Da4 + ", Da5: " + Da5 + ", a3: " + a3 + ", a4: " + a4 + ", a5: " + a5 + ", totalTickNeed: " + totalTicksNeeded);
-            telemetry.addData("time/ticks", currentTick);
-            double power = functionThisAndReturnPowerBasedOnEncodedTime(currentTick);
-            setMotorPowerUniform(power, backwards);
-            //because sometimes pwoer values are too low
-            if (power < Keys.MIN_SPEED_SMOOTH_MOVE) {
-                setMotorPowerUniform(Keys.MIN_SPEED_SMOOTH_MOVE, backwards);
-                //manually increase tick and do the next tick manually
-                telemetry.addData("power", "too low: " + functionThisAndReturnPowerBasedOnEncodedTime(currentTick));
-                telemetry.addData("time/ticks", currentTick);
-                telemetry.addData("Math", "D: " + D + ", Da3: " + Da3 + ", Da4: " + Da4 + ", Da5: " + Da5 + ", a3: " + a3 + ", a4: " + a4 + ", a5: " + a5 + ", totalTickNeed: " + totalTicksNeeded);
-
-                //when this ends, it will have moved one power and one tick only
-                //now when it goes back into the loop, fl.getCurrentPos will be changed, but it should resemble the correct change and now be at tick 2. everything else is same and currentTick will equal two
-            } else {
-                setMotorPowerUniform(functionThisAndReturnPowerBasedOnEncodedTime(currentTick), backwards);
-
-                telemetry.addData("power", "good!" + functionThisAndReturnPowerBasedOnEncodedTime(currentTick));
-            }
-            //implied else, it was already true so you don't need to do anything
-        }
-        //rest at end
-        rest();
-    }
-
-    private double functionThisAndReturnPowerBasedOnEncodedTime(int currentTick) {
-        //v(t) = 3a3t^2 - 4a4t^3 + 5a5t^4
-        return 3 * a3 * Math.pow(currentTick, 2) - 4 * a4 * Math.pow(currentTick, 3) + 5 * a5 * Math.pow(currentTick, 4);
-    }
-
     public void moveAlteredSin(double dist, boolean backwards) {
         //inches
 
@@ -244,12 +175,7 @@ public class Autonomous extends LinearOpMode {
             }
 
             telemetry.addData("power", power);
-            if((objectInFront() && !backwards) || (objectBehind() && backwards)) {
-                rest();
-            }
-            else {
-                setMotorPowerUniform(power, backwards);
-            }
+            setMotorPowerUniform(power, backwards);
         }
         rest();
     }
@@ -259,127 +185,92 @@ public class Autonomous extends LinearOpMode {
         if (backwards) {
             direction = -1;
         }
-        power = direction * -1;
         fr.setPower(power);
         fl.setPower(power);
         bl.setPower(power);
         br.setPower(power);
-    }
+        //collector.setPower(-.5);
 
+    }
     public void rest() {
         fr.setPower(0);
         fl.setPower(0);
         bl.setPower(0);
         br.setPower(0);
-    }public void turn (double power) {
+    }
+    public void turnLeft (double power) {
+        fr.setPower(power);
+        br.setPower(power);
+    }
+    public void turnRight (double power) {
         fl.setPower(power);
         bl.setPower(power);
-        fr.setPower(-power);
-        br.setPower(-power);
     }
-    public void gyroTurn(double degrees, boolean right) {
+    public void gyroTurn (double degrees) {
+        //degrees=degrees*-1;
+        yawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
+        yawPIDController.setSetpoint(degrees);
+        yawPIDController.setContinuous(true);
+        yawPIDController.setOutputRange(Keys.MAX_SPEED * -1, Keys.MAX_SPEED);
+        yawPIDController.setTolerance(navXPIDController.ToleranceType.ABSOLUTE,Keys.TOLERANCE_LEVEL_2);
+
+        yawPIDController.enable(true);
+        int DEVICE_TIMEOUT_MS = 500;
+        navXPIDController.PIDResult yawPIDResult = new navXPIDController.PIDResult();
+
+        telemetry.addData("Yaw", navx_device.getYaw());
+        double degreesNow = navx_device.getYaw();
+        double degreesToGo = degreesNow+degrees;
+        telemetry.addData("if state",navx_device.getYaw());
+        telemetry.addData("other if",degreesToGo);
+        telemetry.addData("boolean",navx_device.getYaw()>degreesToGo);
+        telemetry.addData("boolean",navx_device.getYaw()<degreesToGo);
+        if (navx_device.getYaw()>degreesToGo) {
+            telemetry.addData("if","getYaw>degrees");
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_1<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_1));
+            {
+                telemetry.addData("while","turningLeft1");
+                turnRight(Keys.MAX_SPEED);
+                telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
+            }
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_2<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_2));
+            {
+                telemetry.addData("while","turningLeft2");
+                turnRight(.65);
+                telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
+            }
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3));
+            {
+                telemetry.addData("while","turningLeft3");
+                turnRight(.35);
+                telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
+            }
+            telemetry.addData("while","done");
+        }
+        else if (navx_device.getYaw()<degreesToGo) {
+            telemetry.addData("if","getYaw<degrees");
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_1<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_1)) {
+                turnLeft(Keys.MAX_SPEED);
+                telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
+                telemetry.addData("while","turningRight");
+            }
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_2<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_2)) {
+                turnLeft(.65);
+                telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
+                telemetry.addData("while","turningRight");
+            }
+            while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3)) {
+                turnLeft(.35);
+                telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
+                telemetry.addData("while","turningRight");
+            }
+
+            telemetry.addData("whileD","done");
+        }
+        telemetry.addData("ifD","done");
         rest();
-        navx_device.zeroYaw();
-        boolean onTarget = false;
-        try {
-            if (right) {
-                rightYawPIDController.setSetpoint(-1 * degrees);
-                rightYawPIDController.enable(true);
-            }
-            else {
-                leftYawPIDController.setSetpoint(degrees);
-                leftYawPIDController.enable(true);
-            }
-            int DEVICE_TIMEOUT_MS = 500;
-            navXPIDController.PIDResult yawPIDResult = new navXPIDController.PIDResult();
-            while (!onTarget) {
-                if (leftYawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS) || rightYawPIDController.waitForNewUpdate(yawPIDResult, DEVICE_TIMEOUT_MS)) {
-                    if (leftYawPIDController.isOnTarget() || rightYawPIDController.isOnTarget()) {
-                        onTarget = true;
-                    }
-                    else {
-                        turn(yawPIDResult.getOutput());
-                    }
-                } else {
-			    /* A timeout occurred */
-                    Log.w("navXRotateOp", "Yaw PID waitForNewUpdate() TIMEOUT.");
-                }
-                telemetry.addData("Yaw", navx_device.getYaw());
-                if(leftYawPIDController.isEnabled())
-                    telemetry.addData("Setpoint", leftYawPIDController.getSetpoint());
-                else if(rightYawPIDController.isEnabled())
-                    telemetry.addData("Setpoint", rightYawPIDController.getSetpoint());
-                telemetry.addData("Motor Power", yawPIDResult.getOutput());
-                telemetry.addData("Finished Turn?", onTarget);
-            }
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        } finally {
-            rest();
-            if (right) {
-                rightYawPIDController.enable(false);
-            }
-            else {
-                leftYawPIDController.enable(false);
-            }
-        }
-    }
 
 
-    //return a float the just contains the *hue* which is the color value we want
-    public float colorSensorValue(float[] values) {
-        Color.RGBToHSV((colorFR.red() * 255) / 800, (colorFR.green() * 255) / 800, (colorFR.blue() * 255) / 800, values);
-        return values[0];
-    }
-    //alternative color sensor method to try as well
 
-
-    public double readSonar(AnalogInput sonar) {
-        double sValue = sonar.getValue();
-        sValue = sValue/2;
-        return sValue;
-    }
-
-    public boolean objectBehind () {
-        double sonarBL = readSonar(sonarBackLeft);
-        double sonarBR = readSonar(sonarBackRight);
-        if (sonarBL < 10 || sonarBR < 10) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public boolean objectInFront () {
-        double sonarFL = readSonar(sonarFrontLeft);
-        double sonarFR = readSonar(sonarFrontRight);
-        if (sonarFL < 10 || sonarFR < 10) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public boolean checkSonarPosition(double distance) {
-        boolean allGood;
-                if(distance-4 <= readSonar(sonarFrontLeft) && readSonar(sonarFrontLeft)<= distance+4 && distance-4 <= readSonar(sonarFrontRight) && readSonar(sonarFrontRight)<= distance+4) {
-                    allGood = true;
-                }
-                else {
-                    allGood = false;
-                }
-        return allGood;
-    }
-    public void correctMovement(double distance) {
-        while (!checkSonarPosition(distance)) {
-            if (readSonar(sonarFrontRight) < distance-4 || readSonar(sonarFrontLeft) < distance-4) {
-                setMotorPowerUniform(.1, false);
-            } else if (readSonar(sonarFrontLeft) > distance+4 || readSonar(sonarFrontRight) > distance+4) {
-                setMotorPowerUniform(.1, true);
-            }
-        }
-        rest();
     }
 }
