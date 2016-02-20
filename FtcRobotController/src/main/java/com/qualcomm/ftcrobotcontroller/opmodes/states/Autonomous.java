@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Created by daniel on 2/18/2016.
  */
 public class Autonomous extends LinearOpMode {
-    DcMotor fr, fl, bl, br;
+    DcMotor fr, fl, bl, br, collector;
     AnalogInput sonarAbovePhone;
     //double a3,a4,a5;
     private AHRS navx_device;
@@ -40,8 +40,10 @@ public class Autonomous extends LinearOpMode {
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
         br = hardwareMap.dcMotor.get(Keys.backRight);
+        collector=hardwareMap.dcMotor.get(Keys.collector);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
+        collector.setDirection(DcMotor.Direction.REVERSE);
         sonarAbovePhone = hardwareMap.analogInput.get(Keys.SONAR_ABOVE_PHONE);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         while ( !calibration_complete ) {
@@ -50,12 +52,14 @@ public class Autonomous extends LinearOpMode {
                 telemetry.addData("Calibration Complete?", "No");
             }
         }
-        telemetry.addData("Calibration Complete?","Yes");
+        telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(51, false);
-        gyroTurn(-90.5);
-        adjustToThisDistance(13, sonarAbovePhone);
+        moveAlteredSin(19, false);
+        gyroTurn(-31.75);
+        moveAlteredSin(37, false);
+        gyroTurn(-61.75);
+        adjustToThisDistance(11, sonarAbovePhone);
         rest();
         telemetry.addData("sonar",readSonar(sonarAbovePhone));
 
@@ -89,6 +93,9 @@ public class Autonomous extends LinearOpMode {
             Vision.savePicture(image,hardwareMap.appContext,"SHRUNKEN", false);
             telemetry.addData("bitmap shrunk","shrunk");
         }
+        image= Vision.rotate(image);
+        Vision.savePicture(image,hardwareMap.appContext,"ROTATED",false);
+        telemetry.addData("bitmap rotate","rotated");
 
         // deprecated - String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
         // deprecated telemetry.addData("Vision1","half split color only" +returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
@@ -143,8 +150,46 @@ public class Autonomous extends LinearOpMode {
         //finding the circles
         Bitmap circles = (Bitmap)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_BITMAP);
         telemetry.addData("circles",Vision.savePicture(circles,hardwareMap.appContext,"CIRCLES", false));
-        telemetry.addData("circles found",Vision.getNumberOfLabelsAssumingOrganized(circles));
+        int circlesFound = Vision.getNumberOfLabelsNotOrganized(circles);
+        telemetry.addData("circles found",circlesFound);
+        ArrayList<boolean[]> beaconColorValues;
+        if (circlesFound==2) {
+            //make a list of the edges. for each edge, catch an edge. check average hue color
+            beaconColorValues = Vision.checkColorsGivenTwoCircles(circles,contrastedImage);
+        }
+        else {
+            beaconColorValues=null;
+        }
+        boolean[] red = beaconColorValues.get(Vision.CHECKCOLORS_DATA_RED);
+        boolean [] blue = beaconColorValues.get(Vision.CHECKCOLORS_DATA_BLUE);
+        telemetry.addData("red",red);
+        telemetry.addData("blue",blue);
+        if (red[0]) {
+            telemetry.addData("beacon left","red");
+        }
+        if (red[1]) {
+            telemetry.addData("beacon right","red");
+        }
+        if (blue[0]) {
+            telemetry.addData("beacon left","blue");
+        }
+        if (blue[1]) {
+            telemetry.addData("beacon right","blue");
+        }
+        if (red[0]&&red[1]) {
+            telemetry.addData("beacon both","red, ERROR");
+        }
+        if (blue[0]&&red[1]) {
+            telemetry.addData("beacon both","blue, ERROR");
+        }
+        if (!red[0]&&!red[1]) {
+            telemetry.addData("beacon none1","red, ERR");
+        }
+        if (!blue[0]&&!blue[1]) {
+            telemetry.addData("beaconn non2","blue,ERR");
+        }
     }
+
 
     public void adjustToThisDistance(double distance, AnalogInput sonar) {
         double myPosition  = readSonar(sonar);
@@ -156,7 +201,7 @@ public class Autonomous extends LinearOpMode {
                 telemetry.addData("mySonar",readSonar(sonar));
                 telemetry.addData("dist",distance);
                 setMotorPowerUniform(.15, true);
-                telemetry.addData("bool",readSonar(sonar)<distance-Keys.SONAR_TOLERANCE);
+                telemetry.addData("bool read<dist+tol",readSonar(sonar)<distance-Keys.SONAR_TOLERANCE);
             }
         }
         else if (myPosition>distance+Keys.SONAR_TOLERANCE) {
@@ -166,7 +211,7 @@ public class Autonomous extends LinearOpMode {
                 telemetry.addData("mySonar",readSonar(sonar));
                 telemetry.addData("dist",distance);
                 setMotorPowerUniform(.15, false);
-                telemetry.addData("bool", readSonar(sonar) > distance + Keys.SONAR_TOLERANCE);
+                telemetry.addData("bool read>dist+tol", readSonar(sonar) > distance + Keys.SONAR_TOLERANCE);
             }
         }
 
@@ -190,6 +235,7 @@ public class Autonomous extends LinearOpMode {
         while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
             telemetry.addData("front left encoder: ", "sin" + fl.getCurrentPosition());
             telemetry.addData("ticksFor", totalTicks);
+            collector.setPower(-.5);
             //convert to radians
             int currentTick = fl.getCurrentPosition() - positionBeforeMovement;
             //accelerate 15% of time
@@ -228,10 +274,10 @@ public class Autonomous extends LinearOpMode {
         if (backwards) {
             direction = -1;
         }
-        fr.setPower(power);
-        fl.setPower(power);
-        bl.setPower(power);
-        br.setPower(power);
+        fr.setPower(direction*power);
+        fl.setPower(direction*power);
+        bl.setPower(direction*power);
+        br.setPower(direction*power);
         //collector.setPower(-.5);
 
     }
@@ -240,6 +286,7 @@ public class Autonomous extends LinearOpMode {
         fl.setPower(0);
         bl.setPower(0);
         br.setPower(0);
+        collector.setPower(0);
     }
     public void turnLeft (double power) {
         fr.setPower(power);
@@ -273,6 +320,7 @@ public class Autonomous extends LinearOpMode {
             telemetry.addData("more boolean",!(degreesToGo-Keys.TOLERANCE_LEVEL_1<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_1));
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_1<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_1))
             {
+                collector.setPower(-.5);
                 telemetry.addData("while","turningLeft1");
                 turnLeft(.8);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
@@ -280,12 +328,14 @@ public class Autonomous extends LinearOpMode {
             telemetry.addData("more boolean2",navx_device.getYaw()>degreesToGo+Keys.TOLERANCE_LEVEL_2);
             while (navx_device.getYaw()>degreesToGo+Keys.TOLERANCE_LEVEL_2)
             {
+                collector.setPower(-.5);
                 telemetry.addData("while","turningLeft2");
                 turnLeft(.65);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3))
             {
+                collector.setPower(-.5);
                 telemetry.addData("while","turningLeft3");
                 turnLeft(.4);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
@@ -295,16 +345,19 @@ public class Autonomous extends LinearOpMode {
         else if (navx_device.getYaw()<degreesToGo) {
             telemetry.addData("if","getYaw<degrees");
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_1<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_1)) {
+                collector.setPower(-.5);
                 turnRight(.8);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
                 telemetry.addData("while","turningRight");
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_2<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_2)) {
+                collector.setPower(-.5);
                 turnRight(.65);
                 telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
                 telemetry.addData("while","turningRight");
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3)) {
+                collector.setPower(-.5);
                 turnRight(.4);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
                 telemetry.addData("while","turningRight");
