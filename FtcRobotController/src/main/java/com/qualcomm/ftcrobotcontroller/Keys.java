@@ -75,7 +75,7 @@ public class Keys {
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
     public static final double TOLERANCE_DEGREES = 2.0;
-    public static final double TOLERANCE_LEVEL_1 = 17;
+    public static final double TOLERANCE_LEVEL_1 = 15;
     public static final double TOLERANCE_LEVEL_2 = 7.5;
     public static final double TOLERANCE_LEVEL_3 = .5;
     public static final double SONAR_TOLERANCE = 1.5;
