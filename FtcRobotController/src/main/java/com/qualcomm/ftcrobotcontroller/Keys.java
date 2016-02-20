@@ -19,7 +19,7 @@ public class Keys {
     public static final String advancedSensorModule = "asm";
     public static final String LIMIT_LEFT = "lsl";
     public static final String LIMIT_RIGHT = "lsr";
-    public static final String SONAR_TOP = "sonaT";
+    public static final String SONAR_ABOVE_PHONE = "sonar_above_phone";
     public static final String SONAR_FRONT_LEFT = "sonaFL";
     public static final String SONAR_FRONT_RIGHT = "sonaFR";
     public static final String COLOR_FRONT_RIGHT = "colorFR";
@@ -46,6 +46,7 @@ public class Keys {
     //Smooth move values
     public static final double MAX_SPEED_SMOOTH_MOVE = .6;
     public static final double MIN_SPEED_SMOOTH_MOVE = .001;
+
 
     //Imaging stuff
     public static byte[] IMAGE_DATA;
@@ -74,9 +75,10 @@ public class Keys {
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
     public static final double TOLERANCE_DEGREES = 2.0;
-    public static final double TOLERANCE_LEVEL_1 = 15;
+    public static final double TOLERANCE_LEVEL_1 = 17;
     public static final double TOLERANCE_LEVEL_2 = 7.5;
-    public static final double TOLERANCE_LEVEL_3 = 3.5;
+    public static final double TOLERANCE_LEVEL_3 = .5;
+    public static final double SONAR_TOLERANCE = 1.5;
 
     //Hanging values
     public static final double HANG_INIT = 1;
