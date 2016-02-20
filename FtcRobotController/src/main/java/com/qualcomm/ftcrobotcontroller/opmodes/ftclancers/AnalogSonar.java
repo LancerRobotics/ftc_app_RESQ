@@ -2,7 +2,6 @@ package com.qualcomm.ftcrobotcontroller.opmodes.ftclancers;
 
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -18,13 +17,14 @@ public class AnalogSonar extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         sonarFrontLeft = hardwareMap.analogInput.get(Keys.SONAR_FRONT_LEFT);
         sonarFrontRight = hardwareMap.analogInput.get(Keys.SONAR_FRONT_RIGHT);
-        sonarTop = hardwareMap.analogInput.get(Keys.SONAR_TOP);
+        sonarTop = hardwareMap.analogInput.get(Keys.SONAR_ABOVE_PHONE);
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         br = hardwareMap.dcMotor.get(Keys.backRight);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
         waitForStart();
         distanceToCheck = 24;
+        //inches
         telemetry.addData("IN POSITION?", "NO");
         if (!checkSonarPosition(distanceToCheck)) {
             correctMovement(distanceToCheck);
