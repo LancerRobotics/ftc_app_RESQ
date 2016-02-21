@@ -111,8 +111,44 @@ public class CameraTestOp extends LinearOpMode {
         //finding the circles
         Bitmap circles = (Bitmap)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_BITMAP);
         telemetry.addData("circles",Vision.savePicture(circles,hardwareMap.appContext,"CIRCLES", false));
-        telemetry.addData("circles found",Vision.getNumberOfLabelsAssumingOrganized(circles));
-
+        int circlesFound = Vision.getNumberOfLabelsNotOrganized(circles);
+        telemetry.addData("circles found",circlesFound);
+        ArrayList<boolean[]> beaconColorValues;
+        if (circlesFound==2) {
+            //make a list of the edges. for each edge, catch an edge. check average hue color
+            beaconColorValues = Vision.checkColorsGivenTwoCircles(circles,contrastedImage);
+        }
+        else {
+            beaconColorValues=null;
+        }
+        boolean[] red = beaconColorValues.get(Vision.CHECKCOLORS_DATA_RED);
+        boolean [] blue = beaconColorValues.get(Vision.CHECKCOLORS_DATA_BLUE);
+        telemetry.addData("red",red);
+        telemetry.addData("blue",blue);
+        if (red[0]) {
+            telemetry.addData("beacon left","red");
+        }
+        if (red[1]) {
+            telemetry.addData("beacon right","red");
+        }
+        if (blue[0]) {
+            telemetry.addData("beacon left","blue");
+        }
+        if (blue[1]) {
+            telemetry.addData("beacon right","blue");
+        }
+        if (red[0]&&red[1]) {
+            telemetry.addData("beacon both","red, ERROR");
+        }
+        if (blue[0]&&red[1]) {
+            telemetry.addData("beacon both","blue, ERROR");
+        }
+        if (!red[0]&&!red[1]) {
+            telemetry.addData("beacon none1","red, ERR");
+        }
+        if (!blue[0]&&!blue[1]) {
+            telemetry.addData("beaconn non2","blue,ERR");
+        }
 
     }
 }

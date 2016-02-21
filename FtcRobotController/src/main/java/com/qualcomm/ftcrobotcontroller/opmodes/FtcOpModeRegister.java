@@ -30,13 +30,17 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.AnalogSonar;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.AutonomousOLD;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.ColorSensorTest;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.GyroAuton;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Pitch;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.Autonomous;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Gyro;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.TeleOp;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.Toggle;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.ToggleWithoutBool;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
@@ -61,9 +65,13 @@ public class FtcOpModeRegister implements OpModeRegister {
      * If two or more op modes are registered with the same name, the app will display an error.
      */
     manager.register("Encoded Rotate Testing", Gyro.class);
+    manager.register("Sonar", AnalogSonar.class);
     manager.register("Autonomous", Autonomous.class);
     manager.register("Color Testing",ColorSensorTest.class);
     manager.register("Teleop", TeleOp.class);
     manager.register("Camera", CameraTestOp.class);
+    manager.register("pitch", Pitch.class);
+    manager.register("toggles",Toggle.class);
+    manager.register("toggle2", ToggleWithoutBool.class);
   }
 }
