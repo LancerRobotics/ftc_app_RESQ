@@ -9,10 +9,12 @@ import android.util.Log;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
+import com.qualcomm.ftcrobotcontroller.Beacon;
 import com.qualcomm.ftcrobotcontroller.CameraPreview;
 import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.ftcrobotcontroller.Vision;
+import com.qualcomm.ftcrobotcontroller.XYCoor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -129,7 +131,7 @@ public class Autonomous extends LinearOpMode {
         telemetry.addData("edged image", Vision.savePicture(edged, hardwareMap.appContext, "PRETTY_EDGED",false));
 
         //consolidating edges
-        ArrayList<Object> consolidatedEdgeData = Vision.consolidateEdges(edged, totalLabel);
+        ArrayList<Object> consolidatedEdgeData = Vision.consolidateEdges(edged);
         //without contrast for comparison... disabling because it has already proven to be more effective
         //Vision.savePicture((Bitmap) Vision.convertGrayscaleToEdged(Vision.toGrayscaleBitmap(image)).get(1), hardwareMap.appContext, "WITHOUT CONTRAST", false);
 
@@ -140,54 +142,27 @@ public class Autonomous extends LinearOpMode {
         telemetry.addData("consolidated Edge", Vision.savePicture(consolidatedEdge,hardwareMap.appContext,"CONSOLIDATED_EDGE", false) );
 
         //removing random edges
-        ArrayList<Object> removedRandomnessData=Vision.getRidOfRandomEdges(consolidatedEdge,totalLabel);
+        ArrayList<Object> removedRandomnessData=Vision.getRidOfRandomEdges(consolidatedEdge);
         Bitmap removedRandomness = (Bitmap)removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_BITMAP);
         telemetry.addData("removedRandomness",Vision.savePicture(removedRandomness,hardwareMap.appContext,"REMOVED_RANDOMNESS", false) );
         //debug stuff - telemetry.addData("labels","old"+totalLabel+"new"+removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_LABELS));
         totalLabel=(Integer)removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_LABELS);
-        ArrayList <Object> returnedCirclesData = Vision.returnCircles(removedRandomness,totalLabel);
+        ArrayList <Object> returnedCirclesData = Vision.returnCircles(removedRandomness);
 
         //finding the circles
         Bitmap circles = (Bitmap)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_BITMAP);
         telemetry.addData("circles",Vision.savePicture(circles,hardwareMap.appContext,"CIRCLES", false));
-        int circlesFound = Vision.getNumberOfLabelsNotOrganized(circles);
-        telemetry.addData("circles found",circlesFound);
         ArrayList<boolean[]> beaconColorValues;
-        if (circlesFound==2) {
-            //make a list of the edges. for each edge, catch an edge. check average hue color
-            beaconColorValues = Vision.checkColorsGivenTwoCircles(circles,contrastedImage);
+        Bitmap circlesAdjusted = Vision.findAndIsolateBeaconButtons(circles,(ArrayList<XYCoor>)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_XYCOORSCENTER));
+        int circlesFound = Vision.getNumberOfLabelsNotOrganized(circlesAdjusted);
+        telemetry.addData("circles adjusted",Vision.savePicture(circlesAdjusted,hardwareMap.appContext,"CIRCLES_ADJUSTED", false));
+        telemetry.addData("circles found",circlesFound);
+        if (circlesAdjusted!=null) {
+            if (circlesFound==2) {
+                Beacon beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
+            }
         }
-        else {
-            beaconColorValues=null;
-        }
-        boolean[] red = beaconColorValues.get(Vision.CHECKCOLORS_DATA_RED);
-        boolean [] blue = beaconColorValues.get(Vision.CHECKCOLORS_DATA_BLUE);
-        telemetry.addData("red",red);
-        telemetry.addData("blue",blue);
-        if (red[0]) {
-            telemetry.addData("beacon left","red");
-        }
-        if (red[1]) {
-            telemetry.addData("beacon right","red");
-        }
-        if (blue[0]) {
-            telemetry.addData("beacon left","blue");
-        }
-        if (blue[1]) {
-            telemetry.addData("beacon right","blue");
-        }
-        if (red[0]&&red[1]) {
-            telemetry.addData("beacon both","red, ERROR");
-        }
-        if (blue[0]&&red[1]) {
-            telemetry.addData("beacon both","blue, ERROR");
-        }
-        if (!red[0]&&!red[1]) {
-            telemetry.addData("beacon none1","red, ERR");
-        }
-        if (!blue[0]&&!blue[1]) {
-            telemetry.addData("beaconn non2","blue,ERR");
-        }
+
     }
 
 
@@ -230,7 +205,7 @@ public class Autonomous extends LinearOpMode {
         //inches
 
         double rotations = dist / (6 * Math.PI);
-        double totalTicks = rotations * 1120;
+        double totalTicks = rotations * 1120 * 3 / 2;
         int positionBeforeMovement = fl.getCurrentPosition();
         while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
             telemetry.addData("front left encoder: ", "sin" + fl.getCurrentPosition());
