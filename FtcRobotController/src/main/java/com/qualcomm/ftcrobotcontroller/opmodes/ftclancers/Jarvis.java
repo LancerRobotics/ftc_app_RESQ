@@ -34,7 +34,7 @@ public class Jarvis extends LinearOpMode {
         File imgFile = new File(path);
         image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
         telemetry.addData("image", image.toString());
-        Vision.savePictureOuput((Bitmap)(Vision.consolidateEdges(image,Vision.getNumberOfLabelsAssumingOrganized(image)).get(2)),hardwareMap.appContext);
+        Vision.savePictureOuput((Bitmap)(Vision.consolidateEdges(image)).get(Vision.CONSOLDIATEEDGES_DATA_BITMAP),hardwareMap.appContext);
         Log.e("done","done");
         //ok so now I have the image
         //storage/emulated/0/Pictures/Matt Quan is a boss/IMG_20160211_200555Original.jpg
