@@ -151,17 +151,17 @@ public class Autonomous extends LinearOpMode {
 
         //finding the circles
         Bitmap circles = (Bitmap)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_BITMAP);
+        Log.e("circles", String.valueOf(Vision.getNumberOfLabelsNotOrganized(circles)));
         telemetry.addData("circles",Vision.savePicture(circles,hardwareMap.appContext,"CIRCLES", false));
         ArrayList<boolean[]> beaconColorValues;
-        Bitmap circlesAdjusted = Vision.findAndIsolateBeaconButtons(circles,(ArrayList<XYCoor>)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_XYCOORSCENTER));
+        ArrayList<XYCoor> centers =  (ArrayList<XYCoor>)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_XYCOORSCENTER);
+        ArrayList<Integer> labels = (ArrayList<Integer> )returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_LABELSLIST);
+        Bitmap circlesAdjusted = Vision.findAndIsolateBeaconButtons(circles,centers, labels);
         int circlesFound = Vision.getNumberOfLabelsNotOrganized(circlesAdjusted);
         telemetry.addData("circles adjusted",Vision.savePicture(circlesAdjusted,hardwareMap.appContext,"CIRCLES_ADJUSTED", false));
         telemetry.addData("circles found",circlesFound);
-        if (circlesAdjusted!=null) {
-            if (circlesFound==2) {
-                Beacon beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
-            }
-        }
+        Beacon beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
+        telemetry.addData("beacon is",beacon);
 
     }
 
