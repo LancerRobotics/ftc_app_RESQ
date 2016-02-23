@@ -30,8 +30,8 @@ public class Vision {
     public static final int MIN_NEEDED_TO_BE_AN_EDGE = 15;
     public static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
     public static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
-    public static final int MIN_RADIUS_LENGTH = 8;
-    public static final int MAX_RADIUS_LENGTH = 17;
+    public static final int MIN_RADIUS_LENGTH = 7;
+    public static final int MAX_RADIUS_LENGTH = 15;
 
 
     public static int FOCUS_TIME = 2400;
@@ -58,9 +58,10 @@ public class Vision {
     public static  int REMOVERANDOMNESS_DATA_BITMAP = 1 ;
     public static int RETURNCIRCLES_DATA_BITMAP = 0;
     public static int RETURNCIRCLES_DATA_XYCOORSCENTER = 1;
+    public static int RETURNCIRCLES_DATA_LABELSLIST = 2;
     public static int CHECKCOLORS_DATA_RED = 0;
     public static int CHECKCOLORS_DATA_BLUE = 1;
-    public static double THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS = 5;
+    public static double THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS = 3;
 
     public static Bitmap rotate (Bitmap image) {
         Matrix matrix = new Matrix();
@@ -134,12 +135,13 @@ public class Vision {
         return palet;
 
     }
-    public static Beacon getBeacon (Bitmap circies, Bitmap original) {
+    public static Beacon getBeacon (Bitmap circles, Bitmap original) {
+        //precondition that it is either one circle or two
         //get a list of the edges
         ArrayList<Integer> listOfLabelsInPicture = new ArrayList<Integer>();
-        for (int i =0; i <circies.getWidth();i++) {
-            for (int j= 0 ;j <circies.getHeight();j++) {
-                int label = Color.red(circies.getPixel(i,j));
+        for (int i =0; i <circles.getWidth();i++) {
+            for (int j= 0 ;j <circles.getHeight();j++) {
+                int label = Color.red(circles.getPixel(i,j));
                 if (label!=255) {
                     //check if this label is in the list
                     if (!listOfLabelsInPicture.contains(label)) {
@@ -148,15 +150,59 @@ public class Vision {
                 }
             }
         }
+
+        if (listOfLabelsInPicture.size()==1) {
+            //grab a pixel with that label
+            XYCoor picked = new XYCoor(-1, -1);
+            outerloop:
+            for (int x = 0; x < circles.getWidth(); x++) {
+                for (int y = 0; y < circles.getHeight(); y++) {
+                    if (Color.red(circles.getPixel(x, y)) == listOfLabelsInPicture.get(0)) {
+                        //cool i foud it
+                        picked = new XYCoor(x, y);
+                        break outerloop;
+                    }
+                }
+            }
+            //retrieve pixel value. check around for average hue
+            float averageHue = 0;
+            for (int a = -1; a <= 1; a++) {
+                for (int b = -1; b <= 1; b++) {
+                    //get average from original picture
+                    int pixel = original.getPixel((int) picked.getX() + a, (int) picked.getY() + b);
+                    float[] hsv = new float[3];
+                    Color.RGBToHSV(Color.red(pixel), Color.green(pixel), Color.blue(pixel), hsv);
+                    float hue = hsv[0];
+                    //becuase hue of red can be 0, and then an average of 360 and 0 creates  blue color, we have to translate anything that is on the left half of red to the right side by adding 360
+                    if (hsv[0] < UPPER_BOUNDS_RED_HUE) {
+                        hue += 360;
+                    }
+                    averageHue += hue;
+                }
+
+            }
+            averageHue = averageHue / 9;
+            //now get this color and set it equal to the right beacon
+            Beacon beacon = new Beacon();
+            if (isRedHue(averageHue)) {
+                //assumption that the left one must've gotten cu toff
+                beacon.setRight(Beacon.COLOR_RED);
+            }
+            else if (isBlueHue(averageHue)) {
+                beacon.setRight(Beacon.COLOR_BLUE);
+            }
+            return beacon;
+
+        }
         Log.e("listOfLabelsInPicture",listOfLabelsInPicture.toString());
         XYCoor[] myGuienaPigs = new XYCoor[2];
         for (int i = 0; i <listOfLabelsInPicture.size();i++) {
             //get my label
             int label = listOfLabelsInPicture.get(i);
             outerloop:
-            for (int x= 0; x<circies.getWidth();x++) {
-                for (int y = 0; y<circies.getHeight();y++) {
-                    if (Color.red(circies.getPixel(x,y))==label) {
+            for (int x= 0; x<circles.getWidth();x++) {
+                for (int y = 0; y<circles.getHeight();y++) {
+                    if (Color.red(circles.getPixel(x,y))==label) {
                         //cool i foud it
                         myGuienaPigs[i]= new XYCoor(x,y);
                         break outerloop;
@@ -498,6 +544,7 @@ public class Vision {
         //will have to check for tolerances
         //also elminate radius equal to one
         ArrayList<XYCoor> centers = new ArrayList<XYCoor>();
+        ArrayList<Integer> labels = new ArrayList<Integer>();
         //k so for any given label, numOfLabels will only be greater, not less, so while some labels will have 0 edges, u wont miss any
         ArrayList<Integer> listOfLabelsInPicture = new ArrayList<Integer>();
         for (int i =0; i <circies.getWidth();i++) {
@@ -626,14 +673,16 @@ public class Vision {
                     //also type in the center
                     centers.add(center);
                     Log.e("you're a circle", label + center.toString());
+                    labels.add(label);
                 }
             }
         }
         //turn it into organized
         ArrayList <Object> data = new ArrayList<Object>();
         data.add(RETURNCIRCLES_DATA_BITMAP, circies);
-        Log.e("centers",centers.toString());
+        Log.e("centers", centers.toString());
         data.add(RETURNCIRCLES_DATA_XYCOORSCENTER, centers);
+        data.add(RETURNCIRCLES_DATA_LABELSLIST, labels);
         return data;
     }
 
@@ -662,12 +711,12 @@ public class Vision {
         return circies;
     }
 
-    public static Bitmap findAndIsolateBeaconButtons (Bitmap circies, ArrayList<XYCoor> centersOfCircles) {
+    public static Bitmap findAndIsolateBeaconButtons (Bitmap circles, ArrayList<XYCoor> centersOfCircles, ArrayList<Integer> labelsInSameOrderAsCircles) {
         Log.e("centerOfCircles",centersOfCircles.toString());
         if (centersOfCircles.size()<2) {
-            Log.e("less than two"," returning null");
-            return Bitmap.createBitmap(circies.getWidth(),circies.getHeight(), Bitmap.Config.ARGB_8888);
-            //returns a new (blank) bitmap. there were less than one, so return an image with no circles, since no set of buttons were found
+            Log.e("less than two","making educated guess");
+            //assuming the right beacon button was captured
+           return circles;
         }
         if (centersOfCircles.size()==2) {
             //check to make sure the two x values are equal
@@ -675,12 +724,14 @@ public class Vision {
             if (Math.abs(centersOfCircles.get(0).getY()-centersOfCircles.get(1).getY())<= THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS) {
                 //check y's. the x's will have a huge diff. but the y placement should be about the same
                 Log.e("returning original","yay");
-                return circies;
+                return circles;
                 //you already had the two
             }
             else {
                 Log.e("returning null","centers didnt match");
-                return Bitmap.createBitmap(circies.getWidth(),circies.getHeight(), Bitmap.Config.ARGB_8888);
+                Bitmap empty= Bitmap.createBitmap(circles.getWidth(), circles.getHeight(), Bitmap.Config.ARGB_8888);
+                empty = makeEmpty(empty);
+                return empty;
                 //else those two werent the buttons, so send empty
             }
         }
@@ -709,7 +760,7 @@ public class Vision {
             }
             //now check to see which ones have a sum of 1. then check the one
             for (int i =0; i<centersOfCircles.size();i++) {
-                //TODO this doenst work becuase labels are not organized as 0,1,2,3,4 anymore
+
                 if (sumOfRows[i]==1) {
                     //check the sum of Column associated with that match
                     int matchOfI = findPair (numberOfMatchesPerCircle,i);
@@ -717,30 +768,43 @@ public class Vision {
                     int sumOfMatchPair = sumOfPairColumn(matchOfI, numberOfMatchesPerCircle);
                     if (sumOfMatchPair==1) {
                         //then we found the pair
-                        Log.e("found pair!","circle one label: "+i+"circle two label:"+matchOfI);
-                        pairsOfCircles.add(new XYCoor(i,matchOfI));
+                        Log.e("found pair!","circle one label: "+labelsInSameOrderAsCircles.get(i)+"circle two label:"+labelsInSameOrderAsCircles.get(matchOfI));
+                        pairsOfCircles.add(new XYCoor(labelsInSameOrderAsCircles.get(i),labelsInSameOrderAsCircles.get(matchOfI)));
                         Log.e("pair of cirlces",pairsOfCircles.toString());
                     }
                     //implied else, didn't work out, don't save
                 }
             }
             //remove everything from the picture but the paired circles
-            for (int label =0; label <centersOfCircles.size();label++) {
+            for (int i =0; i <centersOfCircles.size();i++) {
+                int label = labelsInSameOrderAsCircles.get(i);
                 if (!ArrayListOfXYCoorsIncludes(pairsOfCircles,label)) {
-                    removeLabel(circies,label);
+                    Log.e("removed a label","not a pair: "+label);
+                    removeLabel(circles, label);
                 }
             }
             if (pairsOfCircles.size()==1) {
                 //awesomeee my job is easy
-                return circies;
+                Log.e("only one pair left","good! returning now!");
+                return circles;
             }
             else {
                 //TODO find the best fit ie. what is the usual button size, radius size
                 //now u have to rule out circles :/
 
-                return circies;
+                return circles;
             }
         }
+    }
+
+    private static Bitmap makeEmpty(Bitmap empty) {
+        Bitmap mutable = empty.copy(Bitmap.Config.ARGB_8888, true);
+        for (int i =0; i <empty.getWidth();i++) {
+            for (int j =0; j<empty.getHeight();j++) {
+                mutable.setPixel(i,j,Color.argb(255,255,255,255));
+            }
+        }
+        return mutable;
     }
 
     private static boolean ArrayListOfXYCoorsIncludes(ArrayList<XYCoor> pairsOfCircles, int label) {
