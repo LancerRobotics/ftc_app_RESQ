@@ -116,16 +116,12 @@ public class CameraTestOp extends LinearOpMode {
         telemetry.addData("circles",Vision.savePicture(circles,hardwareMap.appContext,"CIRCLES", false));
         ArrayList<boolean[]> beaconColorValues;
        ArrayList<XYCoor> centers =  (ArrayList<XYCoor>)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_XYCOORSCENTER);
-        Bitmap circlesAdjusted = Vision.findAndIsolateBeaconButtons(circles,centers);
+        ArrayList<Integer> labels = (ArrayList<Integer> )returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_LABELSLIST);
+        Bitmap circlesAdjusted = Vision.findAndIsolateBeaconButtons(circles,centers, labels);
         int circlesFound = Vision.getNumberOfLabelsNotOrganized(circlesAdjusted);
         telemetry.addData("circles adjusted",Vision.savePicture(circlesAdjusted,hardwareMap.appContext,"CIRCLES_ADJUSTED", false));
         telemetry.addData("circles found",circlesFound);
-        Beacon beacon = new Beacon();
-        if (circlesAdjusted!=null) {
-            if (circlesFound==2) {
-                 beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
-            }
-        }
+        Beacon beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
         telemetry.addData("beacon is",beacon);
 
     }
