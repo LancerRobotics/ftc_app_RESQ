@@ -59,10 +59,10 @@ public class Keys {
     public static final double CLIMBER_INITIAL_STATE = .85;
 
 
-    //Swivel values TODO FIX VALUES ONCE NEW SERVOS ARRIVE
-    public static final double SWIVEL_CENTER = .475;
-    public static final double SWIVEL_LEFT = .2;
-    public static final double SWIVEL_RIGHT = .75;
+    //Swivel values
+    public static final double SWIVEL_CENTER = .5;
+    public static final double SWIVEL_LEFT = .15;
+    public static final double SWIVEL_RIGHT = .85;
 
     //Right Trigger Values
     public static final double RT_INIT = 0;

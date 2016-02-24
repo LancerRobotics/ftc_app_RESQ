@@ -209,7 +209,7 @@ public class TeleOp extends OpMode{
             leftTrigger = false;
         }
 
-
+    /*
         //Auto-Trigger
         if(!gamepad2.x && !gamepad2.b && !gamepad2.a && !rightTrigger && !leftTrigger) {
             if (navx_device.getPitch() > 15) {
@@ -221,7 +221,7 @@ public class TeleOp extends OpMode{
                 triggerRight.setPosition(Keys.RT_INIT);
             }
         }
-
+    */
         //Swivels
         if(gamepad1.x) {
             swivel.setPosition(Keys.SWIVEL_LEFT);

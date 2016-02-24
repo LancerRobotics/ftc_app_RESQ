@@ -194,6 +194,7 @@ public class AutonomousRed extends LinearOpMode {
         }
         rest();
         telemetry.addData("sonar","done");
+        rest();
     }
     //returns sonar values in inches!!!
     public double readSonar(AnalogInput sonar) {
