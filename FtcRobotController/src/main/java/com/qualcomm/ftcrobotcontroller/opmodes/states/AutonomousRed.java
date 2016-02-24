@@ -57,7 +57,7 @@ public class AutonomousRed extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(19, false);
+        moveAlteredSin(23, false);
         gyroTurn(-31.75);
         moveAlteredSin(37, false);
         gyroTurn(-61.75);
