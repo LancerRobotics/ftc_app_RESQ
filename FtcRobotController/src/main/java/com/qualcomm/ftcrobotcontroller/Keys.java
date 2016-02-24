@@ -55,8 +55,8 @@ public class Keys {
 
 
     //Climber values
-    public static final double CLIMBER_DUMP = .6;
-    public static final double CLIMBER_INITIAL_STATE = .2;
+    public static final double CLIMBER_DUMP = .4;
+    public static final double CLIMBER_INITIAL_STATE = .85;
 
 
     //Swivel values TODO FIX VALUES ONCE NEW SERVOS ARRIVE
@@ -81,20 +81,20 @@ public class Keys {
     public static final double SONAR_TOLERANCE = 1.5;
 
     //Hanging values
-    public static final double HANG_INIT = 1;
+    public static final double HANG_INIT = .95;
     public static final double HANG_NOW = 0;
     public static final double HANG_HALFWAY = .196;
 
     //Dump values,
     public static final double DUMP_INIT = 1;
-    public static final double DUMP_DOWN = .392;
+    public static final double DUMP_DOWN = .35;
 
     //Clamp Left values, TODO get real values
-    public static final double CL_INIT = .706;
+    public static final double CL_INIT = .506;
     public static final double CL_DOWN = 1;
 
     //Clamp Right values,
-    public static final double CR_INIT = .502;
+    public static final double CR_INIT = .702;
     public static final double CR_DOWN = 0;
 
     //Hopper Left TODO confirm with real servos

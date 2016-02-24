@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * Created by daniel on 2/18/2016.
  */
-public class Autonomous extends LinearOpMode {
+public class AutonomousRed extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
     AnalogInput sonarAbovePhone;
     //double a3,a4,a5;
@@ -162,6 +162,9 @@ public class Autonomous extends LinearOpMode {
         telemetry.addData("circles found",circlesFound);
         Beacon beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
         telemetry.addData("beacon is",beacon);
+        if (beacon.whereIsRed()==Beacon.RIGHT) {
+            adjustToThisDistance(3,sonarAbovePhone);
+        }
 
     }
 
@@ -189,7 +192,6 @@ public class Autonomous extends LinearOpMode {
                 telemetry.addData("bool read>dist+tol", readSonar(sonar) > distance + Keys.SONAR_TOLERANCE);
             }
         }
-
         rest();
         telemetry.addData("sonar","done");
     }

@@ -57,10 +57,10 @@ public class Gyro extends LinearOpMode {
         while ( !calibration_complete ) {
             calibration_complete = !navx_device.isCalibrating();
             if (!calibration_complete) {
-                telemetry.addData("Start Autonomous?", "No");
+                telemetry.addData("Calibration done?", "No");
             }
         }
-        telemetry.addData("Start Autonomous?", "Yes");
+        telemetry.addData("Calibration done?", "Yes");
         waitForStart();
         /*while(opModeIsActive()) {
             moveAlteredSin(70, false);

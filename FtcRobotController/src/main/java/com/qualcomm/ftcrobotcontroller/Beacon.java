@@ -7,6 +7,9 @@ public class Beacon {
     public static final int COLOR_RED = 0;
     public static final int COLOR_BLUE = 1;
     private int[] beacon;
+    public static final String RIGHT = "right";
+    public static final String LEFT = "left";
+    public static final String UNKNOWN = "unknown";
 
     public Beacon(int[] beacon) {
         this.beacon = beacon;
@@ -94,6 +97,26 @@ public class Beacon {
             return true;
         }
         return false;
+    }
+    public String whereIsRed () {
+        //basically finds red
+       if (beacon[0]==COLOR_RED) {
+           return LEFT;
+       }
+        else if (beacon[1]==COLOR_RED) {
+           return RIGHT;
+       }
+        return UNKNOWN;
+    }
+    public String whereIsBlue () {
+        //basically finds red
+        if (beacon[0]==COLOR_BLUE) {
+            return LEFT;
+        }
+        else if (beacon[1]==COLOR_BLUE) {
+            return RIGHT;
+        }
+        return UNKNOWN;
     }
 
 }

@@ -209,6 +209,7 @@ public class TeleOp extends OpMode{
             leftTrigger = false;
         }
 
+
         //Auto-Trigger
         if(!gamepad2.x && !gamepad2.b && !gamepad2.a && !rightTrigger && !leftTrigger) {
             if (navx_device.getPitch() > 15) {
