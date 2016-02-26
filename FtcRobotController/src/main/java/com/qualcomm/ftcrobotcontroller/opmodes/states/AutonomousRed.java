@@ -82,7 +82,7 @@ public class AutonomousRed extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(25, false);
+        moveAlteredSin(26, false);
         gyroTurn(-30);
         moveAlteredSin(33, false);
         gyroTurn(-60);
@@ -192,27 +192,27 @@ public class AutonomousRed extends LinearOpMode {
                 //assume this is the right side, assume left side got chopped off
                 if (beacon.getRight()==Beacon.COLOR_RED) {
                     //this is what i want, since im on red team. hit right side
-                    moveStraight(12,false,.15);
+                    moveStraight(8,false,.15);
                 }
                 else {
                     //the other side must be red
                     //drop servo arm, then move forward
 
-                    moveStraight(12,false,.15);
+                    moveStraight(8,false,.15);
                 }
             }
             else {
                 if (beacon.whereIsRed() == Beacon.RIGHT) {
-                    moveStraight(12, false, .15);
+                    moveStraight(8, false, .15);
                 } else if (beacon.whereIsRed() == Beacon.LEFT) {
                     //drop servo arm, then move foward a bit
 
-                    moveStraight(12, false, .15);
+                    moveStraight(8, false, .15);
                 }
             }
         }
         else {
-            moveStraight(4,false,.15);
+            moveStraight(7.5,false,.15);
         }
         climber.setPosition(Keys.CLIMBER_DUMP);
     }
