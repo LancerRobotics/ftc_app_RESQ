@@ -1,7 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.states;
 
 import com.kauailabs.navx.ftc.AHRS;
-import com.kauailabs.navx.ftc.navXPIDController;
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -21,7 +20,12 @@ public class TeleOp extends OpMode{
     double pwrLeft, pwrRight;
 
     //Servos
-    Servo swivel, dump, hopperLeft, climber, hang, clampRight, clampLeft, hopperRight, triggerRight, triggerLeft;
+    Servo swivel, dump, hopperLeft, climber, hang, clampRight, clampLeft, hopperRight, triggerRight, triggerLeft,buttonPusher;
+
+    //Climbers
+    static boolean pressed;
+    double[] climberPositions = {Keys.CLIMBER_INITIAL_STATE, Keys.CLIMBER_DUMP};
+    int climberPos;
 
     //Lift
     double liftPwr;
@@ -56,7 +60,7 @@ public class TeleOp extends OpMode{
         liftLeft = hardwareMap.dcMotor.get(Keys.liftLeft);
         liftRight = hardwareMap.dcMotor.get(Keys.liftRight);
         winch = hardwareMap.dcMotor.get(Keys.winch);
-
+        buttonPusher = hardwareMap.servo.get(Keys.buttonPusher);
         climber = hardwareMap.servo.get(Keys.climber);
         swivel = hardwareMap.servo.get(Keys.swivel);
         hang = hardwareMap.servo.get(Keys.hang);
@@ -72,16 +76,20 @@ public class TeleOp extends OpMode{
         br.setDirection(DcMotor.Direction.REVERSE);
         liftLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        climberPos = 1;
+        climber.setPosition(climberPositions[0]);
+
+        buttonPusher.setPosition(Keys.BUTTON_PUSHER_INIT);
         dump.setPosition(Keys.DUMP_INIT);
         swivel.setPosition(Keys.SWIVEL_CENTER);
         hang.setPosition(Keys.HANG_INIT);
         hopperLeft.setPosition(Keys.HL_STORE);
         hopperRight.setPosition(Keys.HR_STORE);
-        clampLeft.setPosition(Keys.CL_INIT);
-        clampRight.setPosition(Keys.CR_INIT);
-        triggerLeft.setPosition(Keys.LT_INIT);
-        triggerRight.setPosition(Keys.RT_INIT);
+        clampLeft.setPosition(Keys.CLAMP_LEFT_INIT);
+        clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
+        triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
+        triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
+
 
         dumpDown = false;
         hanging = false;
@@ -104,18 +112,6 @@ public class TeleOp extends OpMode{
     }
 
     public void loop() {
-        //TODO test values
-        /*
-        DRIVER:
-         - movement DONE
-         - clamps DONE
-         - climbers DONE
-        GUNNER:
-         - lift DONE
-         - swivel
-         - dump DONE
-         - collector DONE
-         */
 
         gamepad1LeftStickY = Range.clip(gamepad1.left_stick_y, -1, 1);
         if(Math.abs(gamepad1LeftStickY) < .15) {
@@ -177,34 +173,30 @@ public class TeleOp extends OpMode{
 
         //Clamps (for ramp)
         if (gamepad1.right_trigger > .15) {
-            clampRight.setPosition(Keys.CR_DOWN);
+            clampRight.setPosition(Keys.CLAMP_RIGHT_DOWN);
         } else if (gamepad1.right_bumper) {
-            clampRight.setPosition(Keys.CR_INIT);
+            clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
         } else if (gamepad1.left_trigger > .15) {
-            clampLeft.setPosition(Keys.CL_DOWN);
+            clampLeft.setPosition(Keys.CLAMP_LEFT_DOWN);
         } else if (gamepad1.left_bumper) {
-            clampLeft.setPosition(Keys.CL_INIT);
+            clampLeft.setPosition(Keys.CLAMP_LEFT_INIT);
         }
 
         //Climbers
-        if (gamepad1.y) {
-            climber.setPosition(Keys.CLIMBER_DUMP);
-        } else if (gamepad2.y) {
-            climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        }
+        climberPos = toggle(gamepad2.a, climber, climberPositions, climberPos);
 
         //Triggers
         if(gamepad2.x && !rightTrigger) {
-            triggerRight.setPosition(Keys.RT_TRIGGER);
+            triggerRight.setPosition(Keys.RIGHT_TRIGGER_TRIGGER);
             rightTrigger = true;
         }
         else if(gamepad2.b && !leftTrigger) {
-            triggerLeft.setPosition(Keys.LT_TRIGGER);
+            triggerLeft.setPosition(Keys.LEFT_TRIGGER_TRIGGER);
             leftTrigger = true;
         }
         else if(gamepad2.a && (rightTrigger || leftTrigger)) {
-            triggerRight.setPosition(Keys.RT_INIT);
-            triggerLeft.setPosition(Keys.LT_INIT);
+            triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
+            triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
             rightTrigger = false;
             leftTrigger = false;
         }
@@ -213,12 +205,12 @@ public class TeleOp extends OpMode{
         //Auto-Trigger
         if(!gamepad2.x && !gamepad2.b && !gamepad2.a && !rightTrigger && !leftTrigger) {
             if (navx_device.getPitch() > 15) {
-                triggerLeft.setPosition(Keys.LT_TRIGGER);
-                triggerRight.setPosition(Keys.RT_TRIGGER);
+                triggerLeft.setPosition(Keys.LEFT_TRIGGER_TRIGGER);
+                triggerRight.setPosition(Keys.RIGHT_TRIGGER_TRIGGER);
             }
             else {
-                triggerLeft.setPosition(Keys.LT_INIT);
-                triggerRight.setPosition(Keys.RT_INIT);
+                triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
+                triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
             }
         }
     */
@@ -292,5 +284,31 @@ public class TeleOp extends OpMode{
         else {
             return false;
         }
+    }
+
+    public int toggle(boolean button, Servo servo, double[] positions, int currentPos) {
+        int servoPositions = positions.length;
+        if(button) {
+            pressed = true;
+        }
+        if(pressed) {
+            if(servoPositions == 2) {
+                if(currentPos == 1) {
+                    servo.setPosition(positions[1]);
+                    if(!button) {
+                        pressed = false;
+                        currentPos = 2;
+                    }
+                }
+                else if(currentPos == 2) {
+                    servo.setPosition(positions[0]);
+                    if(!button) {
+                        pressed = false;
+                        currentPos = 1;
+                    }
+                }
+            }
+        }
+        return currentPos;
     }
 }
