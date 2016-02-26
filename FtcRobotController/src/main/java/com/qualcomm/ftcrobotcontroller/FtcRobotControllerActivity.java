@@ -68,6 +68,7 @@ import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.ftcrobotcontroller.opmodes.FtcOpModeRegister;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.TakeAPicture;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousBlue;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousRed;
 import com.qualcomm.hardware.HardwareFactory;
 import com.qualcomm.robotcore.hardware.configuration.Utility;
@@ -150,6 +151,17 @@ public class FtcRobotControllerActivity extends Activity {
       @Override
       public void run() {
         context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera);
+        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+        cameraPreviewLayout.addView(context.preview);
+      }
+    });
+  }
+
+  public void initCameraPreview(final Camera mCamera, final AutonomousBlue context) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        context.preview = new CameraPreview(FtcRobotControllerActivity.this, mCamera);
         FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
         cameraPreviewLayout.addView(context.preview);
       }
