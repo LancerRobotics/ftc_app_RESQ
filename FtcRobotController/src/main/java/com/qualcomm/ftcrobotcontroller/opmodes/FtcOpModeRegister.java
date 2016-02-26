@@ -31,12 +31,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousBlue;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousRed;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Gyro;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.JudgesSTATES;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.Judges;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.TeleOp;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.ToggleWithButtonMethod;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
@@ -60,12 +58,9 @@ public class FtcOpModeRegister implements OpModeRegister {
      *
      * If two or more op modes are registered with the same name, the app will display an error.
      */
-    manager.register("Encoded Rotate Testing", Gyro.class);
     manager.register("Auton Red", AutonomousRed.class);
-    manager.register("Auton Blue", AutonomousBlue.class);
     manager.register("Teleop", TeleOp.class);
     manager.register("Camera", CameraTestOp.class);
-    manager.register("Judges Code", JudgesSTATES.class);
-    manager.register("toggles", ToggleWithButtonMethod.class);
+    manager.register("Judges", Judges.class);
   }
 }
