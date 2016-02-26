@@ -18,6 +18,7 @@ import com.qualcomm.ftcrobotcontroller.XYCoor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +28,8 @@ import java.util.ArrayList;
  */
 public class AutonomousRed extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
-    AnalogInput sonarAbovePhone;
+    Servo swivel, dump, hopperLeft, climber, hang, clampRight, clampLeft, hopperRight, triggerRight, triggerLeft,buttonPusher;
+    AnalogInput sonarAbovePhone, sonarFoot;
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
@@ -38,6 +40,17 @@ public class AutonomousRed extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         mCamera = ((FtcRobotControllerActivity) hardwareMap.appContext).mCamera;
+        buttonPusher = hardwareMap.servo.get(Keys.buttonPusher);
+        climber = hardwareMap.servo.get(Keys.climber);
+        swivel = hardwareMap.servo.get(Keys.swivel);
+        hang = hardwareMap.servo.get(Keys.hang);
+        hopperLeft = hardwareMap.servo.get(Keys.hopperLeft);
+        hopperRight = hardwareMap.servo.get(Keys.hopperRight);
+        clampLeft = hardwareMap.servo.get(Keys.clampLeft);
+        clampRight = hardwareMap.servo.get(Keys.clampRight);
+        dump = hardwareMap.servo.get(Keys.dump);
+        triggerLeft = hardwareMap.servo.get(Keys.triggerLeft);
+        triggerRight = hardwareMap.servo.get(Keys.triggerRight);
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
@@ -45,8 +58,20 @@ public class AutonomousRed extends LinearOpMode {
         collector=hardwareMap.dcMotor.get(Keys.collector);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
+        buttonPusher.setPosition(Keys.BUTTON_PUSHER_INIT);
+        dump.setPosition(Keys.DUMP_INIT);
+        swivel.setPosition(Keys.SWIVEL_CENTER);
+        hang.setPosition(Keys.HANG_INIT);
+        hopperLeft.setPosition(Keys.HL_STORE);
+        hopperRight.setPosition(Keys.HR_STORE);
+        clampLeft.setPosition(Keys.CLAMP_LEFT_INIT);
+        clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
+        triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
+        triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
         collector.setDirection(DcMotor.Direction.REVERSE);
         sonarAbovePhone = hardwareMap.analogInput.get(Keys.SONAR_ABOVE_PHONE);
+        sonarFoot = hardwareMap.analogInput.get(Keys.SONAR_FOOT);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         while ( !calibration_complete ) {
             calibration_complete = !navx_device.isCalibrating();
@@ -57,13 +82,14 @@ public class AutonomousRed extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(23, false);
-        gyroTurn(-31.75);
-        moveAlteredSin(37, false);
-        gyroTurn(-61.75);
-        adjustToThisDistance(11, sonarAbovePhone);
+        moveAlteredSin(25, false);
+        gyroTurn(-30);
+        moveAlteredSin(33, false);
+        gyroTurn(-60);
+        adjustToThisDistance(12, sonarFoot);
+        telemetry.addData("sonar",readSonar(sonarFoot));
         rest();
-        telemetry.addData("sonar",readSonar(sonarAbovePhone));
+        //telemetry.addData("sonar",readSonar(sonarAbovePhone));
 
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
         telemetry.addData("camera","initingcameraPreview");
@@ -140,7 +166,6 @@ public class AutonomousRed extends LinearOpMode {
         totalLabel = (Integer)consolidatedEdgeData.get(Vision.CONSOLIDATEEDGES_DATA_TOTALLABELS);
         Bitmap consolidatedEdge = (Bitmap) consolidatedEdgeData.get(Vision.CONSOLDIATEEDGES_DATA_BITMAP);
         telemetry.addData("consolidated Edge", Vision.savePicture(consolidatedEdge,hardwareMap.appContext,"CONSOLIDATED_EDGE", false) );
-
         //removing random edges
         ArrayList<Object> removedRandomnessData=Vision.getRidOfRandomEdges(consolidatedEdge);
         Bitmap removedRandomness = (Bitmap)removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_BITMAP);
@@ -162,10 +187,34 @@ public class AutonomousRed extends LinearOpMode {
         telemetry.addData("circles found",circlesFound);
         Beacon beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
         telemetry.addData("beacon is",beacon);
-        if (beacon.whereIsRed()==Beacon.RIGHT) {
-            adjustToThisDistance(3,sonarAbovePhone);
-        }
+        if (!beacon.error()) {
+            if (beacon.oneSideUnknown()) {
+                //assume this is the right side, assume left side got chopped off
+                if (beacon.getRight()==Beacon.COLOR_RED) {
+                    //this is what i want, since im on red team. hit right side
+                    moveStraight(12,false,.15);
+                }
+                else {
+                    //the other side must be red
+                    //drop servo arm, then move forward
 
+                    moveStraight(12,false,.15);
+                }
+            }
+            else {
+                if (beacon.whereIsRed() == Beacon.RIGHT) {
+                    moveStraight(12, false, .15);
+                } else if (beacon.whereIsRed() == Beacon.LEFT) {
+                    //drop servo arm, then move foward a bit
+
+                    moveStraight(12, false, .15);
+                }
+            }
+        }
+        else {
+            moveStraight(4,false,.15);
+        }
+        climber.setPosition(Keys.CLIMBER_DUMP);
     }
 
 
@@ -203,6 +252,15 @@ public class AutonomousRed extends LinearOpMode {
         return sValue;
     }
 
+    public void moveStraight (double dist, boolean backwards, double power) {
+        double rotations = dist / (6 * Math.PI);
+        double totalTicks = rotations * 1120 * 3 / 2;
+        int positionBeforeMovement = fl.getCurrentPosition();
+        while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
+            setMotorPowerUniform(power,backwards);
+        }
+        rest();
+    }
 
     public void moveAlteredSin(double dist, boolean backwards) {
         //inches
