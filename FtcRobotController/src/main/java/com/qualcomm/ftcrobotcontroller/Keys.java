@@ -15,13 +15,13 @@ public class Keys {
     public static final String hopperRight = "hopper_right";
     public static final String clampLeft = "clamp_left";
     public static final String clampRight = "clamp_right";
+    public static final String buttonPusher = "button_pusher";
     public static final String hang = "hang";
     public static final String advancedSensorModule = "asm";
     public static final String LIMIT_LEFT = "lsl";
     public static final String LIMIT_RIGHT = "lsr";
     public static final String SONAR_ABOVE_PHONE = "sonar_above_phone";
-    public static final String SONAR_FRONT_LEFT = "sonaFL";
-    public static final String SONAR_FRONT_RIGHT = "sonaFR";
+    public static final String SONAR_FOOT = "sonar_foot";
     public static final String COLOR_FRONT_RIGHT = "colorFR";
     public static final String COLOR_FRONT_LEFT = "colorFL";
     public static final String dump = "dump";
@@ -56,21 +56,25 @@ public class Keys {
 
     //Climber values
     public static final double CLIMBER_DUMP = .4;
-    public static final double CLIMBER_INITIAL_STATE = .85;
+    public static final double CLIMBER_INITIAL_STATE = .78;
 
 
     //Swivel values
     public static final double SWIVEL_CENTER = .5;
-    public static final double SWIVEL_LEFT = .15;
-    public static final double SWIVEL_RIGHT = .85;
+    public static final double SWIVEL_LEFT = .19;
+    public static final double SWIVEL_RIGHT = .81;
+
+    //button pusher
+    public static final double BUTTON_PUSHER_INIT=.95;
+    public static final double BUTTON_PUSHER_PUSH = .25;
 
     //Right Trigger Values
-    public static final double RT_INIT = 0;
-    public static final double RT_TRIGGER = 0.47;
+    public static final double RIGHT_TRIGGER_INIT = 0;
+    public static final double RIGHT_TRIGGER_TRIGGER = 0.47;
 
     //Left Trigger Values
-    public static final double LT_INIT = 1;
-    public static final double LT_TRIGGER = 0.53;
+    public static final double LEFT_TRIGGER_INIT = 1;
+    public static final double LEFT_TRIGGER_TRIGGER = 0.53;
 
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
@@ -78,7 +82,7 @@ public class Keys {
     public static final double TOLERANCE_LEVEL_1 = 11;
     public static final double TOLERANCE_LEVEL_2 = 6;
     public static final double TOLERANCE_LEVEL_3 = .5;
-    public static final double SONAR_TOLERANCE = 1.5;
+    public static final double SONAR_TOLERANCE = .5;
 
     //Hanging values
     public static final double HANG_INIT = .95;
@@ -90,12 +94,12 @@ public class Keys {
     public static final double DUMP_DOWN = .35;
 
     //Clamp Left values, TODO get real values
-    public static final double CL_INIT = .506;
-    public static final double CL_DOWN = 1;
+    public static final double CLAMP_LEFT_INIT = .506;
+    public static final double CLAMP_LEFT_DOWN = 1;
 
     //Clamp Right values,
-    public static final double CR_INIT = .702;
-    public static final double CR_DOWN = 0;
+    public static final double CLAMP_RIGHT_INIT = .702;
+    public static final double CLAMP_RIGHT_DOWN = 0;
 
     //Hopper Left TODO confirm with real servos
     public static final double HL_STORE = 1;
