@@ -31,7 +31,7 @@ public class Vision {
     public static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
     public static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
     public static final int MIN_RADIUS_LENGTH = 7;
-    public static final int MAX_RADIUS_LENGTH = 15;
+    public static final int MAX_RADIUS_LENGTH = 13;
 
 
     public static int FOCUS_TIME = 2400;
@@ -138,6 +138,9 @@ public class Vision {
     public static Beacon getBeacon (Bitmap circles, Bitmap original) {
         //precondition that it is either one circle or two
         //get a list of the edges
+        if (getNumberOfLabelsNotOrganized(circles)==0) {
+            return new Beacon();
+        }
         ArrayList<Integer> listOfLabelsInPicture = new ArrayList<Integer>();
         for (int i =0; i <circles.getWidth();i++) {
             for (int j= 0 ;j <circles.getHeight();j++) {
@@ -494,7 +497,7 @@ public class Vision {
         //now check any edges that are touching the borders of the bitmap
         for (int i =0; i <dirty.getWidth();i++) {
             for (int j =0;j <dirty.getHeight();j++) {
-                if (i==0||i==dirty.getWidth()-1||j==0||j==dirty.getHeight()-1) {
+                if (i==dirty.getWidth()-1||j==0||j==dirty.getHeight()-1) {
                     //then you're on an edge of the bitmap
                     if (Color.red(dirty.getPixel(i,j))!=255) {
                         //if it's a label, or it's not white, those two statements are equal
@@ -619,7 +622,7 @@ public class Vision {
             double leftRightRadius = Math.abs(rightMost.getX() - leftMost.getX());
             double topBottomRadius = Math.abs(bottomMost.getY() - topMost.getY());
             Log.e("radius",label+"leftR"+leftRightRadius+"tb"+topBottomRadius);
-            if (Math.abs(leftRightRadius - topBottomRadius) >= Vision.DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS) {
+            if (Math.abs(leftRightRadius - topBottomRadius) > Vision.DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS) {
                 //then it isn't a cirlce
                 //so we'll white out and move on
                 circies = removeLabel(circies, label);
