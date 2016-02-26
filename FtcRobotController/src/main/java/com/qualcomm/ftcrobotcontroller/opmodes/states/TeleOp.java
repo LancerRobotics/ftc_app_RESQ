@@ -194,7 +194,7 @@ public class TeleOp extends OpMode{
             triggerLeft.setPosition(Keys.LEFT_TRIGGER_TRIGGER);
             leftTrigger = true;
         }
-        else if(gamepad2.a && (rightTrigger || leftTrigger)) {
+        else if(gamepad2.y && (rightTrigger || leftTrigger)) {
             triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
             triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
             rightTrigger = false;
