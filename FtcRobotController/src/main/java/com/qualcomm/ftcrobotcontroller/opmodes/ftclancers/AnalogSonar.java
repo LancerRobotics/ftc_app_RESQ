@@ -15,8 +15,8 @@ public class AnalogSonar extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        sonarFrontLeft = hardwareMap.analogInput.get(Keys.SONAR_FRONT_LEFT);
-        sonarFrontRight = hardwareMap.analogInput.get(Keys.SONAR_FRONT_RIGHT);
+        sonarFrontLeft = hardwareMap.analogInput.get(Keys.SONAR_FOOT);
+        sonarFrontRight = hardwareMap.analogInput.get(Keys.SONAR_FOOT);
         sonarTop = hardwareMap.analogInput.get(Keys.SONAR_ABOVE_PHONE);
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
