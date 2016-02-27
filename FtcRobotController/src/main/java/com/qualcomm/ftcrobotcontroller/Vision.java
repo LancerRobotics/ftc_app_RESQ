@@ -35,7 +35,7 @@ public class Vision {
 
 
     public static int FOCUS_TIME = 2400;
-    public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 1750;
+    public static int RETRIEVE_FILE_TIME = FOCUS_TIME + 2000;
 
     public static double EDGE_THRESHOLD = 85;
     public static double CONTRAST_ADJUSTMENT = .85;
