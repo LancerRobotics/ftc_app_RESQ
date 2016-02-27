@@ -18,7 +18,7 @@ public class AnalogLimitSwitch extends OpMode {
         telemetry.addData("Limit switch is pressed: ", getState());
     }
     public boolean getState() {
-        if(limit1.getValue() > 100) {
+        if(limit1.getValue() > 0) {
             return true;
         }
         else {

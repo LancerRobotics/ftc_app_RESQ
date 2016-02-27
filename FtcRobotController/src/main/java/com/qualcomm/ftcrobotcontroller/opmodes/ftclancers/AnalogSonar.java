@@ -40,7 +40,7 @@ public class AnalogSonar extends LinearOpMode {
         correctMovement(distanceToCheck);
     }
 
-    //returns sonar values in inches!!!
+    //returns sonar values in inches
     public double readSonar(AnalogInput sonar) {
         double sValue = sonar.getValue();
         sValue = sValue/2;
