@@ -83,12 +83,16 @@ public class AutonomousRed extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         moveAlteredSin(26, false);
-        gyroTurn(-30);
+        gyroTurn(-30, false);
         moveAlteredSin(33, false);
-        gyroTurn(-60);
-        adjustToThisDistance(12, sonarFoot);
-        telemetry.addData("sonar",readSonar(sonarFoot));
+        gyroTurn(-60, false);
+        sleep(100);
         rest();
+        adjustToThisDistance(12, sonarFoot);
+        telemetry.addData("sonar", readSonar(sonarFoot));
+        rest();
+        sleep(100);
+
         //telemetry.addData("sonar",readSonar(sonarAbovePhone));
 
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
@@ -111,11 +115,11 @@ public class AutonomousRed extends LinearOpMode {
         //ok so now I have the image
 
         //scale image down to 216 height if needed
-        if (image.getHeight()>216||image.getWidth()>216) {
+        if (image.getHeight()>160||image.getWidth()>160) {
             //too large to be uploaded into a texture
-            int nh = (int) ( image.getHeight() * (216.0 / image.getWidth()) );
+            int nh = (int) ( image.getHeight() * (160.0 / image.getWidth()) );
             Log.e("nh", nh + " h" + image.getHeight() + " w" + image.getWidth());
-            image = Bitmap.createScaledBitmap(image,216,nh,true);
+            image = Bitmap.createScaledBitmap(image,160,nh,true);
             //original will be same size as everything else
             //the saved version of the pic is original size, however
             Vision.savePicture(image,hardwareMap.appContext,"SHRUNKEN", false);
@@ -190,31 +194,72 @@ public class AutonomousRed extends LinearOpMode {
         if (!beacon.error()) {
             if (beacon.oneSideUnknown()) {
                 //assume this is the right side, assume left side got chopped off
-                if (beacon.getRight()==Beacon.COLOR_RED) {
+                if (beacon.getRight()== Beacon.COLOR_RED) {
+                    telemetry.addData("beacon",1);
                     //this is what i want, since im on red team. hit right side
-                    moveStraight(8,false,.15);
+                    moveStraight(9.5, false, .15);
+                    climber.setPosition(Keys.CLIMBER_DUMP);
+                    sleep(250);
+                    //park
+                    gyroTurn(45, true);
+                    moveStraight(12,false,.4);
                 }
                 else {
                     //the other side must be red
                     //drop servo arm, then move forward
-
-                    moveStraight(8,false,.15);
+                    telemetry.addData("beacon",2);
+                    moveStraight(8.75, false, .15);
+                    climber.setPosition(Keys.CLIMBER_DUMP);
+                    Thread.sleep(100);
+                    moveStraight(4, true, .6);
+                    gyroTurn(45, true);
+                    //Thread.sleep(1000);
+                    moveStraight(15, true, .4);
+                    //Thread.sleep(1000);
+                    gyroTurn(-45,false);
+                    moveStraight(15,false,.24);
+                    //park
+                    gyroTurn(45,true);
+                    moveStraight(7,false,.24);
                 }
             }
             else {
-                if (beacon.whereIsRed() == Beacon.RIGHT) {
-                    moveStraight(8, false, .15);
-                } else if (beacon.whereIsRed() == Beacon.LEFT) {
-                    //drop servo arm, then move foward a bit
-
-                    moveStraight(8, false, .15);
+                if (beacon.whereIsRed().equals( Beacon.RIGHT)) {
+                    moveStraight(9.5, false, .15);
+                    telemetry.addData("beacon", 3);
+                    climber.setPosition(Keys.CLIMBER_DUMP);
+                    sleep(250);
+                    gyroTurn(45, true);
+                    moveStraight(12,false,.24);
+                } else if (beacon.whereIsRed().equals( Beacon.LEFT)) {
+                    telemetry.addData("beacon",4);
+                    moveStraight(8.75,false,.15);
+                    climber.setPosition(Keys.CLIMBER_DUMP);
+                    Thread.sleep(100);
+                    moveStraight(4,true,.6);
+                    gyroTurn(45, true);
+                    //Thread.sleep(1000);
+                    moveStraight(15, true, .4);
+                    //Thread.sleep(1000);
+                    gyroTurn(-45,false);
+                    moveStraight(15,false,.24);
+                    //park
+                    gyroTurn(45,true);
+                    moveStraight(7,false,.24);
                 }
             }
         }
         else {
-            moveStraight(7.5,false,.15);
+            //couldn't find. just dump climber
+            moveStraight(8.75, false, .15);
+            climber.setPosition(Keys.CLIMBER_DUMP);
+            sleep(250);
+            //park
+            gyroTurn(45,true);
+            moveStraight(12,false,.24);
         }
-        climber.setPosition(Keys.CLIMBER_DUMP);
+
+
     }
 
 
@@ -245,6 +290,7 @@ public class AutonomousRed extends LinearOpMode {
         telemetry.addData("sonar","done");
         rest();
     }
+
     //returns sonar values in inches!!!
     public double readSonar(AnalogInput sonar) {
         double sValue = sonar.getValue();
@@ -253,11 +299,19 @@ public class AutonomousRed extends LinearOpMode {
     }
 
     public void moveStraight (double dist, boolean backwards, double power) {
+
         double rotations = dist / (6 * Math.PI);
         double totalTicks = rotations * 1120 * 3 / 2;
         int positionBeforeMovement = fl.getCurrentPosition();
-        while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
-            setMotorPowerUniform(power,backwards);
+        if (backwards) {
+            while (fl.getCurrentPosition()>positionBeforeMovement-totalTicks) {
+                setMotorPowerUniform(power, backwards);
+            }
+        }
+        else {
+            while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
+                setMotorPowerUniform(power, backwards);
+            }
         }
         rest();
     }
@@ -313,7 +367,7 @@ public class AutonomousRed extends LinearOpMode {
         fr.setPower(direction*power);
         fl.setPower(direction*power);
         bl.setPower(direction*power);
-        br.setPower(direction*power);
+        br.setPower(direction * power);
         //collector.setPower(-.5);
 
     }
@@ -324,6 +378,7 @@ public class AutonomousRed extends LinearOpMode {
         br.setPower(0);
         collector.setPower(0);
     }
+
     public void turnLeft (double power) {
         fr.setPower(power);
         br.setPower(power);
@@ -332,8 +387,9 @@ public class AutonomousRed extends LinearOpMode {
         fl.setPower(power);
         bl.setPower(power);
     }
-    public void gyroTurn (double degrees) {
+    public void gyroTurn (double degrees, boolean buttFirst) {
         //degrees=degrees*-1;
+
         yawPIDController = new navXPIDController(navx_device, navXPIDController.navXTimestampedDataSource.YAW);
         yawPIDController.setSetpoint(degrees);
         yawPIDController.setContinuous(true);
@@ -358,7 +414,11 @@ public class AutonomousRed extends LinearOpMode {
             {
                 collector.setPower(-.5);
                 telemetry.addData("while","turningLeft1");
-                turnLeft(.8);
+                double turnPower = .8;
+                if (buttFirst) {
+                    turnPower=-.8;
+                }
+                turnLeft(turnPower);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
             }
             telemetry.addData("more boolean2",navx_device.getYaw()>degreesToGo+Keys.TOLERANCE_LEVEL_2);
@@ -366,14 +426,22 @@ public class AutonomousRed extends LinearOpMode {
             {
                 collector.setPower(-.5);
                 telemetry.addData("while","turningLeft2");
-                turnLeft(.65);
+                double turnPower = .65;
+                if (buttFirst) {
+                    turnPower=-1*turnPower;
+                }
+                turnLeft(turnPower);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3))
             {
                 collector.setPower(-.5);
-                telemetry.addData("while","turningLeft3");
-                turnLeft(.4);
+                telemetry.addData("while", "turningLeft3");
+                double turnPower = .4;
+                if (buttFirst) {
+                    turnPower=-1*turnPower;
+                }
+                turnLeft(turnPower);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
             }
             telemetry.addData("while","done");
@@ -382,19 +450,31 @@ public class AutonomousRed extends LinearOpMode {
             telemetry.addData("if","getYaw<degrees");
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_1<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_1)) {
                 collector.setPower(-.5);
-                turnRight(.8);
+                double turnPower = .8;
+                if (buttFirst) {
+                    turnPower=-1*turnPower;
+                }
+                turnLeft(turnPower);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
                 telemetry.addData("while","turningRight");
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_2<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_2)) {
                 collector.setPower(-.5);
-                turnRight(.65);
+                double turnPower = .65;
+                if (buttFirst) {
+                    turnPower=-1*turnPower;
+                }
+                turnLeft(turnPower);
                 telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
                 telemetry.addData("while","turningRight");
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3)) {
                 collector.setPower(-.5);
-                turnRight(.4);
+                double turnPower = .4;
+                if (buttFirst) {
+                    turnPower=-1*turnPower;
+                }
+                turnLeft(turnPower);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
                 telemetry.addData("while","turningRight");
             }
