@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * Created by spork on 2/23/2016.
+ * Created by mattquan on 2/23/2016.
  */
 public class Judges extends LinearOpMode {
     DcMotor fr, fl, bl, br, liftLeft, liftRight, collector, winch;
@@ -48,25 +48,24 @@ public class Judges extends LinearOpMode {
         triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
         triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
         waitForStart();
-        int count = 1;
+        int count = 2;
 
 
         while (count < 9) {
             if (gamepad1.a) {
                 switch (count) {
-                    case 1:
-                        collector.setPower(Keys.COLLECTOR);
-                        sleep(3000);
-                        collector.setPower(0);
-                        break;
                     case 2:
                         clampLeft.setPosition(Keys.CLAMP_LEFT_DOWN);
                         sleep(2000);
                         clampRight.setPosition(Keys.CLAMP_RIGHT_DOWN);
+                        sleep(2000);
+                        clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
+                        sleep(2000);
+                        clampLeft.setPosition(Keys.CLAMP_LEFT_INIT);
                         break;
                     case 3:
-                        liftLeft.setPower(.5);
-                        liftRight.setPower(.5);
+                        liftLeft.setPower(-.5);
+                        liftRight.setPower(-.5);
                         sleep(875);
                         liftLeft.setPower(0);
                         liftRight.setPower(0);
@@ -81,8 +80,8 @@ public class Judges extends LinearOpMode {
                         dump.setPosition(Keys.DUMP_INIT);
                         swivel.setPosition(Keys.SWIVEL_CENTER);
                         sleep(875);
-                        liftRight.setPower(-.5);
-                        liftLeft.setPower(-.5);
+                        liftRight.setPower(.5);
+                        liftLeft.setPower(.5);
                         sleep(800);
                         liftLeft.setPower(0);
                         liftRight.setPower(0);
@@ -91,7 +90,7 @@ public class Judges extends LinearOpMode {
                         hang.setPosition(Keys.HANG_NOW);
                         break;
                     case 8:
-                        winch.setPower(.5);
+                        winch.setPower(-.5);
                         sleep(2000);
                         winch.setPower(0);
                         break;
