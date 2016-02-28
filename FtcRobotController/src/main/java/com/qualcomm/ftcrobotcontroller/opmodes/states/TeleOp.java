@@ -201,19 +201,20 @@ public class TeleOp extends OpMode{
             leftTrigger = false;
         }
 
-    /*
+
         //Auto-Trigger
-        if(!gamepad2.x && !gamepad2.b && !gamepad2.a && !rightTrigger && !leftTrigger) {
-            if (navx_device.getPitch() > 15) {
+        /*if(!gamepad2.x && !gamepad2.b && !gamepad2.a && !rightTrigger && !leftTrigger) {
+            if (navx_device.getPitch() > Keys.PITCH_OF_MOUNTAIN) {
                 triggerLeft.setPosition(Keys.LEFT_TRIGGER_TRIGGER);
                 triggerRight.setPosition(Keys.RIGHT_TRIGGER_TRIGGER);
             }
             else {
                 triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
                 triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
+                //else do nothing
             }
-        }
-    */
+        }*/
+
         //Swivels
         if(gamepad1.x) {
             swivel.setPosition(Keys.SWIVEL_LEFT);
