@@ -56,7 +56,7 @@ public class Keys {
 
     //Climber values
     public static final double CLIMBER_DUMP = .4;
-    public static final double CLIMBER_INITIAL_STATE = .78;
+    public static final double CLIMBER_INITIAL_STATE = .812;
 
 
     //Swivel values
@@ -78,6 +78,7 @@ public class Keys {
 
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
+    public static final double PITCH_OF_MOUNTAIN = 27.5;
     public static final double TOLERANCE_DEGREES = 2.0;
     public static final double TOLERANCE_LEVEL_1 = 11;
     public static final double TOLERANCE_LEVEL_2 = 6;
@@ -94,11 +95,11 @@ public class Keys {
     public static final double DUMP_DOWN = .35;
 
     //Clamp Left values, TODO get real values
-    public static final double CLAMP_LEFT_INIT = .506;
+    public static final double CLAMP_LEFT_INIT = .506 ;
     public static final double CLAMP_LEFT_DOWN = 1;
 
     //Clamp Right values,
-    public static final double CLAMP_RIGHT_INIT = .702;
+    public static final double CLAMP_RIGHT_INIT = .602;
     public static final double CLAMP_RIGHT_DOWN = 0;
 
     //Hopper Left TODO confirm with real servos
