@@ -31,6 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Pitch;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousBlue;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousRed;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Gyro;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.Judges;
@@ -59,8 +61,9 @@ public class FtcOpModeRegister implements OpModeRegister {
      * If two or more op modes are registered with the same name, the app will display an error.
      */
     manager.register("Auton Red", AutonomousRed.class);
+    manager.register("Auton Blue", AutonomousBlue.class);
     manager.register("Teleop", TeleOp.class);
     manager.register("Camera", CameraTestOp.class);
     manager.register("Judges", Judges.class);
-  }
+      }
 }
