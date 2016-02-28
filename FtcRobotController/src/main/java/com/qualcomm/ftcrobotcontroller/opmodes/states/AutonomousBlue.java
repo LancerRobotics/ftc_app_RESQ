@@ -24,7 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by daniel on 2/18/2016.
+ * Created by mattquan on 2/18/2016.
  */
 public class AutonomousBlue extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
@@ -82,7 +82,7 @@ public class AutonomousBlue extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(21, false);
+        moveAlteredSin(12, false);
         gyroTurn(30, false);
         moveAlteredSin(33, false);
         gyroTurn(60, false);
@@ -91,7 +91,7 @@ public class AutonomousBlue extends LinearOpMode {
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
-        sleep(100);
+
 
         //telemetry.addData("sonar",readSonar(sonarAbovePhone));
 
@@ -190,79 +190,89 @@ public class AutonomousBlue extends LinearOpMode {
         telemetry.addData("circles adjusted",Vision.savePicture(circlesAdjusted,hardwareMap.appContext,"CIRCLES_ADJUSTED", false));
         telemetry.addData("circles found",circlesFound);
         Beacon beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
-        telemetry.addData("beacon is", beacon);
+        telemetry.addData("beacon is",beacon);
         if (!beacon.error()) {
             if (beacon.oneSideUnknown()) {
                 //assume this is the right side, assume left side got chopped off
                 if (beacon.getRight()== Beacon.COLOR_BLUE) {
-                    telemetry.addData("beacon",1);
+                    telemetry.addData("beacon", 1);
                     //this is what i want, since im on red team. hit right side
-                    moveStraight(9.5, false, .15);
+                    pushRightButton();
+
                     climber.setPosition(Keys.CLIMBER_DUMP);
-                    sleep(250);
-                    //park
-                    gyroTurn(-45, true);
-                    moveStraight(7,false,.4);
+                    sleep(1290);
+                    //parkfromRightSide();
                 }
                 else {
                     //the other side must be red
                     //drop servo arm, then move forward
                     telemetry.addData("beacon",2);
-                    moveStraight(8.75, false, .15);
+                    moveStraight(8.5, false, .3);
                     climber.setPosition(Keys.CLIMBER_DUMP);
-                    Thread.sleep(100);
-                    moveStraight(4, true, .6);
-                    gyroTurn(-45, true);
-                    //Thread.sleep(1000);
-                    moveStraight(15, true, .4);
-                    //Thread.sleep(1000);
-                    gyroTurn(45,false);
-                    moveStraight(15,false,.24);
+                    //Thread.sleep(100);
+                    sleep(1200);
+                    adjustAndPressLeft();
                     //park
-                    gyroTurn(-45,true);
-                    moveStraight(7,false,.24);
+                    //parkFromLeftSide();
                 }
             }
             else {
-                //TODO change signs
-                if (beacon.whereIsRed().equals( Beacon.RIGHT)) {
-                    moveStraight(9.5, false, .15);
-                    telemetry.addData("beacon", 3);
+                if (beacon.whereIsBlue().equals( Beacon.RIGHT)) {
+                    pushRightButton();
                     climber.setPosition(Keys.CLIMBER_DUMP);
-                    sleep(250);
-                    gyroTurn(45, true);
-                    moveStraight(12,false,.24);
-                } else if (beacon.whereIsRed().equals( Beacon.LEFT)) {
-                    telemetry.addData("beacon",4);
-                    moveStraight(8.75,false,.15);
-                    climber.setPosition(Keys.CLIMBER_DUMP);
-                    Thread.sleep(100);
-                    moveStraight(4,true,.6);
-                    gyroTurn(45, true);
-                    //Thread.sleep(1000);
-                    moveStraight(15, true, .4);
-                    //Thread.sleep(1000);
-                    gyroTurn(-45,false);
-                    moveStraight(15,false,.24);
+                    sleep(1200);
                     //park
-                    gyroTurn(45,true);
-                    moveStraight(7,false,.24);
+                    //parkfromRightSide();
+                } else if (beacon.whereIsBlue().equals( Beacon.LEFT)) {
+                    telemetry.addData("beacon", 4);
+                    moveStraight(8.5, false, .3);
+                    climber.setPosition(Keys.CLIMBER_DUMP);
+                    Thread.sleep(1200);
+                    adjustAndPressLeft();
+                    //park
+                    //parkFromLeftSide();
+
                 }
             }
         }
         else {
             //couldn't find. just dump climber
-            moveStraight(8.75, false, .15);
+            moveStraight(8.5, false, .3);
             climber.setPosition(Keys.CLIMBER_DUMP);
-            sleep(250);
-            //park
-            gyroTurn(45,true);
-            moveStraight(12,false,.24);
+            sleep(1200);
+            //parkfromRightSide();
+
         }
 
 
     }
 
+    private void parkFromLeftSide() {
+        moveStraight(8,true,.5);
+        gyroTurn(45,true);
+        moveStraight(7,false,.24);
+    }
+
+    private void adjustAndPressLeft() {
+        moveStraight(4, true, .6);
+        gyroTurn(45, true);
+        //Thread.sleep(1000);
+        moveStraight(12.8, true, .4);
+        //Thread.sleep(1000);
+        gyroTurn(-45,false);
+        moveStraight(10,false,.3);
+    }
+
+    private void pushRightButton() {
+        moveStraight(9.7, false, .3);
+    }
+
+    public void parkFromRightSide () {
+        //park
+        moveStraight(8,true,.4);
+        gyroTurn(-45,true);
+        moveStraight(15,false,.3);
+    }
 
     public void adjustToThisDistance(double distance, AnalogInput sonar) {
         double myPosition  = readSonar(sonar);
@@ -273,7 +283,7 @@ public class AutonomousBlue extends LinearOpMode {
                 telemetry.addData("while","looping3");
                 telemetry.addData("mySonar",readSonar(sonar));
                 telemetry.addData("dist",distance);
-                setMotorPowerUniform(.15, true);
+                setMotorPowerUniform(.25, true);
                 telemetry.addData("bool read<dist+tol",readSonar(sonar)<distance-Keys.SONAR_TOLERANCE);
             }
         }
@@ -283,7 +293,7 @@ public class AutonomousBlue extends LinearOpMode {
                 telemetry.addData("while", "looping");
                 telemetry.addData("mySonar",readSonar(sonar));
                 telemetry.addData("dist",distance);
-                setMotorPowerUniform(.15, false);
+                setMotorPowerUniform(.25, false);
                 telemetry.addData("bool read>dist+tol", readSonar(sonar) > distance + Keys.SONAR_TOLERANCE);
             }
         }
@@ -418,8 +428,11 @@ public class AutonomousBlue extends LinearOpMode {
                 double turnPower = .8;
                 if (buttFirst) {
                     turnPower=-.8;
+                    turnRight(turnPower);
                 }
-                turnLeft(turnPower);
+                else {
+                    turnLeft(turnPower);
+                }
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
             }
             telemetry.addData("more boolean2",navx_device.getYaw()>degreesToGo+Keys.TOLERANCE_LEVEL_2);
@@ -430,22 +443,27 @@ public class AutonomousBlue extends LinearOpMode {
                 double turnPower = .65;
                 if (buttFirst) {
                     turnPower=-1*turnPower;
+                    turnRight(turnPower);
                 }
-                turnLeft(turnPower);
+                else {
+                    turnLeft(turnPower);
+                }
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3))
             {
                 collector.setPower(-.5);
                 telemetry.addData("while", "turningLeft3");
-                double turnPower = .4;
+                double turnPower = .45;
                 if (buttFirst) {
                     turnPower=-1*turnPower;
+                    turnRight(turnPower);
+                } else {
+                    turnLeft(turnPower);
                 }
-                turnLeft(turnPower);
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
             }
-            telemetry.addData("while","done");
+            telemetry.addData("while", "done");
         }
         else if (navx_device.getYaw()<degreesToGo) {
             telemetry.addData("if","getYaw<degrees");
@@ -454,8 +472,11 @@ public class AutonomousBlue extends LinearOpMode {
                 double turnPower = .8;
                 if (buttFirst) {
                     turnPower=-1*turnPower;
+                    turnLeft(turnPower);
                 }
-                turnLeft(turnPower);
+                else {
+                    turnRight(turnPower);
+                }
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
                 telemetry.addData("while","turningRight");
             }
@@ -464,23 +485,29 @@ public class AutonomousBlue extends LinearOpMode {
                 double turnPower = .65;
                 if (buttFirst) {
                     turnPower=-1*turnPower;
+                    turnLeft(turnPower);
                 }
-                turnLeft(turnPower);
+                else {
+                    turnRight(turnPower);
+                }
                 telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
                 telemetry.addData("while","turningRight");
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3)) {
                 collector.setPower(-.5);
-                double turnPower = .4;
+                double turnPower= .45;
                 if (buttFirst) {
                     turnPower=-1*turnPower;
+                    turnLeft(turnPower);
+                } else {
+                    turnRight(turnPower);
                 }
-                turnLeft(turnPower);
+
                 telemetry.addData("if",".yaw"+navx_device.getYaw()+"toGo"+degreesToGo);
                 telemetry.addData("while","turningRight");
             }
 
-            telemetry.addData("whileD","done");
+            telemetry.addData("whileD", "done");
         }
         telemetry.addData("ifD","done");
         rest();
