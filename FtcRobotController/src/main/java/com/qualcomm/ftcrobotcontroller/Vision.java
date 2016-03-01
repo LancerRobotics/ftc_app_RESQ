@@ -837,7 +837,8 @@ public class Vision {
         //this should never happen...
         return -1;
     }
-
+    
+    //DEPRECATED WE DO NOT USE THIS METHOD ANyMORE
     //these values are all based off of the color wheel
     public static String findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(Bitmap circies) {
         //find the avg hue for right side, find avg hue for left side
@@ -909,7 +910,7 @@ public class Vision {
         return returnThis;
 
     }
-
+ //DEPRECATED WE DO NOT USE THIS METHOD ANyMORE
     public static String findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(Bitmap circies, Context context) {
         // a drop of 150 in all rgb (or at least two) means that relatively, the pixel is black, relative to all the other pixels
         //scan horizontally downward
