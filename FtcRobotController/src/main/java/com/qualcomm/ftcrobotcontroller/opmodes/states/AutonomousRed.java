@@ -440,7 +440,7 @@ public class AutonomousRed extends LinearOpMode {
             {
                 collector.setPower(-.5);
                 telemetry.addData("while","turningLeft2");
-                double turnPower = .65;
+                double turnPower = .75;
                 if (buttFirst) {
                     turnPower=-1*turnPower;
                     turnRight(turnPower);
@@ -454,7 +454,7 @@ public class AutonomousRed extends LinearOpMode {
             {
                 collector.setPower(-.5);
                 telemetry.addData("while", "turningLeft3");
-                double turnPower = .45;
+                double turnPower = .7;
                 if (buttFirst) {
                     turnPower=-1*turnPower;
                     turnRight(turnPower);
@@ -482,7 +482,7 @@ public class AutonomousRed extends LinearOpMode {
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_2<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_2)) {
                 collector.setPower(-.5);
-                double turnPower = .65;
+                double turnPower = .75;
                 if (buttFirst) {
                     turnPower=-1*turnPower;
                     turnLeft(turnPower);
@@ -495,7 +495,7 @@ public class AutonomousRed extends LinearOpMode {
             }
             while (!(degreesToGo-Keys.TOLERANCE_LEVEL_3<navx_device.getYaw()&&navx_device.getYaw()<degreesToGo+Keys.TOLERANCE_LEVEL_3)) {
                 collector.setPower(-.5);
-                double turnPower= .45;
+                double turnPower= .7;
                 if (buttFirst) {
                     turnPower=-1*turnPower;
                     turnLeft(turnPower);
