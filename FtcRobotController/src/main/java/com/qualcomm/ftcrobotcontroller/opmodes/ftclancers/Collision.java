@@ -47,6 +47,7 @@ public class Collision extends LinearOpMode {
         setMotorPowerUniform(.66, false);
         telemetry.addData("hitBeaconX", hitBeaconX());
         telemetry.addData("hitBeaconZ", hitBeaconZ());
+        telemetry.addData("hitBeaconY", hitBeaconY());
 
     }
     public void setMotorPowerUniform(double power, boolean backwards) {
@@ -102,5 +103,13 @@ public class Collision extends LinearOpMode {
         }
     }
 
-
+    public boolean hitBeaconY () {
+        double speed = navx_device.getWorldLinearAccelY();
+        if(speed < 2) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
