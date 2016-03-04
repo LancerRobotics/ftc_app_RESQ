@@ -28,6 +28,7 @@ public class Keys {
     public static final String triggerLeft = "trigger_left";
     public static final String triggerRight = "trigger_right";
     public static final String winch = "winch";
+    public static final String jam = "jam";
 
     //Ports
     public static final int NAVX_DIM_I2C_PORT = 0;
@@ -58,6 +59,8 @@ public class Keys {
     public static final double CLIMBER_DUMP = .4;
     public static final double CLIMBER_INITIAL_STATE = .812;
 
+    public static final double JAM_INIT = .2;
+    public static final double JAM_JAM = .3;
 
     //Swivel values
     public static final double SWIVEL_CENTER = .5;
