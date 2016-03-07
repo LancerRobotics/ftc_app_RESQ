@@ -82,16 +82,7 @@ public class AutonomousBlueMain extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(15.5, false);
-        gyroTurn(30, false);
-        moveAlteredSin(35.25, false);
-        gyroTurn(60, false);
-        sleep(100);
-        rest();
-        adjustToThisDistance(12, sonarFoot);
-        telemetry.addData("sonar", readSonar(sonarFoot));
-        rest();
-
+        //todo ADD NAVIGATION
 
         //telemetry.addData("sonar",readSonar(sonarAbovePhone));
 
