@@ -38,14 +38,6 @@ public class Collision extends LinearOpMode {
         while(!gamepad1.a) {
             sleep(1);
         }
-        setMotorPowerUniform(Keys.MAX_SPEED, false);
-        while(!objectInFront()) {
-            sleep(1);
-        }
-        rest();
-        while(!gamepad1.a) {
-            sleep(1);
-        }
         setMotorPowerUniform(.66, false);
         while(true) {
             telemetry.addData("hitBeaconX", hitBeaconX());

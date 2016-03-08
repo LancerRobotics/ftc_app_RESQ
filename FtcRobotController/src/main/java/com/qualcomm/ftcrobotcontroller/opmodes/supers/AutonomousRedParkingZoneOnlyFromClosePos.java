@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 public class AutonomousRedParkingZoneOnlyFromClosePos extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
-    Servo swivel, dump, hopperLeft, climber, hang, clampRight, clampLeft, hopperRight, triggerRight, triggerLeft,buttonPusher;
+    Servo swivel, dump, climber, hang, clampRight, clampLeft, triggerRight, triggerLeft;
     AnalogInput sonarAbovePhone, sonarFoot;
     //double a3,a4,a5;
     private AHRS navx_device;
@@ -25,12 +25,9 @@ public class AutonomousRedParkingZoneOnlyFromClosePos extends LinearOpMode {
     boolean calibration_complete = false;
     @Override
     public void runOpMode() throws InterruptedException {
-        buttonPusher = hardwareMap.servo.get(Keys.buttonPusher);
         climber = hardwareMap.servo.get(Keys.climber);
         swivel = hardwareMap.servo.get(Keys.swivel);
         hang = hardwareMap.servo.get(Keys.hang);
-        hopperLeft = hardwareMap.servo.get(Keys.hopperLeft);
-        hopperRight = hardwareMap.servo.get(Keys.hopperRight);
         clampLeft = hardwareMap.servo.get(Keys.clampLeft);
         clampRight = hardwareMap.servo.get(Keys.clampRight);
         dump = hardwareMap.servo.get(Keys.dump);
@@ -43,12 +40,9 @@ public class AutonomousRedParkingZoneOnlyFromClosePos extends LinearOpMode {
         collector = hardwareMap.dcMotor.get(Keys.collector);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
-        buttonPusher.setPosition(Keys.BUTTON_PUSHER_INIT);
         dump.setPosition(Keys.DUMP_INIT);
         swivel.setPosition(Keys.SWIVEL_CENTER);
         hang.setPosition(Keys.HANG_INIT);
-        hopperLeft.setPosition(Keys.HL_STORE);
-        hopperRight.setPosition(Keys.HR_STORE);
         clampLeft.setPosition(Keys.CLAMP_LEFT_INIT);
         clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
         triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
