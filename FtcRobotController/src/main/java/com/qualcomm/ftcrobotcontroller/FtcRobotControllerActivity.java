@@ -68,10 +68,12 @@ import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.ftcrobotcontroller.opmodes.FtcOpModeRegister;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.TakeAPicture;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousBlue;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousRed;
-import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMain;
-import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousRedMain;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousBlueStates;
+import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousRedStates;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMainFromClosePos;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMainFromFarPos;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousRedMainFromClosePos;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousRedMainFromFarPos;
 import com.qualcomm.hardware.HardwareFactory;
 import com.qualcomm.robotcore.hardware.configuration.Utility;
 import com.qualcomm.robotcore.util.Dimmer;
@@ -148,7 +150,7 @@ public class FtcRobotControllerActivity extends Activity {
       }
     });
   }
-  public void initCameraPreview(final Camera camera, final AutonomousRedMain context) {
+  public void initCameraPreview(final Camera camera, final AutonomousRedMainFromFarPos context) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
@@ -159,7 +161,7 @@ public class FtcRobotControllerActivity extends Activity {
     });
   }
 
-  public void initCameraPreview(final Camera camera, final AutonomousRed context) {
+  public void initCameraPreview(final Camera camera, final AutonomousRedStates context) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
@@ -170,7 +172,29 @@ public class FtcRobotControllerActivity extends Activity {
     });
   }
 
-  public void initCameraPreview(final Camera mCamera, final AutonomousBlue context) {
+  public void initCameraPreview(final Camera camera, final AutonomousRedMainFromClosePos context) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera);
+        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+        cameraPreviewLayout.addView(context.preview);
+      }
+    });
+  }
+
+  public void initCameraPreview(final Camera camera, final AutonomousBlueMainFromClosePos context) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera);
+        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+        cameraPreviewLayout.addView(context.preview);
+      }
+    });
+  }
+
+  public void initCameraPreview(final Camera mCamera, final AutonomousBlueStates context) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
@@ -181,7 +205,7 @@ public class FtcRobotControllerActivity extends Activity {
     });
   }
 
-  public void initCameraPreview(final Camera mCamera, final AutonomousBlueMain context) {
+  public void initCameraPreview(final Camera mCamera, final AutonomousBlueMainFromFarPos context) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {

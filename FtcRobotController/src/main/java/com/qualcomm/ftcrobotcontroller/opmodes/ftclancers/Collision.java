@@ -22,6 +22,8 @@ public class Collision extends LinearOpMode {
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         br = hardwareMap.dcMotor.get(Keys.backRight);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
+        fl.setDirection(DcMotor.Direction.REVERSE);
+        bl.setDirection(DcMotor.Direction.REVERSE);
         sonarAbovePhone = hardwareMap.analogInput.get(Keys.SONAR_ABOVE_PHONE);
         sonarFoot = hardwareMap.analogInput.get(Keys.SONAR_FOOT);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
@@ -45,10 +47,14 @@ public class Collision extends LinearOpMode {
             sleep(1);
         }
         setMotorPowerUniform(.66, false);
-        telemetry.addData("hitBeaconX", hitBeaconX());
-        telemetry.addData("hitBeaconZ", hitBeaconZ());
-        telemetry.addData("hitBeaconY", hitBeaconY());
-
+        while(true) {
+            telemetry.addData("hitBeaconX", hitBeaconX());
+            telemetry.addData("hitBeaconZ", hitBeaconZ());
+            telemetry.addData("hitBeaconY", hitBeaconY());
+            telemetry.addData("X", navx_device.getWorldLinearAccelX());
+            telemetry.addData("Y", navx_device.getWorldLinearAccelY());
+            telemetry.addData("Z", navx_device.getWorldLinearAccelZ());
+        }
     }
     public void setMotorPowerUniform(double power, boolean backwards) {
         int direction = 1;

@@ -24,9 +24,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by matt quan on 2/18/2016.
+ * Created by mattquan on 2/18/2016.
  */
-public class AutonomousRedMain extends LinearOpMode {
+public class AutonomousBlueMainFromFarPos extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
     Servo swivel, dump, hopperLeft, climber, hang, clampRight, clampLeft, hopperRight, triggerRight, triggerLeft,buttonPusher;
     AnalogInput sonarAbovePhone, sonarFoot;
@@ -83,6 +83,7 @@ public class AutonomousRedMain extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         //todo ADD NAVIGATION
+
         //telemetry.addData("sonar",readSonar(sonarAbovePhone));
 
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
@@ -184,7 +185,7 @@ public class AutonomousRedMain extends LinearOpMode {
         if (!beacon.error()) {
             if (beacon.oneSideUnknown()) {
                 //assume this is the right side, assume left side got chopped off
-                if (beacon.getRight()== Beacon.COLOR_RED) {
+                if (beacon.getRight()== Beacon.COLOR_BLUE) {
                     telemetry.addData("beacon", 1);
                     //this is what i want, since im on red team. hit right side
                     pushRightButton();
@@ -207,20 +208,20 @@ public class AutonomousRedMain extends LinearOpMode {
                 }
             }
             else {
-                if (beacon.whereIsRed().equals( Beacon.RIGHT)) {
+                if (beacon.whereIsBlue().equals( Beacon.RIGHT)) {
                     pushRightButton();
                     climber.setPosition(Keys.CLIMBER_DUMP);
                     sleep(1200);
                     //park
                     //parkfromRightSide();
-                } else if (beacon.whereIsRed().equals( Beacon.LEFT)) {
+                } else if (beacon.whereIsBlue().equals( Beacon.LEFT)) {
                     telemetry.addData("beacon", 4);
                     moveStraight(8.5, false, .3);
                     climber.setPosition(Keys.CLIMBER_DUMP);
                     Thread.sleep(1200);
                     adjustAndPressLeft();
                     //park
-                   //parkFromLeftSide();
+                    //parkFromLeftSide();
 
                 }
             }
@@ -301,7 +302,7 @@ public class AutonomousRedMain extends LinearOpMode {
 
     public void moveStraight (double dist, boolean backwards, double power) {
 
-        double rotations = dist / (6 * Math.PI);
+        double rotations = dist / (Keys.WHEEL_DIAMETER * Math.PI);
         double totalTicks = rotations * 1120 * 3 / 2;
         int positionBeforeMovement = fl.getCurrentPosition();
         if (backwards) {
@@ -320,7 +321,7 @@ public class AutonomousRedMain extends LinearOpMode {
     public void moveAlteredSin(double dist, boolean backwards) {
         //inches
 
-        double rotations = dist / (6 * Math.PI);
+        double rotations = dist / (Keys.WHEEL_DIAMETER * Math.PI);
         double totalTicks = rotations * 1120 * 3 / 2;
         int positionBeforeMovement = fl.getCurrentPosition();
         while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
@@ -368,7 +369,7 @@ public class AutonomousRedMain extends LinearOpMode {
         fr.setPower(direction*power);
         fl.setPower(direction*power);
         bl.setPower(direction*power);
-        br.setPower(direction * power);
+        br.setPower(direction*power);
         //collector.setPower(-.5);
 
     }

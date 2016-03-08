@@ -30,13 +30,15 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
-import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
-import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Pitch;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousBlue;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousRed;
-import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Gyro;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.Judges;
-import com.qualcomm.ftcrobotcontroller.opmodes.states.TeleOp;
+import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Collision;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMainFromFarPos;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueNoCameraFromFarPos;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueParkingZoneOnlyFromFarPos;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousRedMainFromFarPos;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousRedNoCameraFromFarPos;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousRedParkingZoneOnlyFromFarPos;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.JudgesSupers;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.TeleOpSupers;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
@@ -60,10 +62,14 @@ public class FtcOpModeRegister implements OpModeRegister {
      *
      * If two or more op modes are registered with the same name, the app will display an error.
      */
-    manager.register("Auton Red", AutonomousRed.class);
-    manager.register("Auton Blue", AutonomousBlue.class);
-    manager.register("Teleop", TeleOp.class);
-    manager.register("Camera", CameraTestOp.class);
-    manager.register("Judges", Judges.class);
-      }
+    manager.register("Teleop", TeleOpSupers.class);
+    manager.register("Autonomous Blue Main", AutonomousBlueMainFromFarPos.class);
+    manager.register("Autonomous Red Main", AutonomousRedMainFromFarPos.class);
+    manager.register("Autonomous Blue Parking Zone Only", AutonomousBlueParkingZoneOnlyFromFarPos.class);
+    manager.register("Autonomous Blue Main Without Camera", AutonomousBlueNoCameraFromFarPos.class);
+    manager.register("Autonomous Red Main Without Camera", AutonomousRedNoCameraFromFarPos.class);
+    manager.register("Autonomous Red Parking Zone Only", AutonomousRedParkingZoneOnlyFromFarPos.class);
+    manager.register("Collision", Collision.class);
+    manager.register("Judges Code", JudgesSupers.class);
+  }
 }

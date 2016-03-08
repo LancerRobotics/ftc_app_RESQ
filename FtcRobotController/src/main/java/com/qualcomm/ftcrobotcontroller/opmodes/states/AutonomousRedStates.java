@@ -26,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Created by matt quan on 2/18/2016.
  */
-public class AutonomousRed extends LinearOpMode {
+public class AutonomousRedStates extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
     Servo swivel, dump, hopperLeft, climber, hang, clampRight, clampLeft, hopperRight, triggerRight, triggerLeft,buttonPusher;
     AnalogInput sonarAbovePhone, sonarFoot;

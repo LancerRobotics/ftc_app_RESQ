@@ -20,7 +20,7 @@ public class TeleOpSupers extends OpMode{
     double pwrLeft, pwrRight;
 
     //Servos
-    Servo jam, swivel, dump, hopperLeft, climber, hang, clampRight, clampLeft, hopperRight, triggerRight, triggerLeft,buttonPusher;
+    Servo jam, swivel, dump, climber, hang, clampRight, clampLeft, triggerRight, triggerLeft;
 
     //Climbers
     boolean climberButtonPressed = false;
@@ -57,12 +57,9 @@ public class TeleOpSupers extends OpMode{
         liftLeft = hardwareMap.dcMotor.get(Keys.liftLeft);
         liftRight = hardwareMap.dcMotor.get(Keys.liftRight);
         winch = hardwareMap.dcMotor.get(Keys.winch);
-        buttonPusher = hardwareMap.servo.get(Keys.buttonPusher);
         climber = hardwareMap.servo.get(Keys.climber);
         swivel = hardwareMap.servo.get(Keys.swivel);
         hang = hardwareMap.servo.get(Keys.hang);
-        hopperLeft = hardwareMap.servo.get(Keys.hopperLeft);
-        hopperRight = hardwareMap.servo.get(Keys.hopperRight);
         clampLeft = hardwareMap.servo.get(Keys.clampLeft);
         clampRight = hardwareMap.servo.get(Keys.clampRight);
         dump = hardwareMap.servo.get(Keys.dump);
@@ -79,18 +76,13 @@ public class TeleOpSupers extends OpMode{
 
         jamPos = 1;
         jam.setPosition(jamPositions[0]);
-
-        buttonPusher.setPosition(Keys.BUTTON_PUSHER_INIT);
         dump.setPosition(Keys.DUMP_INIT);
         swivel.setPosition(Keys.SWIVEL_CENTER);
         hang.setPosition(Keys.HANG_INIT);
-        hopperLeft.setPosition(Keys.HL_STORE);
-        hopperRight.setPosition(Keys.HR_STORE);
         clampLeft.setPosition(Keys.CLAMP_LEFT_INIT);
         clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
         triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
         triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
-
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         //limitLeft = hardwareMap.analogInput.get(Keys.LIMIT_LEFT);
         limitRight = hardwareMap.analogInput.get(Keys.LIMIT_RIGHT);

@@ -57,26 +57,26 @@ public class Keys {
 
     //Climber values
     public static final double CLIMBER_DUMP = .4;
-    public static final double CLIMBER_INITIAL_STATE = .812;
+    public static final double CLIMBER_INITIAL_STATE = .85;
 
-    public static final double JAM_INIT = .2;
-    public static final double JAM_JAM = .3;
+    public static final double JAM_INIT = .1;
+    public static final double JAM_JAM = .2;
 
     //Swivel values
     public static final double SWIVEL_CENTER = .5;
-    public static final double SWIVEL_LEFT = .19;
-    public static final double SWIVEL_RIGHT = .81;
+    public static final double SWIVEL_LEFT = .20;
+    public static final double SWIVEL_RIGHT = .80;
 
-    //button pusher
+    //button pusher todo REMOVE ALL REFERENCES OF THIS
     public static final double BUTTON_PUSHER_INIT=.95;
     public static final double BUTTON_PUSHER_PUSH = .25;
 
     //Right Trigger Values
-    public static final double RIGHT_TRIGGER_INIT = 0;
+    public static final double RIGHT_TRIGGER_INIT = .05;
     public static final double RIGHT_TRIGGER_TRIGGER = 0.47;
 
     //Left Trigger Values
-    public static final double LEFT_TRIGGER_INIT = 1;
+    public static final double LEFT_TRIGGER_INIT = .95;
     public static final double LEFT_TRIGGER_TRIGGER = 0.53;
 
     //NavX values
@@ -94,16 +94,16 @@ public class Keys {
     public static final double HANG_HALFWAY = .196;
 
     //Dump values,
-    public static final double DUMP_INIT = 1;
+    public static final double DUMP_INIT = .95;
     public static final double DUMP_DOWN = .35;
 
     //Clamp Left values, TODO get real values
-    public static final double CLAMP_LEFT_INIT = .506 ;
-    public static final double CLAMP_LEFT_DOWN = 1;
+    public static final double CLAMP_LEFT_INIT = 1;
+    public static final double CLAMP_LEFT_DOWN = .5;
 
     //Clamp Right values,
-    public static final double CLAMP_RIGHT_INIT = .602;
-    public static final double CLAMP_RIGHT_DOWN = 0;
+    public static final double CLAMP_RIGHT_INIT = .25;
+    public static final double CLAMP_RIGHT_DOWN = .75;
 
     //Hopper Left TODO confirm with real servos
     public static final double HL_STORE = 1;
@@ -129,6 +129,7 @@ public class Keys {
 
     //Misc
     public static final double MAX_SPEED = .86;
+    public static final double WHEEL_DIAMETER = 6.5;
 
 
 

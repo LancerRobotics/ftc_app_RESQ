@@ -1,21 +1,32 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.supers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.util.Log;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
+import com.qualcomm.ftcrobotcontroller.Beacon;
 import com.qualcomm.ftcrobotcontroller.CameraPreview;
+import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.ftcrobotcontroller.Keys;
+import com.qualcomm.ftcrobotcontroller.Vision;
+import com.qualcomm.ftcrobotcontroller.XYCoor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import java.io.File;
+import java.util.ArrayList;
+
 /**
  * Created by matt quan on 2/18/2016.
  */
-public class AutonomousBlueParkingZoneOnly extends LinearOpMode {
+public class AutonomousRedParkingZoneOnlyFromFarPos extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
     Servo swivel, dump, hopperLeft, climber, hang, clampRight, clampLeft, hopperRight, triggerRight, triggerLeft,buttonPusher;
     AnalogInput sonarAbovePhone, sonarFoot;
@@ -23,9 +34,6 @@ public class AutonomousBlueParkingZoneOnly extends LinearOpMode {
     private AHRS navx_device;
     private navXPIDController yawPIDController;
     boolean calibration_complete = false;
-    private Camera mCamera;
-    public CameraPreview preview;
-    public Bitmap image;
     @Override
     public void runOpMode() throws InterruptedException {
         buttonPusher = hardwareMap.servo.get(Keys.buttonPusher);
@@ -110,7 +118,7 @@ public class AutonomousBlueParkingZoneOnly extends LinearOpMode {
 
     public void moveStraight (double dist, boolean backwards, double power) {
 
-        double rotations = dist / (6 * Math.PI);
+        double rotations = dist / (Keys.WHEEL_DIAMETER * Math.PI);
         double totalTicks = rotations * 1120 * 3 / 2;
         int positionBeforeMovement = fl.getCurrentPosition();
         if (backwards) {
@@ -129,7 +137,7 @@ public class AutonomousBlueParkingZoneOnly extends LinearOpMode {
     public void moveAlteredSin(double dist, boolean backwards) {
         //inches
 
-        double rotations = dist / (6 * Math.PI);
+        double rotations = dist / (Keys.WHEEL_DIAMETER * Math.PI);
         double totalTicks = rotations * 1120 * 3 / 2;
         int positionBeforeMovement = fl.getCurrentPosition();
         while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
