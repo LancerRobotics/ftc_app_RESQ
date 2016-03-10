@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller.opmodes.deprecated;
+package com.qualcomm.ftcrobotcontroller.opmodes.ftclancers;
 
 import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.ftcrobotcontroller.Keys;

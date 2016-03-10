@@ -29,4 +29,4 @@
       android:layout_alignParentStart="true"
       android:visibility="invisible"/>
 </RelativeLayout>
-<!-- From: file:/Users/tom/Documents/workspace/release/ftc_sdk/lib/FtcCommon/src/main/res/layout/activity_config_wifi_direct.xml --><!-- From: file:/C:/Users/Matt/Desktop/ftc_app-16.02.09.001/ftc_app-16.02.09.001/FtcRobotController/build/intermediates/exploded-aar/FtcCommon-release/res/layout/activity_config_wifi_direct.xml -->
+<!-- From: file:/Users/tom/Documents/workspace/release/ftc_sdk/lib/FtcCommon/src/main/res/layout/activity_config_wifi_direct.xml --><!-- From: file:/C:/Users/spork/Desktop/plswork/ftc_app/FtcRobotController/build/intermediates/exploded-aar/FtcCommon-release/res/layout/activity_config_wifi_direct.xml -->
