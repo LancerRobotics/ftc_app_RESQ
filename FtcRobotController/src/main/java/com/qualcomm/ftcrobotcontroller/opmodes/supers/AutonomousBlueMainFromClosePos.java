@@ -76,7 +76,7 @@ public class AutonomousBlueMainFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(15.5, false);
+        moveAlteredSin(18.5, false);
         gyroTurn(30, false);
         moveAlteredSin(34.25, false);
         gyroTurn(60, false);

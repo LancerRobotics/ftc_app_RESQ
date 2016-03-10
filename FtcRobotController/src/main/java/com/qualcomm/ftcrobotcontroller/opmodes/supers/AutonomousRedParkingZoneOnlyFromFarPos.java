@@ -74,7 +74,7 @@ public class AutonomousRedParkingZoneOnlyFromFarPos extends LinearOpMode {
         waitForStart();
         moveAlteredSin(71, false);
         gyroTurn(-60, false);
-        moveAlteredSin(29, false);
+        moveAlteredSin(25, false);
     }
 
     public void adjustToThisDistance(double distance, AnalogInput sonar) {

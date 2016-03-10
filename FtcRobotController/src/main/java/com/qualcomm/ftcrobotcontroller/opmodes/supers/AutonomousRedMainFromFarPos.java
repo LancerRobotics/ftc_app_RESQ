@@ -77,7 +77,7 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         //todo ADD NAVIGATION
-        moveAlteredSin(110, false);
+        moveAlteredSin(105, false);
         sleep(500);
         gyroTurn(-40, false);
         adjustToThisDistance(12, sonarFoot);

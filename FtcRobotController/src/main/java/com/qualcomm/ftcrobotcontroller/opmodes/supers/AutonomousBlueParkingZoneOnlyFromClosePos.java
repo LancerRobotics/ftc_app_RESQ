@@ -61,7 +61,7 @@ public class AutonomousBlueParkingZoneOnlyFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(31.5, false);
+        moveAlteredSin(34.5, false);
         gyroTurn(90, false);
         moveAlteredSin(35, false);
     }

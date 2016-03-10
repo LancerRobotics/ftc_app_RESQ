@@ -77,11 +77,17 @@ public class AutonomousBlueMainFromFarPos extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         //todo ADD NAVIGATION
-        moveAlteredSin(82, false);
+        moveAlteredSin(85, false);
         sleep(500);
         gyroTurn(45, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
+        sleep(1200);
+        moveStraight(9.5, false, .3);
+        climber.setPosition(Keys.CLIMBER_DUMP);
+        sleep(1200);
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(9.5, true, .3);
         //telemetry.addData("sonar",readSonar(sonarAbovePhone));
 
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
@@ -176,16 +182,10 @@ public class AutonomousBlueMainFromFarPos extends LinearOpMode {
         ArrayList<Integer> labels = (ArrayList<Integer> )returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_LABELSLIST);
         Bitmap circlesAdjusted = Vision.findAndIsolateBeaconButtons(circles,centers, labels);
         int circlesFound = Vision.getNumberOfLabelsNotOrganized(circlesAdjusted);
-        telemetry.addData("circles adjusted",Vision.savePicture(circlesAdjusted,hardwareMap.appContext,"CIRCLES_ADJUSTED", false));
-        telemetry.addData("circles found",circlesFound);
+        telemetry.addData("circles adjusted", Vision.savePicture(circlesAdjusted, hardwareMap.appContext, "CIRCLES_ADJUSTED", false));
+        telemetry.addData("circles found", circlesFound);
         Beacon beacon = Vision.getBeacon(circlesAdjusted, contrastedImage);
         telemetry.addData("beacon is", beacon);
-        sleep(1200);
-        moveStraight(9.5, false, .3);
-        climber.setPosition(Keys.CLIMBER_DUMP);
-        sleep(1200);
-        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(9.5, true, .3);
         if (!beacon.error()) {
             if (beacon.oneSideUnknown()) {
                 //assume this is the right side, assume left side got chopped off
