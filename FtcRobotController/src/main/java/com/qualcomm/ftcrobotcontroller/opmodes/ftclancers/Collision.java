@@ -35,18 +35,18 @@ public class Collision extends LinearOpMode {
         }
         telemetry.addData("Calibration Complete?", "Yes");
         waitForStart();
-        while(!gamepad1.a) {
-            sleep(1);
-        }
         setMotorPowerUniform(.66, false);
-        while(true) {
+        sleep(500);
+        while(!navx_device.isMoving()) {
             telemetry.addData("hitBeaconX", hitBeaconX());
             telemetry.addData("hitBeaconZ", hitBeaconZ());
             telemetry.addData("hitBeaconY", hitBeaconY());
             telemetry.addData("X", navx_device.getWorldLinearAccelX());
             telemetry.addData("Y", navx_device.getWorldLinearAccelY());
             telemetry.addData("Z", navx_device.getWorldLinearAccelZ());
+            telemetry.addData("moving", navx_device.isMoving());
         }
+        rest();
     }
     public void setMotorPowerUniform(double power, boolean backwards) {
         int direction = 1;

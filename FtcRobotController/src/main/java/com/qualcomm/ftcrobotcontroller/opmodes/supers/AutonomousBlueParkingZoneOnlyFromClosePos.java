@@ -61,7 +61,9 @@ public class AutonomousBlueParkingZoneOnlyFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        //todo ADD NAVIGATION
+        moveAlteredSin(31.5, false);
+        gyroTurn(90, false);
+        moveAlteredSin(35, false);
     }
 
     public void adjustToThisDistance(double distance, AnalogInput sonar) {
@@ -169,7 +171,7 @@ public class AutonomousBlueParkingZoneOnlyFromClosePos extends LinearOpMode {
         fl.setPower(direction*power);
         bl.setPower(direction*power);
         br.setPower(direction * power);
-        //collector.setPower(-.5);
+        collector.setPower(-.5);
 
     }
     public void rest() {

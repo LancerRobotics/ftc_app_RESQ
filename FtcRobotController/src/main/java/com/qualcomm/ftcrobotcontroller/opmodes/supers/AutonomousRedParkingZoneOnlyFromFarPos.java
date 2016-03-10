@@ -182,7 +182,7 @@ public class AutonomousRedParkingZoneOnlyFromFarPos extends LinearOpMode {
         fl.setPower(direction*power);
         bl.setPower(direction*power);
         br.setPower(direction * power);
-        //collector.setPower(-.5);
+        collector.setPower(-.5);
 
     }
     public void rest() {

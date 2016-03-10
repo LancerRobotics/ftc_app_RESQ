@@ -78,7 +78,8 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         waitForStart();
         //todo ADD NAVIGATION
         moveAlteredSin(110, false);
-        gyroTurn(-45, false);
+        sleep(500);
+        gyroTurn(-40, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
 
@@ -366,7 +367,7 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         fl.setPower(direction*power);
         bl.setPower(direction*power);
         br.setPower(direction * power);
-        //collector.setPower(-.5);
+        collector.setPower(-.5);
 
     }
     public void rest() {

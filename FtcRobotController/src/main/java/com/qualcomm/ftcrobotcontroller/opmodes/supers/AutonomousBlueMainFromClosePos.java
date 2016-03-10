@@ -78,7 +78,7 @@ public class AutonomousBlueMainFromClosePos extends LinearOpMode {
         waitForStart();
         moveAlteredSin(15.5, false);
         gyroTurn(30, false);
-        moveAlteredSin(35.25, false);
+        moveAlteredSin(34.25, false);
         gyroTurn(60, false);
         sleep(100);
         rest();
@@ -373,7 +373,7 @@ public class AutonomousBlueMainFromClosePos extends LinearOpMode {
         fl.setPower(direction*power);
         bl.setPower(direction*power);
         br.setPower(direction * power);
-        //collector.setPower(-.5);
+        collector.setPower(-.5);
 
     }
     public void rest() {

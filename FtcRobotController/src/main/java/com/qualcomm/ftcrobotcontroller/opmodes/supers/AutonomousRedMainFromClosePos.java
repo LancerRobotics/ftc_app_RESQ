@@ -76,9 +76,9 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(26, false);
+        moveAlteredSin(30, false);
         gyroTurn(-30, false);
-        moveAlteredSin(33, false);
+        moveAlteredSin(35, false);
         gyroTurn(-60, false);
         sleep(100);
         rest();
@@ -185,60 +185,33 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         telemetry.addData("circles found",circlesFound);
         Beacon beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
         telemetry.addData("beacon is",beacon);
+        moveStraight(9.5, false, .3);
+        climber.setPosition(Keys.CLIMBER_DUMP);
+        sleep(1200);
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(9.5, true, .3);
         if (!beacon.error()) {
             if (beacon.oneSideUnknown()) {
                 //assume this is the right side, assume left side got chopped off
                 if (beacon.getRight()== Beacon.COLOR_RED) {
                     telemetry.addData("beacon", 1);
                     //this is what i want, since im on red team. hit right side
-                    pushRightButton();
-
-                    climber.setPosition(Keys.CLIMBER_DUMP);
-                    sleep(1290);
-                    //parkfromRightSide();
+                    gyroTurn(30, false);
                 }
                 else {
-                    //the other side must be red
-                    //drop servo arm, then move forward
-                    telemetry.addData("beacon",2);
-                    moveStraight(8.5, false, .3);
-                    climber.setPosition(Keys.CLIMBER_DUMP);
-                    //Thread.sleep(100);
-                    sleep(1200);
-                    adjustAndPressLeft();
-                    //park
-                    //parkFromLeftSide();
+                    moveStraight(20, true, .3);
+                    gyroTurn(-60, false);
                 }
             }
             else {
                 if (beacon.whereIsRed().equals( Beacon.RIGHT)) {
-                    pushRightButton();
-                    climber.setPosition(Keys.CLIMBER_DUMP);
-                    sleep(1200);
-                    //park
-                    //parkfromRightSide();
+                    gyroTurn(30, false);
                 } else if (beacon.whereIsRed().equals( Beacon.LEFT)) {
-                    telemetry.addData("beacon", 4);
-                    moveStraight(8.5, false, .3);
-                    climber.setPosition(Keys.CLIMBER_DUMP);
-                    Thread.sleep(1200);
-                    adjustAndPressLeft();
-                    //park
-                   //parkFromLeftSide();
-
+                    moveStraight(20, true, .3);
+                    gyroTurn(-60, false);
                 }
             }
         }
-        else {
-            //couldn't find. just dump climber
-            moveStraight(10, false, .3);
-            climber.setPosition(Keys.CLIMBER_DUMP);
-            sleep(1200);
-            //parkfromRightSide();
-
-        }
-
-
     }
 
     private void parkFromLeftSide() {
@@ -373,7 +346,7 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         fl.setPower(direction*power);
         bl.setPower(direction*power);
         br.setPower(direction * power);
-        //collector.setPower(-.5);
+        collector.setPower(-.5);
 
     }
     public void rest() {

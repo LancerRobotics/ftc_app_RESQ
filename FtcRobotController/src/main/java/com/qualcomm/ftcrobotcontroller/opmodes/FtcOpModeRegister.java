@@ -31,6 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Collision;
+import com.qualcomm.ftcrobotcontroller.opmodes.navX.navXCollisionDetectionOp;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMainFromClosePos;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMainFromFarPos;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueParkingZoneOnlyFromClosePos;
@@ -75,5 +76,6 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Autonomous Red Parking Zone Only Close Pos", AutonomousRedParkingZoneOnlyFromClosePos.class);
     manager.register("Collision", Collision.class);
     manager.register("Judges Code", JudgesSupers.class);
+    manager.register("navX Collision Example", navXCollisionDetectionOp.class);
   }
 }
