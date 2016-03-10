@@ -29,7 +29,7 @@ public class Vision {
     public static final int MIN_NEEDED_TO_BE_AN_EDGE = 15;
     public static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
     public static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
-    public static final int MIN_RADIUS_LENGTH = 4;
+    public static final int MIN_RADIUS_LENGTH = 7;
     public static final int MAX_RADIUS_LENGTH = 13;
 
 
