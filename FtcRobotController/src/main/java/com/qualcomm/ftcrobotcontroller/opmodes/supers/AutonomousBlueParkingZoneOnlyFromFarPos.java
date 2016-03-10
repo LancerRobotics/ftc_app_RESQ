@@ -136,21 +136,24 @@ public class AutonomousBlueParkingZoneOnlyFromFarPos extends LinearOpMode {
             //accelerate 15% of time
             //coast 25% of time
             //decelerate 60% of time
-            int firstSectionTime = (int) Math.round(.1 * totalTicks);
-            int secondSectionTime = (int) (Math.round((.1 + .25) * totalTicks));
+            int firstSectionTime = (int) Math.round(.05 * totalTicks);
+            int secondSectionTime = (int) (Math.round((.05+ .05) * totalTicks)); //35
+            int thirdSectionTime = (int) (Math.round((.5) * totalTicks)); //35
             //rest will just be 100%
             double power;
             if (currentTick < firstSectionTime) {
 
-                power = .3 * Math.cos((currentTick) * Math.PI / totalTicks + Math.PI) + .4;
-
-                power += .1;
+                power = .33;
                 //first quarter (period = 2pi) of sin function is only reaching altitude
 
             } else if (currentTick < secondSectionTime) {
-                power = .8;
+                power = .66;
 
-            } else {
+            }
+            else if (currentTick < thirdSectionTime) {
+                power = .86;
+
+            }else {
                 // between [40%,100%]
                 //decrease time
                 int ticksLeft = (int) Math.round(currentTick - (totalTicks * .35));
@@ -163,7 +166,6 @@ public class AutonomousBlueParkingZoneOnlyFromFarPos extends LinearOpMode {
         }
         rest();
     }
-
     public void setMotorPowerUniform(double power, boolean backwards) {
         int direction = 1;
         if (backwards) {

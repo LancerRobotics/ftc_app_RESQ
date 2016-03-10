@@ -30,8 +30,8 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
-import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Collision;
-import com.qualcomm.ftcrobotcontroller.opmodes.navX.navXCollisionDetectionOp;
+import com.qualcomm.ftcrobotcontroller.opmodes.deprecated.Collision;
+import com.qualcomm.ftcrobotcontroller.opmodes.deprecated.Jarvis;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMainFromClosePos;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMainFromFarPos;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueParkingZoneOnlyFromClosePos;
@@ -74,8 +74,9 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Autonomous Blue Parking Zone Only Close Pos", AutonomousBlueParkingZoneOnlyFromClosePos.class);
     manager.register("Autonomous Red Parking Zone Only Far Pos", AutonomousRedParkingZoneOnlyFromFarPos.class);
     manager.register("Autonomous Red Parking Zone Only Close Pos", AutonomousRedParkingZoneOnlyFromClosePos.class);
+    manager.register("Jarvis",Jarvis.class);
     manager.register("Collision", Collision.class);
     manager.register("Judges Code", JudgesSupers.class);
-    manager.register("navX Collision Example", navXCollisionDetectionOp.class);
+    manager.register("navX Collision Example", com.qualcomm.ftcrobotcontroller.opmodes.sample.navXCollisionDetectionOp.class);
   }
 }

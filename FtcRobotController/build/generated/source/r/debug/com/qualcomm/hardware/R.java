@@ -19,7 +19,14 @@ public final class R {
 		public static final int white = 0x7f08000a;
 	}
 	public static final class string {
-		public static final int app_name = 0x7f090009;
+		public static final int app_name = 0x7f090014;
+		public static final int defaultOpModeName = 0x7f090023;
+		public static final int moduleDisplayNameCDIM = 0x7f09004f;
+		public static final int moduleDisplayNameLegacyModule = 0x7f090050;
+		public static final int moduleDisplayNameMotorController = 0x7f090051;
+		public static final int moduleDisplayNameServoController = 0x7f090052;
+		public static final int warningProblemCommunicatingWithUSBDevice = 0x7f090080;
+		public static final int warningUnableToOpen = 0x7f090081;
 	}
 	public static final class style {
 		public static final int AppBaseTheme = 0x7f060000;

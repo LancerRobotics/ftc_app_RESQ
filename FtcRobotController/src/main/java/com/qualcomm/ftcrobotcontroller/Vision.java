@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.qualcomm.ftcrobotcontroller.opmodes.depreciated.PostNNTeleOp;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,7 +29,7 @@ public class Vision {
     public static final int MIN_NEEDED_TO_BE_AN_EDGE = 15;
     public static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
     public static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
-    public static final int MIN_RADIUS_LENGTH = 7;
+    public static final int MIN_RADIUS_LENGTH = 4;
     public static final int MAX_RADIUS_LENGTH = 13;
 
 
@@ -197,6 +196,7 @@ public class Vision {
             return beacon;
 
         }
+
         Log.e("listOfLabelsInPicture",listOfLabelsInPicture.toString());
         XYCoor[] myGuienaPigs = new XYCoor[2];
         for (int i = 0; i <listOfLabelsInPicture.size();i++) {
@@ -713,7 +713,92 @@ public class Vision {
         }
         return circies;
     }
+    public static Bitmap findAndIsolateBeaconButtonsOuput (Bitmap circles, ArrayList<XYCoor> centersOfCircles, ArrayList<Integer> labelsInSameOrderAsCircles, Context context) {
+        Log.e("centerOfCircles",centersOfCircles.toString());
+        if (centersOfCircles.size()<2) {
+            Log.e("less than two","making educated guess");
+            //assuming the right beacon button was captured
+            return circles;
+        }
+        if (centersOfCircles.size()==2) {
+            //check to make sure the two x values are equal
+            Log.e("centers = 2",Math.abs(centersOfCircles.get(0).getY()-centersOfCircles.get(1).getY())+"");
+            if (Math.abs(centersOfCircles.get(0).getY()-centersOfCircles.get(1).getY())<= THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS) {
+                //check y's. the x's will have a huge diff. but the y placement should be about the same
+                Log.e("returning original","yay");
+                return circles;
+                //you already had the two
+            }
+            else {
+                Log.e("returning null","centers didnt match");
+                Bitmap empty= Bitmap.createBitmap(circles.getWidth(), circles.getHeight(), Bitmap.Config.ARGB_8888);
+                empty = makeEmpty(empty);
+                return empty;
+                //else those two werent the buttons, so send empty
+            }
+        }
+        else {
+            Log.e("more than 2","running center check");
+            //more than 2. check to see if any two y's are equal
+            int[][] numberOfMatchesPerCircle = new int[centersOfCircles.size()][centersOfCircles.size()];
+            ArrayList<XYCoor> pairsOfCircles = new ArrayList<XYCoor>();
+            //we can use XYCoor to represnt the pair
+            for (int i =0; i <centersOfCircles.size()-1;i++) {
+                for (int j =i+1;j<centersOfCircles.size();j++) {
+                    //compare i and j y values. note the number of matches
+                    if (Math.abs(centersOfCircles.get(i).getY()-centersOfCircles.get(j).getY())<=THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS) {
+                        numberOfMatchesPerCircle[i][j]++;
+                    }
+                }
+            }
+            //k so now we've got that half triangle adjacency matrix
+            int[] sumOfRows = new int[centersOfCircles.size()];
+            for (int i =0; i <centersOfCircles.size();i++) {
+                int sumOfI = 0;
+                for (int j =0; j<centersOfCircles.size();j++) {
+                    sumOfI+=numberOfMatchesPerCircle[i][j];
+                }
+                sumOfRows[i]=sumOfI;
+            }
+            //now check to see which ones have a sum of 1. then check the one
+            for (int i =0; i<centersOfCircles.size();i++) {
 
+                if (sumOfRows[i]==1) {
+                    //check the sum of Column associated with that match
+                    int matchOfI = findPair (numberOfMatchesPerCircle,i);
+                    //now check for sum
+                    int sumOfMatchPair = sumOfPairColumn(matchOfI, numberOfMatchesPerCircle);
+                    if (sumOfMatchPair==1) {
+                        //then we found the pair
+                        Log.e("found pair!","circle one label: "+labelsInSameOrderAsCircles.get(i)+"circle two label:"+labelsInSameOrderAsCircles.get(matchOfI));
+                        pairsOfCircles.add(new XYCoor(labelsInSameOrderAsCircles.get(i),labelsInSameOrderAsCircles.get(matchOfI)));
+                        Log.e("pair of cirlces",pairsOfCircles.toString());
+                    }
+                    //implied else, didn't work out, don't save
+                }
+            }
+            //remove everything from the picture but the paired circles
+            for (int i =0; i <centersOfCircles.size();i++) {
+                int label = labelsInSameOrderAsCircles.get(i);
+                if (!ArrayListOfXYCoorsIncludes(pairsOfCircles,label)) {
+                    Log.e("removed a label","not a pair: "+label);
+                    circles = removeLabel(circles, label);
+                }
+            }
+            if (pairsOfCircles.size()==1) {
+                //awesomeee my job is easy
+                Log.e("only one pair left","good! returning now!");
+                savePictureOuput(circles,context);
+                return circles;
+            }
+            else {
+                //TODO find the best fit ie. what is the usual button size, radius size
+                //now u have to rule out circles :/
+
+                return circles;
+            }
+        }
+    }
     public static Bitmap findAndIsolateBeaconButtons (Bitmap circles, ArrayList<XYCoor> centersOfCircles, ArrayList<Integer> labelsInSameOrderAsCircles) {
         Log.e("centerOfCircles",centersOfCircles.toString());
         if (centersOfCircles.size()<2) {
@@ -783,12 +868,13 @@ public class Vision {
                 int label = labelsInSameOrderAsCircles.get(i);
                 if (!ArrayListOfXYCoorsIncludes(pairsOfCircles,label)) {
                     Log.e("removed a label","not a pair: "+label);
-                    removeLabel(circles, label);
+                    circles = removeLabel(circles, label);
                 }
             }
             if (pairsOfCircles.size()==1) {
                 //awesomeee my job is easy
                 Log.e("only one pair left","good! returning now!");
+                //TODO HERE
                 return circles;
             }
             else {
@@ -838,233 +924,7 @@ public class Vision {
         return -1;
     }
     
-    //DEPRECATED WE DO NOT USE THIS METHOD ANyMORE
-    //these values are all based off of the color wheel
-    public static String findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(Bitmap circies) {
-        //find the avg hue for right side, find avg hue for left side
-        //compare
-        //blue hues tend to be unvariably 180, so like 170 - 190
-        //red hues tend to be pink or purple, so somehwere around 295 higher (inaccurate from our testing). but, they can also be very low numbereed hued reds so like 15
-        //so basically we can say that blues will be less than reds, since the red comes out as pink
-        int xMidPoint = circies.getWidth() / 2;
-        double avgHueLeft = 0;
-        int pixelCounter = 0;
-        for (int i = 0; i < xMidPoint; i++) {
-            for (int j = 0; j < circies.getHeight(); j++) {
-                int pixel = circies.getPixel(i, j);
-                //pixel is in rgb value. let's break this into hsv values
-                // hsv[0] is Hue [0 .. 360)
-                // hsv[1] is Saturation [0...1]
-                // hsv[2] is Value [0...1]
-                pixelCounter++;
-                float[] hsv = new float[3];
-                Color.RGBToHSV(Color.red(pixel),Color.green(pixel),Color.blue(pixel),hsv);
-                avgHueLeft += hsv[0];
-            }
-        }
-        //done getting left side
-        avgHueLeft = avgHueLeft / pixelCounter;
-        //let's do for right side
-        double avgHueRight = 0;
-        pixelCounter = 0;
-        for (int i = circies.getWidth() - 1; i > xMidPoint; i--) {
-            for (int j = 0; j < circies.getHeight(); j++) {
-                int pixel = circies.getPixel(i, j);
-                //pixel is in rgb value. let's break this into hsv values
-                // hsv[0] is Hue [0 .. 360)
-                // hsv[1] is Saturation [0...1]
-                // hsv[2] is Value [0...1]
-                pixelCounter++;
-                float[] hsv = new float[3];
-                Color.colorToHSV(pixel, hsv);
-                avgHueRight += hsv[0];
-            }
-        }
-        //done getting right side
-        //compare and return
-        String returnThis = "avgHueLeft:" + avgHueLeft + "avgHueRight:" + avgHueRight;
-        if (isRedHue(avgHueLeft)) {
-            //left was red
-            returnThis += "left=red";
-            return returnThis;
-        } else if (isBlueHue(avgHueLeft)) {
-            returnThis += "left=blue";
-            return returnThis;
-        } else {
-            returnThis += "left=unknown";
-        }
-        //if you're here, it means we're unknown
-        //so let's check the right side
-        if (isRedHue(avgHueRight)) {
-            //right was red
-            returnThis += "right=red";
-            return returnThis;
-        } else if (isBlueHue(avgHueRight)) {
-            returnThis += "right=blue";
-            return returnThis;
-        } else {
-            returnThis += "right=unknown";
-            //well that's not good
 
-        }
-        return returnThis;
-
-    }
- //DEPRECATED WE DO NOT USE THIS METHOD ANyMORE
-    public static String findViaWhiteOutNotWorthyPixelsAndThenFindANonWhiteFromLeftAndSeeColor(Bitmap circies, Context context) {
-        // a drop of 150 in all rgb (or at least two) means that relatively, the pixel is black, relative to all the other pixels
-        //scan horizontally downward
-        //here's how we'll represnt a dot
-        //represent it via an arraylist of pixels
-        //keep on esarching vertically down until you don't hit a black dot anymore
-        //then go from oringial found. go left and down until no more black
-        //then go from origninal and go right and down
-        //done
-        //here's how we'll decide if the surrounding is black: using luminance formula
-        //0.2126*R + 0.7152*G + 0.0722*B
-        //where 0 is black and 255 is white
-        //we'll do less than 90 on luminance scale is considered a black
-        //we also need an array list with pixels we already defined as black, so as to not create duplicate black dots with different original dot points
-        //ArrayList checkedBlackPixels = new ArrayList<XYCoor>();
-        //TODO edit description because it's kinda different now
-        //change image to mutable
-        circies = circies.copy(Bitmap.Config.ARGB_8888, true);
-        String returnThis = "";
-        for (int i = 0; i < circies.getHeight(); i++) {
-            int numberOfPixelsThatAreNoteWorthy = 0;
-            //noteworthy pixels are those within the hue range of blue and pink
-            //so around 165 - 190 for blues, and from 0-15 for reds and 295 up for reds
-            for (int j = 0; j < circies.getWidth(); j++) {
-                //where j is x and i is y, 0,0 is top left corner
-                int pixel = circies.getPixel(j, i);
-                //pixel is in rgb value. let's break this into hsv values
-                // hsv[0] is Hue [0 .. 360)
-                // hsv[1] is Saturation [0...1]
-                // hsv[2] is Value [0...1]
-                float[] hsv = new float[3];
-                Color.colorToHSV(pixel, hsv);
-                //check hue to see if noteworthy
-                if ((1 <= hsv[0] && hsv[0] <= 15) || hsv[0] > 295 || (170 < hsv[0] && hsv[0] < 190)) {
-                    //then it is either red or blue, and is noteworthy
-                    //note a complete white pixel has hue values of 0, hence the greater than or equal to 1
-                    numberOfPixelsThatAreNoteWorthy++;
-                }
-            }
-            //from our testing, about 25% of the row is taken up by the beacon
-            //so noteworthiness must cross the 25% threshold
-            double percentNoteworthy = (double) (numberOfPixelsThatAreNoteWorthy) / (double) (circies.getWidth());
-            Log.e("numPixNote", String.valueOf(numberOfPixelsThatAreNoteWorthy));
-            Log.e("total", String.valueOf(circies.getWidth()));
-            Log.e("percentNoteWorthy", String.valueOf(percentNoteworthy));
-            if (percentNoteworthy < .25) {
-                //delete this row
-                Log.e("delete!", "Deleting...");
-                /*for (int x = 0; x<image.getWidth();x++) {
-                    if (x>=image.getWidth()) {
-                        x=image.getWidth()-1;
-                    }
-                    image.setPixel(x,i,Color.argb(255,255,255,255));
-                    //set the pixel to white
-                    //note a complete white pixel has hue value of 0
-                }*/
-            }
-        }
-        //ok so now you have a corrected image.
-        //save the image for logging and debugging
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + " EditedWhiteRows";
-        File pictureFile = getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, timeStamp, context, false);
-        if (pictureFile == null) {
-            Log.d("ERROR", "Error creating media file, check storage permissions: "
-            );
-        }
-        try {
-            FileOutputStream fos = new FileOutputStream(pictureFile);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            circies.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            fos.write(byteArray);
-            fos.close();
-
-
-        } catch (FileNotFoundException e) {
-            Log.d("ERROR", "File not found: " + e.getMessage());
-        } catch (IOException e) {
-            Log.d("ERROR", "Error accessing file: " + e.getMessage());
-        }
-        //ok saved
-        returnThis = "pathRows:" + "IMG_" + timeStamp + "EditedWhiteRows" + ".jpg";
-
-        //so now all we have left is the bacon and a bunch of white lines, horizontally
-        //do the same vertically now, to eliminate all of the excess stuff
-        for (int i = 0; i < circies.getWidth(); i++) {
-            int numberOfWorthy = 0;
-            for (int j = 0; j < circies.getHeight(); j++) {
-                int pixel = circies.getPixel(i, j);
-                float[] hsv = new float[3];
-                Color.colorToHSV(pixel, hsv);
-                if ((1 <= hsv[0] && hsv[0] <= 15) || hsv[0] > 295 || (170 < hsv[0] && hsv[0] < 190)) {
-                    //then it is either red or blue, and is noteworthy
-                    //note a complete white pixel has hue values of 0, hence the greater than or equal to 1
-                    numberOfWorthy++;
-                }
-            }
-            double percentNoteworthy = numberOfWorthy / circies.getWidth();
-            if (percentNoteworthy < .25) {
-                //delete this row
-                for (int x = 0; x < circies.getHeight(); x++) {
-                    circies.setPixel(i, x, Color.argb(255, 255, 255, 255));
-                    //set the pixel to white
-                    //note a complete white pixel has hue value of 0
-                }
-            }
-        }
-        String timeStamp2 = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + " EditedWhiteAll";
-        File pictureFile2 = getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE, timeStamp, context, false);
-        if (pictureFile == null) {
-            Log.d("ERROR", "Error creating media file, check storage permissions: "
-            );
-        }
-        try {
-            FileOutputStream fos = new FileOutputStream(pictureFile);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            circies.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            fos.write(byteArray);
-            fos.close();
-
-
-        } catch (FileNotFoundException e) {
-            Log.d("ERROR", "File not found: " + e.getMessage());
-        } catch (IOException e) {
-            Log.d("ERROR", "Error accessing file: " + e.getMessage());
-        }
-        returnThis = "pathAll:" + "IMG_" + timeStamp + "EditedWhiteAll" + ".jpg";
-
-        //now all we have to do is see what the first hue value from the left is
-        for (int i = 0; i < circies.getWidth(); i++) {
-            for (int j = 0; j < circies.getHeight(); j++) {
-                //go down and move to the right (start from left) until you hit a non white
-                int pixel = circies.getPixel(i, j);
-                float[] hsv = new float[3];
-                Color.colorToHSV(pixel, hsv);
-                if (hsv[0] != 0) {
-                    //because r=255,g=255,b=255, means hue = 0; (which is white)
-                    if (isBlue(hsv[0], hsv[1], hsv[2])) {
-                        returnThis += "firstColorFound:blue XYCoor:" + i + "," + j;
-                        return returnThis;
-                    } else if (isRed(hsv[0], hsv[2])) {
-                        returnThis += "firstColorFound:red XYCoor:" + i + "," + j;
-                        return returnThis;
-                    } else {
-                        //uhoh, something was wrong
-                        returnThis += "error!";
-                    }
-                }
-            }
-        }
-
-        return returnThis;
-    }
     public static String savePictureOuput (Bitmap bitmap, Context context) {
         return savePicture(bitmap, context, "OUTPUT", true);
     }
@@ -1092,7 +952,7 @@ public class Vision {
         return pictureFile.getName();
     }
 
-    private static File getOutputMediaFile(int type, String timeStamp, Context context, boolean debug) {
+    public static File getOutputMediaFile(int type, String timeStamp, Context context, boolean debug) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 

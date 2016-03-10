@@ -19,7 +19,7 @@ public final class R {
 		public static final int white = 0x7f08000a;
 	}
 	public static final class string {
-		public static final int app_name = 0x7f090009;
+		public static final int app_name = 0x7f090014;
 	}
 	public static final class style {
 		public static final int AppBaseTheme = 0x7f060000;

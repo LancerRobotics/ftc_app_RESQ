@@ -41,6 +41,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
+import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -66,8 +67,6 @@ import com.qualcomm.ftccommon.LaunchActivityConstantsList;
 import com.qualcomm.ftccommon.Restarter;
 import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.ftcrobotcontroller.opmodes.FtcOpModeRegister;
-import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.CameraTestOp;
-import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.TakeAPicture;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousBlueStates;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousRedStates;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMainFromClosePos;
@@ -85,6 +84,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class FtcRobotControllerActivity extends Activity {
 
@@ -117,6 +118,63 @@ public class FtcRobotControllerActivity extends Activity {
   protected FtcRobotControllerService controllerService;
 
   protected FtcEventLoop eventLoop;
+  protected Queue<UsbDevice> receivedUsbAttachmentNotifications;
+
+  protected class RobotRestarter implements Restarter {
+
+    public void requestRestart() {
+      requestRobotRestart();
+    }
+
+  }
+
+  protected ServiceConnection connection = new ServiceConnection() {
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+      FtcRobotControllerBinder binder = (FtcRobotControllerBinder) service;
+      onServiceBind(binder.getService());
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+      controllerService = null;
+    }
+  };
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+
+    if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(intent.getAction())) {
+      UsbDevice usbDevice = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+      if (usbDevice != null) {  // paranoia
+        // We might get attachment notifications before the event loop is set up, so
+        // we hold on to them and pass them along only when we're good and ready.
+        if (receivedUsbAttachmentNotifications != null) { // *total* paranoia
+          receivedUsbAttachmentNotifications.add(usbDevice);
+          passReceivedUsbAttachmentsToEventLoop();
+        }
+      }
+    }
+  }
+
+  protected void passReceivedUsbAttachmentsToEventLoop() {
+    if (this.eventLoop != null) {
+      for (;;) {
+        UsbDevice usbDevice = receivedUsbAttachmentNotifications.poll();
+        if (usbDevice == null)
+          break;
+        this.eventLoop.onUsbDeviceAttached(usbDevice);
+      }
+    }
+    else {
+      // Paranoia: we don't want the pending list to grow without bound when we don't
+      // (yet) have an event loop
+      while (receivedUsbAttachmentNotifications.size() > 100) {
+        receivedUsbAttachmentNotifications.poll();
+      }
+    }
+  }
   public static Camera mCamera;
   private static CameraPreview mPreview;
   public void initImageTakenPreview(final Bitmap image) {
@@ -129,7 +187,7 @@ public class FtcRobotControllerActivity extends Activity {
       }
     });
   }
-  public void initCameraPreview(final Camera camera, final CameraTestOp context) {
+  public void initCameraPreview(final Camera camera, final com.qualcomm.ftcrobotcontroller.opmodes.deprecated.CameraTestOp context) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
@@ -140,7 +198,7 @@ public class FtcRobotControllerActivity extends Activity {
     });
   }
 
-  public void initCameraPreview(final Camera camera, final TakeAPicture context) {
+  public void initCameraPreview(final Camera camera, final com.qualcomm.ftcrobotcontroller.opmodes.deprecated.TakeAPicture context) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
@@ -216,39 +274,12 @@ public class FtcRobotControllerActivity extends Activity {
     });
   }
 
-  protected class RobotRestarter implements Restarter {
-
-    public void requestRestart() {
-      requestRobotRestart();
-    }
-
-  }
-
-  protected ServiceConnection connection = new ServiceConnection() {
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-      FtcRobotControllerBinder binder = (FtcRobotControllerBinder) service;
-      onServiceBind(binder.getService());
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-      controllerService = null;
-    }
-  };
-
-  @Override
-  protected void onNewIntent(Intent intent) {
-    super.onNewIntent(intent);
-    if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(intent.getAction())) {
-      // a new USB device has been attached
-      DbgLog.msg("USB Device attached; app restart may be needed");
-    }
-  }
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    receivedUsbAttachmentNotifications = new ConcurrentLinkedQueue<UsbDevice>();
+    eventLoop = null;
 
     setContentView(R.layout.activity_ftc_controller);
 
@@ -278,7 +309,7 @@ public class FtcRobotControllerActivity extends Activity {
     updateUI = new UpdateUI(this, dimmer);
     updateUI.setRestarter(restarter);
     updateUI.setTextViews(textWifiDirectStatus, textRobotStatus,
-            textGamepad, textOpMode, textErrorMessage, textDeviceName);
+        textGamepad, textOpMode, textErrorMessage, textDeviceName);
     callback = updateUI.new Callback();
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -287,7 +318,7 @@ public class FtcRobotControllerActivity extends Activity {
     WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
     wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "");
 
-
+    hittingMenuButtonBrightensScreen();
     mCamera = Camera.open();
     Camera.Parameters params = mCamera.getParameters(); // mCamera is a Camera object
     List<Camera.Size> sizes = params.getSupportedPreviewSizes();
@@ -305,9 +336,6 @@ public class FtcRobotControllerActivity extends Activity {
     //params.setPictureSize(972,1476);
     mCamera.setParameters(params);
     mCamera.setDisplayOrientation(90);
-
-
-    hittingMenuButtonBrightensScreen();
 
     if (USE_DEVICE_EMULATION) { HardwareFactory.enableDeviceEmulation(); }
   }
@@ -467,12 +495,14 @@ public class FtcRobotControllerActivity extends Activity {
 
     controllerService.setCallback(callback);
     controllerService.setupRobot(eventLoop);
+
+    passReceivedUsbAttachmentsToEventLoop();
   }
 
   private FileInputStream fileSetup() {
 
     final String filename = Utility.CONFIG_FILES_DIR
-            + utility.getFilenameFromPrefs(R.string.pref_hardware_config_filename, Utility.NO_FILE) + Utility.FILE_EXT;
+        + utility.getFilenameFromPrefs(R.string.pref_hardware_config_filename, Utility.NO_FILE) + Utility.FILE_EXT;
 
     FileInputStream fis;
     try {
