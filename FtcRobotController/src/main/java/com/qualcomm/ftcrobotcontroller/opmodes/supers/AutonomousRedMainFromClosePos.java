@@ -119,8 +119,9 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
             Vision.savePicture(image,hardwareMap.appContext,"SHRUNKEN", false);
             telemetry.addData("bitmap shrunk","shrunk");
         }
-        image= Vision.rotate(image);
-        Vision.savePicture(image,hardwareMap.appContext,"ROTATED",false);
+        //does not need rotation for a portrait Moto G
+        //image= Vision.rotate(image);
+        //Vision.savePicture(image,hardwareMap.appContext,"ROTATED",false);
         telemetry.addData("bitmap rotate","rotated");
 
         // deprecated - String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
