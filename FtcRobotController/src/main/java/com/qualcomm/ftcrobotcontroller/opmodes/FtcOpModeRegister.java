@@ -71,9 +71,9 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Autonomous Red Main Far Pos", AutonomousRedMainFromFarPos.class);
     manager.register("Autonomous Red Main Close Pos", AutonomousRedMainFromClosePos.class);
     manager.register("Autonomous Blue Parking Zone Only Far Pos", AutonomousBlueParkingZoneOnlyFromFarPos.class);
-    manager.register("Autonomous Blue Parking Zone Only Close Pos", AutonomousBlueParkingZoneOnlyFromClosePos.class);
-    manager.register("Autonomous Red Parking Zone Only Far Pos", AutonomousRedParkingZoneOnlyFromFarPos.class);
-    manager.register("Autonomous Red Parking Zone Only Close Pos", AutonomousRedParkingZoneOnlyFromClosePos.class);
+    manager.register("Autonomous Blue Parking Zone Only Close Pos DONE", AutonomousBlueParkingZoneOnlyFromClosePos.class);
+    manager.register("Autonomous Red Parking Zone Only Far Pos DONE", AutonomousRedParkingZoneOnlyFromFarPos.class);
+    manager.register("Autonomous Red Parking Zone Only Close Pos DONE", AutonomousRedParkingZoneOnlyFromClosePos.class);
     manager.register("Jarvis",Jarvis.class);
     manager.register("Collision", Collision.class);
     manager.register("Judges Code", JudgesSupers.class);

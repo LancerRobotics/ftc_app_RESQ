@@ -85,6 +85,12 @@ public class AutonomousBlueMainFromClosePos extends LinearOpMode {
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
+        moveStraight(9, false, .3);
+        climber.setPosition(Keys.CLIMBER_DUMP);
+        sleep(1200);
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(9, true, .3);
+        rest();
 
 
         //telemetry.addData("sonar",readSonar(sonarAbovePhone));

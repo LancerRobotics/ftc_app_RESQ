@@ -64,7 +64,7 @@ public class AutonomousBlueParkingZoneOnlyFromFarPos extends LinearOpMode {
         //todo ADD NAVIGATION
         moveAlteredSin(71, false);
         gyroTurn(60, false);
-        moveAlteredSin(29, false);
+        moveAlteredSin(23, false);
         telemetry.addData("Stop Autonomous Here?", "YES");
     }
 

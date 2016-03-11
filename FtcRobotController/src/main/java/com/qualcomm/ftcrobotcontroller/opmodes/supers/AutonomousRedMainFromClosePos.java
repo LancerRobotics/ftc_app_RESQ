@@ -84,6 +84,11 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         rest();
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
+        moveStraight(9, false, .3);
+        climber.setPosition(Keys.CLIMBER_DUMP);
+        sleep(1200);
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(9, true, .3);
         rest();
         sleep(100);
 
@@ -196,7 +201,15 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
                 if (beacon.getRight()== Beacon.COLOR_RED) {
                     telemetry.addData("beacon", 1);
                     //this is what i want, since im on red team. hit right side
-                    gyroTurn(30, false);
+                    setMotorPowerUniform(.86, false);
+                    sleep(100);
+                    while(!navx_device.isMoving()) {
+                        sleep(1);
+                    }
+                    rest();
+                    setMotorPowerUniform(.86, true);
+                    sleep(200);
+                    rest();
                 }
                 else {
                     moveStraight(20, true, .3);

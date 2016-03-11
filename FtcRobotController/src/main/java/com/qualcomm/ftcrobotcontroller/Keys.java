@@ -72,12 +72,12 @@ public class Keys {
     public static final double BUTTON_PUSHER_PUSH = .25;
 
     //Right Trigger Values
-    public static final double RIGHT_TRIGGER_INIT = .05;
-    public static final double RIGHT_TRIGGER_TRIGGER = 0.47;
+    public static final double RIGHT_TRIGGER_INIT = .10;
+    public static final double RIGHT_TRIGGER_TRIGGER = 0.50;
 
     //Left Trigger Values
-    public static final double LEFT_TRIGGER_INIT = .95;
-    public static final double LEFT_TRIGGER_TRIGGER = 0.53;
+    public static final double LEFT_TRIGGER_INIT = .90;
+    public static final double LEFT_TRIGGER_TRIGGER = 0.50;
 
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
@@ -99,11 +99,11 @@ public class Keys {
 
     //Clamp Left values, TODO get real values
     public static final double CLAMP_LEFT_INIT = 1;
-    public static final double CLAMP_LEFT_DOWN = .5;
+    public static final double CLAMP_LEFT_DOWN = .45;
 
     //Clamp Right values,
     public static final double CLAMP_RIGHT_INIT = .25;
-    public static final double CLAMP_RIGHT_DOWN = .75;
+    public static final double CLAMP_RIGHT_DOWN = .80;
 
     //Hopper Left TODO confirm with real servos
     public static final double HL_STORE = 1;

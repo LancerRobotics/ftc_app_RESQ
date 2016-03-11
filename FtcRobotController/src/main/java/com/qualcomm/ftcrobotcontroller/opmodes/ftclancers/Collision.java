@@ -36,7 +36,7 @@ public class Collision extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         waitForStart();
         setMotorPowerUniform(.66, false);
-        sleep(500);
+        sleep(750);
         while(!navx_device.isMoving()) {
             telemetry.addData("hitBeaconX", hitBeaconX());
             telemetry.addData("hitBeaconZ", hitBeaconZ());

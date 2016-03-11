@@ -77,17 +77,17 @@ public class AutonomousBlueMainFromFarPos extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         //todo ADD NAVIGATION
-        moveAlteredSin(85, false);
+        moveAlteredSin(81.5, false);
         sleep(500);
         gyroTurn(45, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         sleep(1200);
-        moveStraight(9.5, false, .3);
+        moveStraight(9, false, .3);
         climber.setPosition(Keys.CLIMBER_DUMP);
         sleep(1200);
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(9.5, true, .3);
+        moveStraight(9, true, .3);
         //telemetry.addData("sonar",readSonar(sonarAbovePhone));
 
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
@@ -192,16 +192,20 @@ public class AutonomousBlueMainFromFarPos extends LinearOpMode {
                 if (beacon.getRight()== Beacon.COLOR_BLUE) {
                     telemetry.addData("beacon", 1);
                     //this is what i want, since im on red team. hit right side
-                    gyroTurn(30, false);
-                }
-                else {
                     moveStraight(20, true, .3);
                     gyroTurn(-60, false);
+                }
+                else {
+                    moveStraight(9.5, false, .66);
+                    rest();
+                    moveStraight(9.5, true, .66);
                 }
             }
             else {
                 if (beacon.whereIsBlue().equals( Beacon.RIGHT)) {
-                    gyroTurn(30, false);
+                    moveStraight(9.5, false, .66);
+                    rest();
+                    moveStraight(9.5, true, .66);
                 } else if (beacon.whereIsBlue().equals( Beacon.LEFT)) {
                     moveStraight(20, true, .3);
                     gyroTurn(-60, false);

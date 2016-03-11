@@ -82,6 +82,11 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         gyroTurn(-40, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
+        moveStraight(9, false, .3);
+        climber.setPosition(Keys.CLIMBER_DUMP);
+        sleep(1200);
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(9, true, .3);
 
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
         telemetry.addData("camera","initingcameraPreview");

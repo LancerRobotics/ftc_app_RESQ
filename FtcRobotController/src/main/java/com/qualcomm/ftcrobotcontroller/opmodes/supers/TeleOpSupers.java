@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.util.Range;
  * Created by AJ on 1/18/2016.
  */
 public class TeleOpSupers extends OpMode{
-    private AHRS navx_device;
     //AnalogInput limitLeft;
     AnalogInput limitRight;
     //Motors
@@ -83,15 +82,8 @@ public class TeleOpSupers extends OpMode{
         clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
         triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
         triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
-        navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
         //limitLeft = hardwareMap.analogInput.get(Keys.LIMIT_LEFT);
         limitRight = hardwareMap.analogInput.get(Keys.LIMIT_RIGHT);
-        while ( !calibration_complete ) {
-            calibration_complete = !navx_device.isCalibrating();
-            if (!calibration_complete) {
-                telemetry.addData("Start Teleop?", "No");
-            }
-        }
         telemetry.addData("Start Teleop?", "Yes");
     }
 
