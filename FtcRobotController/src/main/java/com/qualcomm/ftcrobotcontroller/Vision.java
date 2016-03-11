@@ -60,7 +60,7 @@ public class Vision {
     public static int RETURNCIRCLES_DATA_LABELSLIST = 2;
     public static int CHECKCOLORS_DATA_RED = 0;
     public static int CHECKCOLORS_DATA_BLUE = 1;
-    public static double THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS = 3;
+    public static double THRESHOLD_FOR_CENTERS_OF_TWO_BUTTONS = 5;
 
     public static Bitmap rotate (Bitmap image) {
         Matrix matrix = new Matrix();
