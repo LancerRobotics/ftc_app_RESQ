@@ -11,7 +11,7 @@ import android.util.Log;
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.io.File;e
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -270,7 +270,7 @@ public class Vision {
 
         return beacon;
     }
-    public static ArrayList<Object> convertGrayscaleToEdged(Bitmap grayscale, double edgeThresholdUsed) {
+    public static ArrayList<Object> convertGrayscaleToEdged(Bitmap grayscale, int edgeThresholdUsed) {
         //sort through image matrix pixxel by pixel
         //for each pixel, analyze each of the 8 pixels surrounding it
 
