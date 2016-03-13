@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller.opmodes.deprecated;
+package com.qualcomm.ftcrobotcontroller.opmodes.ftclancers;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -37,17 +37,12 @@ public class Collision extends LinearOpMode {
         waitForStart();
         setMotorPowerUniform(.66, false);
         sleep(750);
-        while(!navx_device.isMoving()) {
-            telemetry.addData("hitBeaconX", hitBeaconX());
-            telemetry.addData("hitBeaconZ", hitBeaconZ());
-            telemetry.addData("hitBeaconY", hitBeaconY());
-            telemetry.addData("X", navx_device.getWorldLinearAccelX());
-            telemetry.addData("Y", navx_device.getWorldLinearAccelY());
-            telemetry.addData("Z", navx_device.getWorldLinearAccelZ());
-            telemetry.addData("moving", navx_device.isMoving());
+        while(!hitBeaconX() && !hitBeaconY()) {
+            sleep(1);
         }
         rest();
     }
+
     public void setMotorPowerUniform(double power, boolean backwards) {
         int direction = 1;
         if (backwards) {
@@ -83,7 +78,7 @@ public class Collision extends LinearOpMode {
 
     public boolean hitBeaconX () {
         double speed = navx_device.getWorldLinearAccelX();
-        if(speed < 2) {
+        if(speed < 0.02) {
             return true;
         }
         else {
@@ -93,7 +88,7 @@ public class Collision extends LinearOpMode {
 
     public boolean hitBeaconZ () {
         double speed = navx_device.getWorldLinearAccelZ();
-        if(speed < 2) {
+        if(speed < 0.02) {
             return true;
         }
         else {
@@ -103,7 +98,7 @@ public class Collision extends LinearOpMode {
 
     public boolean hitBeaconY () {
         double speed = navx_device.getWorldLinearAccelY();
-        if(speed < 2) {
+        if(speed < 0.02) {
             return true;
         }
         else {
