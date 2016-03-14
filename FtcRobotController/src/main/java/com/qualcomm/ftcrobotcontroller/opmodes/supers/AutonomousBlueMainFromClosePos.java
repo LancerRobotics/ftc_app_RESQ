@@ -76,7 +76,7 @@ public class AutonomousBlueMainFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(18.5, false);
+        moveAlteredSin(16.5, false);
         gyroTurn(30, false);
         moveAlteredSin(34.25, false);
         gyroTurn(60, false);
@@ -85,11 +85,9 @@ public class AutonomousBlueMainFromClosePos extends LinearOpMode {
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
-        moveStraight(9, false, .3);
-        climber.setPosition(Keys.CLIMBER_DUMP);
+        dumpClimbers();
         sleep(1200);
-        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(9, true, .3);
+        returnToOrigPosAfterDumpOfClimbers();
         rest();
 
 
@@ -236,16 +234,6 @@ public class AutonomousBlueMainFromClosePos extends LinearOpMode {
                 }
             }
         }
-        else {
-            //couldn't find. just dump climber
-            moveStraight(10, false, .3);
-            climber.setPosition(Keys.CLIMBER_DUMP);
-            sleep(1200);
-            //parkfromRightSide();
-
-        }
-
-
     }
 
     private void parkFromLeftSide() {
@@ -301,6 +289,16 @@ public class AutonomousBlueMainFromClosePos extends LinearOpMode {
         rest();
         telemetry.addData("sonar","done");
         rest();
+    }
+
+    public void dumpClimbers() {
+        moveStraight(9.5, false, .3);
+        climber.setPosition(Keys.CLIMBER_DUMP);
+    }
+
+    public void returnToOrigPosAfterDumpOfClimbers() {
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(9, true, .3);
     }
 
     //returns sonar values in inches!!!

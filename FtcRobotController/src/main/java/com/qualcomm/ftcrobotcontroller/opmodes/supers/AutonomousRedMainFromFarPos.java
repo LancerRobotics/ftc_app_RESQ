@@ -77,16 +77,14 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         //todo ADD NAVIGATION
-        moveAlteredSin(105, false);
-        sleep(500);
+        moveAlteredSin(107, false);
         gyroTurn(-40, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
-        moveStraight(9, false, .3);
-        climber.setPosition(Keys.CLIMBER_DUMP);
+        dumpClimbers();
         sleep(1200);
-        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(9, true, .3);
+        returnToOrigPosAfterDumpOfClimbers();
+
 
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
         telemetry.addData("camera","initingcameraPreview");
@@ -239,6 +237,16 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         }
 
 
+    }
+
+    public void dumpClimbers() {
+        moveStraight(9.5, false, .3);
+        climber.setPosition(Keys.CLIMBER_DUMP);
+    }
+
+    public void returnToOrigPosAfterDumpOfClimbers() {
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(9, true, .3);
     }
 
     private void parkFromLeftSide() {

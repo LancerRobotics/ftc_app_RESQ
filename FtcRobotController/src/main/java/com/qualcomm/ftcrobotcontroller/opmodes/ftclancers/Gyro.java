@@ -213,10 +213,10 @@ public class Gyro extends LinearOpMode {
                             onTarget = true;
                         } else {
                             double motorPower = yawPIDResult.getOutput();
-                            if(yawPIDResult.getOutput() > .7 && leftYawPIDController.getSetpoint() - navx_device.getYaw() < 10) {
+                            if(yawPIDResult.getOutput() > .7 && leftYawPIDController.getSetpoint() - navx_device.getYaw() < 17.5) {
                                 motorPower = .7;
                             }
-                            else if (yawPIDResult .getOutput() < -.7 && leftYawPIDController.getSetpoint() - navx_device.getYaw() < 10) {
+                            else if (yawPIDResult .getOutput() < -.7 && leftYawPIDController.getSetpoint() - navx_device.getYaw() < 17.5) {
                                 motorPower = -.7;
                             }
                             turn(motorPower, right, motorPowerForwards);
