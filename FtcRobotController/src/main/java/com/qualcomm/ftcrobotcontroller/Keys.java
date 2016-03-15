@@ -72,12 +72,12 @@ public class Keys {
     public static final double BUTTON_PUSHER_PUSH = .25;
 
     //Right Trigger Values
-    public static final double RIGHT_TRIGGER_INIT = .10;
-    public static final double RIGHT_TRIGGER_TRIGGER = 0.50;
+    public static final double RIGHT_TRIGGER_INIT = .20;
+    public static final double RIGHT_TRIGGER_TRIGGER = 0.80;
 
     //Left Trigger Values
-    public static final double LEFT_TRIGGER_INIT = .90;
-    public static final double LEFT_TRIGGER_TRIGGER = 0.50;
+    public static final double LEFT_TRIGGER_INIT = .80;
+    public static final double LEFT_TRIGGER_TRIGGER = 0.20;
 
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;

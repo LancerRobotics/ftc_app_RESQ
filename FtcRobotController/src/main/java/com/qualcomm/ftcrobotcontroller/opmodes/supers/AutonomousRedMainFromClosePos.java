@@ -76,7 +76,7 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(29.5 , false);
+        moveAlteredSin(27, false);
         gyroTurn(-30, false);
         moveAlteredSin(35, false);
         gyroTurn(-60, false);
@@ -184,42 +184,26 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         ArrayList<Integer> labels = (ArrayList<Integer> )returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_LABELSLIST);
         Bitmap circlesAdjusted = Vision.findAndIsolateBeaconButtons(circles,centers, labels);
         int circlesFound = Vision.getNumberOfLabelsNotOrganized(circlesAdjusted);
-        telemetry.addData("circles adjusted",Vision.savePicture(circlesAdjusted,hardwareMap.appContext,"CIRCLES_ADJUSTED", false));
-        telemetry.addData("circles found",circlesFound);
+        telemetry.addData("circles adjusted", Vision.savePicture(circlesAdjusted, hardwareMap.appContext, "CIRCLES_ADJUSTED", false));
+        telemetry.addData("circles found", circlesFound);
         Beacon beacon = Vision.getBeacon(circlesAdjusted,contrastedImage);
-        telemetry.addData("beacon is",beacon);
-        moveStraight(9.5, false, .3);
-        climber.setPosition(Keys.CLIMBER_DUMP);
-        sleep(1200);
-        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(9.5, true, .3);
+        telemetry.addData("beacon is", beacon);
         if (!beacon.error()) {
             if (beacon.oneSideUnknown()) {
                 //assume this is the right side, assume left side got chopped off
                 if (beacon.getRight()== Beacon.COLOR_RED) {
-                    telemetry.addData("beacon", 1);
-                    //this is what i want, since im on red team. hit right side
-                    setMotorPowerUniform(.86, false);
-                    sleep(100);
-                    while(!navx_device.isMoving()) {
-                        sleep(1);
-                    }
-                    rest();
-                    setMotorPowerUniform(.86, true);
-                    sleep(200);
-                    rest();
+                    pushRightButton();
                 }
                 else {
-                    moveStraight(20, true, .3);
-                    gyroTurn(-60, false);
+                    adjustAndPressLeft();
                 }
             }
             else {
                 if (beacon.whereIsRed().equals( Beacon.RIGHT)) {
-                    gyroTurn(30, false);
+                    pushRightButton();
                 } else if (beacon.whereIsRed().equals( Beacon.LEFT)) {
-                    moveStraight(20, true, .3);
-                    gyroTurn(-60, false);
+                    telemetry.addData("beacon", 4);
+                    adjustAndPressLeft();
                 }
             }
         }
@@ -232,17 +216,13 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
     }
 
     private void adjustAndPressLeft() {
-        moveStraight(4, true, .6);
-        gyroTurn(45, true);
-        //Thread.sleep(1000);
-        moveStraight(12.8, true, .4);
-        //Thread.sleep(1000);
-        gyroTurn(-45,false);
-        moveStraight(10,false,.3);
+        moveStraight(11, true, .6);
     }
 
     private void pushRightButton() {
-        moveStraight(9.7, false, .3);
+        adjustToThisDistance(24,sonarFoot);
+        gyroTurn(30, false);
+        moveStraight(15, true, .6);
     }
 
     public void parkFromRightSide () {

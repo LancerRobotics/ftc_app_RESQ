@@ -77,7 +77,7 @@ public class AutonomousBlueMainFromFarPos extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         //todo ADD NAVIGATION
-        moveAlteredSin(84.5, false);
+        moveAlteredSin(84 + Math.sqrt(2), false);
         gyroTurn(45, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
@@ -190,23 +190,23 @@ public class AutonomousBlueMainFromFarPos extends LinearOpMode {
                 if (beacon.getRight()== Beacon.COLOR_BLUE) {
                     telemetry.addData("beacon", 1);
                     //this is what i want, since im on red team. hit right side
-                    moveStraight(20, true, .3);
-                    gyroTurn(-60, false);
+                    pushRightButton();
                 }
                 else {
-                    moveStraight(9.5, false, .66);
-                    rest();
-                    moveStraight(9.5, true, .66);
+                    //the other side must be red
+                    //drop servo arm, then move forward
+                    telemetry.addData("beacon", 2);
+                    adjustAndPressLeft();
+                    //park
+                    //parkFromLeftSide();
                 }
             }
             else {
                 if (beacon.whereIsBlue().equals( Beacon.RIGHT)) {
-                    moveStraight(9.5, false, .66);
-                    rest();
-                    moveStraight(9.5, true, .66);
+                    pushRightButton();
                 } else if (beacon.whereIsBlue().equals( Beacon.LEFT)) {
-                    moveStraight(20, true, .3);
-                    gyroTurn(-60, false);
+                    telemetry.addData("beacon", 4);
+                    adjustAndPressLeft();
                 }
             }
         }
@@ -229,17 +229,13 @@ public class AutonomousBlueMainFromFarPos extends LinearOpMode {
     }
 
     private void adjustAndPressLeft() {
-        moveStraight(4, true, .6);
-        gyroTurn(45, true);
-        //Thread.sleep(1000);
-        moveStraight(12.8, true, .4);
-        //Thread.sleep(1000);
-        gyroTurn(-45,false);
-        moveStraight(10,false,.3);
+        moveStraight(11, true, .6);
     }
 
     private void pushRightButton() {
-        moveStraight(9.7, false, .3);
+        adjustToThisDistance(24,sonarFoot);
+        gyroTurn(30, false);
+        moveStraight(15, true, .6);
     }
 
     public void parkFromRightSide () {
