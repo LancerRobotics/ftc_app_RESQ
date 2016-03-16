@@ -56,7 +56,7 @@ public class Keys {
 
 
     //Climber values
-    public static final double CLIMBER_DUMP = .4;
+    public static final double CLIMBER_DUMP = .3415;
     public static final double CLIMBER_INITIAL_STATE = .85;
 
     public static final double JAM_INIT = .1;

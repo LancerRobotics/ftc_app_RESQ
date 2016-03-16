@@ -85,6 +85,7 @@ public class AutonomousBlueMainFromFarPos extends LinearOpMode {
         dumpClimbers();
         sleep(1200);
         returnToOrigPosAfterDumpOfClimbers();
+        rest();
         //telemetry.addData("sonar",readSonar(sonarAbovePhone));
 
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
