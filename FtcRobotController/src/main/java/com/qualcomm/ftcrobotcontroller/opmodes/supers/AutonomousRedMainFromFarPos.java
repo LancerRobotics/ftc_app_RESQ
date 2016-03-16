@@ -77,11 +77,11 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         //todo ADD NAVIGATION
-        moveAlteredSin(87, false);
-        gyroTurn(-47, false);
+        moveAlteredSin(89 + (4.75 * Math.sqrt(2)), false);
+        gyroTurn(-50, false);
         adjustToThisDistance(12, sonarFoot);
-        sleep(100);
         telemetry.addData("sonar", readSonar(sonarFoot));
+        sleep(500);
         dumpClimbers();
         sleep(1200);
         returnToOrigPosAfterDumpOfClimbers();
@@ -206,29 +206,29 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
     }
 
     public void dumpClimbers() {
-        moveStraight(9.5, false, .3);
+        moveStraight(8.5, false, .3);
         climber.setPosition(Keys.CLIMBER_DUMP);
     }
 
     public void returnToOrigPosAfterDumpOfClimbers() {
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(9, true, .3);
+        moveStraight(8.5, true, .3);
     }
 
     private void parkFromLeftSide() {
-        moveStraight(8,true,.5);
+        moveStraight(8, true, .5);
         gyroTurn(45, true);
         moveStraight(7, false, .24);
     }
 
     private void adjustAndPressLeft() {
-        moveStraight(11, true, .6);
+        moveStraight(11, false, .6);
     }
 
     private void pushRightButton() {
         adjustToThisDistance(24,sonarFoot);
-        gyroTurn(-20, false);
-        moveStraight(10, true, .6);
+        gyroTurn(-10, false);
+        moveStraight(30, false, .6);
     }
 
     public void parkFromRightSide () {

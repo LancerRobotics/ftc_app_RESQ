@@ -76,7 +76,7 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(27, false);
+        moveAlteredSin(26, false);
         gyroTurn(-30, false);
         moveAlteredSin(35, false);
         gyroTurn(-60, false);
@@ -84,6 +84,7 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         rest();
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
+        sleep(500);
         dumpClimbers();
         sleep(1200);
         returnToOrigPosAfterDumpOfClimbers();
@@ -216,13 +217,13 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
     }
 
     private void adjustAndPressLeft() {
-        moveStraight(11, true, .6);
+        moveStraight(11, false, .6);
     }
 
     private void pushRightButton() {
         adjustToThisDistance(24,sonarFoot);
-        gyroTurn(30, false);
-        moveStraight(15, true, .6);
+        gyroTurn(-10, false);
+        moveStraight(30, false, .6);
     }
 
     public void parkFromRightSide () {
@@ -233,13 +234,13 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
     }
 
     public void dumpClimbers() {
-        moveStraight(9.5, false, .3);
+        moveStraight(8.5, false, .3);
         climber.setPosition(Keys.CLIMBER_DUMP);
     }
 
     public void returnToOrigPosAfterDumpOfClimbers() {
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(9, true, .3);
+        moveStraight(8.5, true, .3);
     }
 
     public void adjustToThisDistance(double distance, AnalogInput sonar) {
