@@ -30,7 +30,7 @@ public class CameraTestOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         mCamera = ((FtcRobotControllerActivity) hardwareMap.appContext).mCamera;
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
-
+        telemetry.addData("camera","initingcameraPreview");
         ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
 
         //wait, because I have handler wait three seconds b4 it'll take a picture, in initCamera
@@ -49,16 +49,20 @@ public class CameraTestOp extends LinearOpMode {
         //ok so now I have the image
 
         //scale image down to 216 height if needed
-        if (image.getHeight()>216||image.getWidth()>216) {
+        if (image.getHeight()>160||image.getWidth()>160) {
             //too large to be uploaded into a texture
-            int nh = (int) ( image.getHeight() * (216.0 / image.getWidth()) );
-            Log.e("nh",nh+" h"+image.getHeight()+" w"+image.getWidth());
-            image = Bitmap.createScaledBitmap(image,216,nh,true);
+            int nh = (int) ( image.getHeight() * (160.0 / image.getWidth()) );
+            Log.e("nh", nh + " h" + image.getHeight() + " w" + image.getWidth());
+            image = Bitmap.createScaledBitmap(image,160,nh,true);
             //original will be same size as everything else
             //the saved version of the pic is original size, however
             Vision.savePicture(image,hardwareMap.appContext,"SHRUNKEN", false);
             telemetry.addData("bitmap shrunk","shrunk");
         }
+        //does not need rotation for a portrait Moto G
+        //image= Vision.rotate(image);
+        //Vision.savePicture(image,hardwareMap.appContext,"ROTATED",false);
+        telemetry.addData("bitmap rotate", "rotated");
 
         // deprecated - String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
         // deprecated telemetry.addData("Vision1","half split color only" +returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
@@ -73,9 +77,10 @@ public class CameraTestOp extends LinearOpMode {
         //convert to grayscale/luminance
         Bitmap grayscaleBitmap = Vision.toGrayscaleBitmap(contrastedImage);
         telemetry.addData("grayscale image", Vision.savePicture(grayscaleBitmap, hardwareMap.appContext, "GRAYSCALE", false));
-
+        Bitmap blur = Vision.fastblur(grayscaleBitmap,1);
+        telemetry.addData("blur", Vision.savePicture(blur,hardwareMap.appContext,"BLUR",false));
         //conver to edge
-        ArrayList<Object> data = Vision.convertGrayscaleToEdged(grayscaleBitmap,Vision.EDGE_THRESHOLD);
+        ArrayList<Object> data = Vision.convertGrayscaleToEdged(blur,Vision.EDGE_THRESHOLD);
         int totalLabel = (Integer) data.get(Vision.CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS);
         telemetry.addData("totalLabel", totalLabel);
         //catching label overflows
@@ -101,7 +106,6 @@ public class CameraTestOp extends LinearOpMode {
         totalLabel = (Integer)consolidatedEdgeData.get(Vision.CONSOLIDATEEDGES_DATA_TOTALLABELS);
         Bitmap consolidatedEdge = (Bitmap) consolidatedEdgeData.get(Vision.CONSOLDIATEEDGES_DATA_BITMAP);
         telemetry.addData("consolidated Edge", Vision.savePicture(consolidatedEdge,hardwareMap.appContext,"CONSOLIDATED_EDGE", false) );
-
         //removing random edges
         ArrayList<Object> removedRandomnessData=Vision.getRidOfRandomEdges(consolidatedEdge);
         Bitmap removedRandomness = (Bitmap)removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_BITMAP);
@@ -112,10 +116,10 @@ public class CameraTestOp extends LinearOpMode {
 
         //finding the circles
         Bitmap circles = (Bitmap)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_BITMAP);
-        Log.e("circles",String.valueOf(Vision.getNumberOfLabelsNotOrganized(circles)));
+        Log.e("circles", String.valueOf(Vision.getNumberOfLabelsNotOrganized(circles)));
         telemetry.addData("circles",Vision.savePicture(circles,hardwareMap.appContext,"CIRCLES", false));
         ArrayList<boolean[]> beaconColorValues;
-       ArrayList<XYCoor> centers =  (ArrayList<XYCoor>)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_XYCOORSCENTER);
+        ArrayList<XYCoor> centers =  (ArrayList<XYCoor>)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_XYCOORSCENTER);
         ArrayList<Integer> labels = (ArrayList<Integer> )returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_LABELSLIST);
         Bitmap circlesAdjusted = Vision.findAndIsolateBeaconButtons(circles,centers, labels);
         int circlesFound = Vision.getNumberOfLabelsNotOrganized(circlesAdjusted);
