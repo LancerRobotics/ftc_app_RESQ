@@ -78,7 +78,7 @@ public class CameraTestOp extends LinearOpMode {
         Bitmap grayscaleBitmap = Vision.toGrayscaleBitmap(contrastedImage);
         telemetry.addData("grayscale image", Vision.savePicture(grayscaleBitmap, hardwareMap.appContext, "GRAYSCALE", false));
         Bitmap blur = Vision.fastblur(grayscaleBitmap,1);
-        telemetry.addData("blurred", Vision.savePicture(blur,hardwareMap.appContext,"BLUR",false));
+        telemetry.addData("blurr", Vision.savePicture(blur,hardwareMap.appContext,"BLUR",false));
         //conver to edge
         ArrayList<Object> data = Vision.convertGrayscaleToEdged(blur,Vision.EDGE_THRESHOLD);
         int totalLabel = (Integer) data.get(Vision.CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS);
