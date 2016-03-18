@@ -76,15 +76,10 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        //todo ADD NAVIGATION
         moveAlteredSin(88 + (4.75 * Math.sqrt(2)), false);
         gyroTurn(-50, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
-        sleep(500);
-        dumpClimbers();
-        sleep(1200);
-        returnToOrigPosAfterDumpOfClimbers();
         rest();
 
 
@@ -121,7 +116,10 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         //does not need rotation for a portrait Moto G
     //    image= Vision.rotate(image);
         //Vision.savePicture(image,hardwareMap.appContext,"ROTATED",false);
-        telemetry.addData("bitmap rotate","rotated");
+        telemetry.addData("bitmap rotate", "rotated");
+        sleep(500);
+        dumpClimbers();
+        sleep(1200);
 
         // deprecated - String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
         // deprecated telemetry.addData("Vision1","half split color only" +returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
@@ -136,9 +134,10 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         //convert to grayscale/luminance
         Bitmap grayscaleBitmap = Vision.toGrayscaleBitmap(contrastedImage);
         telemetry.addData("grayscale image", Vision.savePicture(grayscaleBitmap, hardwareMap.appContext, "GRAYSCALE", false));
-
+        Bitmap blur = Vision.fastblur(grayscaleBitmap,1);
+        telemetry.addData("blur",Vision.savePicture(blur,hardwareMap.appContext,"BLUR",false));
         //conver to edge
-        ArrayList<Object> data = Vision.convertGrayscaleToEdged(grayscaleBitmap,Vision.EDGE_THRESHOLD);
+        ArrayList<Object> data = Vision.convertGrayscaleToEdged(blur,Vision.EDGE_THRESHOLD);
         int totalLabel = (Integer) data.get(Vision.CONVERTGRAYSCALETOEDGED_DATA_NUMBER_OF_LABELS);
         telemetry.addData("totalLabel", totalLabel);
         //catching label overflows
@@ -171,7 +170,8 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         //debug stuff - telemetry.addData("labels","old"+totalLabel+"new"+removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_LABELS));
         totalLabel=(Integer)removedRandomnessData.get(Vision.REMOVERANDOMNESS_DATA_LABELS);
         ArrayList <Object> returnedCirclesData = Vision.returnCircles(removedRandomness);
-
+        returnToOrigPosAfterDumpOfClimbers();
+        rest();
         //finding the circles
         Bitmap circles = (Bitmap)returnedCirclesData.get(Vision.RETURNCIRCLES_DATA_BITMAP);
         Log.e("circles", String.valueOf(Vision.getNumberOfLabelsNotOrganized(circles)));
@@ -479,8 +479,5 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         }
         telemetry.addData("ifD","done");
         rest();
-
-
-
     }
 }
