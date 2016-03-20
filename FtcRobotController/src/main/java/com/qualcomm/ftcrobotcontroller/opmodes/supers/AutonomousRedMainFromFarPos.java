@@ -78,7 +78,7 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
         waitForStart();
         moveAlteredSin(88 + (4.75 * Math.sqrt(2)), false);
         gyroTurn(-50, false);
-        adjustToThisDistance(12, sonarFoot);
+        adjustToThisDistance(14, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
 
@@ -117,9 +117,7 @@ public class AutonomousRedMainFromFarPos extends LinearOpMode {
     //    image= Vision.rotate(image);
         //Vision.savePicture(image,hardwareMap.appContext,"ROTATED",false);
         telemetry.addData("bitmap rotate", "rotated");
-        sleep(500);
         dumpClimbers();
-        sleep(1200);
 
         // deprecated - String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
         // deprecated telemetry.addData("Vision1","half split color only" +returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);

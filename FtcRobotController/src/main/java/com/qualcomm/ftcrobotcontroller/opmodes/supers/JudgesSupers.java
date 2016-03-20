@@ -45,7 +45,7 @@ public class JudgesSupers extends LinearOpMode {
         triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
         waitForStart();
         int count = 2;
-        while (count < 9) {
+        while (count < 6) {
             if (gamepad1.a) {
                 switch (count) {
                     case 2:
@@ -65,17 +65,10 @@ public class JudgesSupers extends LinearOpMode {
                         sleep(2000);
                         break;
                     case 4:
-                        swivel.setPosition(Keys.SWIVEL_RIGHT);
+                        hang.setPosition(Keys.HANG_NOW);
                         sleep(2000);
                         break;
                     case 5:
-                        dump.setPosition(Keys.DUMP_DOWN);
-                        sleep(2000);
-                        break;
-                    case 6:
-                        dump.setPosition(Keys.DUMP_INIT);
-                        swivel.setPosition(Keys.SWIVEL_CENTER);
-                        sleep(875);
                         liftRight.setPower(.5);
                         liftLeft.setPower(.5);
                         sleep(800);
@@ -83,17 +76,7 @@ public class JudgesSupers extends LinearOpMode {
                         liftRight.setPower(0);
                         sleep(2000);
                         break;
-                    case 7:
-                        hang.setPosition(Keys.HANG_NOW);
-                        sleep(2000);
-                        break;
-                    case 8:
-                        winch.setPower(-.5);
-                        sleep(2000);
-                        winch.setPower(0);
-                        sleep(2000);
-                        break;
-                }
+                    }
                 count++;
             }
             waitOneFullHardwareCycle();

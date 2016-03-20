@@ -82,7 +82,7 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         gyroTurn(-60, false);
         sleep(100);
         rest();
-        adjustToThisDistance(12, sonarFoot);
+        adjustToThisDistance(14, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
 
@@ -122,9 +122,7 @@ public class AutonomousRedMainFromClosePos extends LinearOpMode {
         //image= Vision.rotate(image);
         //Vision.savePicture(image,hardwareMap.appContext,"ROTATED",false);
         telemetry.addData("bitmap rotate","rotated");
-        sleep(500);
         dumpClimbers();
-        sleep(1200);
         // deprecated - String returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide = Vision.findViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide(image);
         // deprecated telemetry.addData("Vision1","half split color only" +returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
         // deprecated  Log.e("half split color", returnedStringViaFindViaSplitImageInHalfAndSeeWhichColorIsOnWhichSide);
