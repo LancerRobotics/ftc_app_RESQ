@@ -1,32 +1,17 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.supers;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.hardware.Camera;
-import android.util.Log;
-
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
-import com.qualcomm.ftcrobotcontroller.Beacon;
-import com.qualcomm.ftcrobotcontroller.CameraPreview;
-import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.ftcrobotcontroller.Keys;
-import com.qualcomm.ftcrobotcontroller.Vision;
-import com.qualcomm.ftcrobotcontroller.XYCoor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import java.io.File;
-import java.util.ArrayList;
-
 /**
  * Created by matt quan on 2/18/2016.
  */
-public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
+public class AutonomousRedClimbersFromFarPos extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
     Servo swivel, dump, climber, hang, clampRight, clampLeft, triggerRight, triggerLeft;
     AnalogInput sonarAbovePhone, sonarFoot;
@@ -72,12 +57,8 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        sleep(10000);
-        moveAlteredSin(26, false);
-        gyroTurn(-30, false);
-        moveAlteredSin(31, false);
-        gyroTurn(-60, false);
-        rest();
+        moveAlteredSin(88 + (4.75 * Math.sqrt(2)), false);
+        gyroTurn(-50, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         sleep(500);
@@ -87,10 +68,20 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         rest();
     }
 
+    public void dumpClimbers() {
+        moveStraight(8.5, false, .3);
+        climber.setPosition(Keys.CLIMBER_DUMP);
+    }
+
+    public void returnToOrigPosAfterDumpOfClimbers() {
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(8.5, true, .3);
+    }
+
     private void parkFromLeftSide() {
-        moveStraight(8,true,.5);
-        gyroTurn(45,true);
-        moveStraight(7,false,.24);
+        moveStraight(8, true, .5);
+        gyroTurn(45, true);
+        moveStraight(7, false, .24);
     }
 
     private void adjustAndPressLeft() {
@@ -108,16 +99,6 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         moveStraight(8,true,.4);
         gyroTurn(-45,true);
         moveStraight(15,false,.3);
-    }
-
-    public void dumpClimbers() {
-        moveStraight(8.5, false, .3);
-        climber.setPosition(Keys.CLIMBER_DUMP);
-    }
-
-    public void returnToOrigPosAfterDumpOfClimbers() {
-        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(8.5, true, .3);
     }
 
     public void adjustToThisDistance(double distance, AnalogInput sonar) {
@@ -218,6 +199,7 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         }
         rest();
     }
+
     public void setMotorPowerUniform(double power, boolean backwards) {
         int direction = 1;
         if (backwards) {

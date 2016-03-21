@@ -78,7 +78,7 @@ public class AutonomousBlueMainFromFarPos extends LinearOpMode {
         waitForStart();
         moveAlteredSin(84 + 8 * Math.sqrt(2), false);
         gyroTurn(45, false);
-        adjustToThisDistance(14, sonarFoot);
+        adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
         //telemetry.addData("sonar",readSonar(sonarAbovePhone));

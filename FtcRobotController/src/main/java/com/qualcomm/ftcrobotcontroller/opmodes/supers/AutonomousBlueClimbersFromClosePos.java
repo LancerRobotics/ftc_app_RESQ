@@ -1,32 +1,17 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.supers;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.hardware.Camera;
-import android.util.Log;
-
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
-import com.qualcomm.ftcrobotcontroller.Beacon;
-import com.qualcomm.ftcrobotcontroller.CameraPreview;
-import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.ftcrobotcontroller.Keys;
-import com.qualcomm.ftcrobotcontroller.Vision;
-import com.qualcomm.ftcrobotcontroller.XYCoor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import java.io.File;
-import java.util.ArrayList;
-
 /**
- * Created by matt quan on 2/18/2016.
+ * Created by mattquan on 2/18/2016.
  */
-public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
+public class AutonomousBlueClimbersFromClosePos extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
     Servo swivel, dump, climber, hang, clampRight, clampLeft, triggerRight, triggerLeft;
     AnalogInput sonarAbovePhone, sonarFoot;
@@ -48,7 +33,7 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
         br = hardwareMap.dcMotor.get(Keys.backRight);
-        collector=hardwareMap.dcMotor.get(Keys.collector);
+        collector = hardwareMap.dcMotor.get(Keys.collector);
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
         dump.setPosition(Keys.DUMP_INIT);
@@ -63,7 +48,7 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         sonarAbovePhone = hardwareMap.analogInput.get(Keys.SONAR_ABOVE_PHONE);
         sonarFoot = hardwareMap.analogInput.get(Keys.SONAR_FOOT);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
-        while ( !calibration_complete ) {
+        while (!calibration_complete) {
             calibration_complete = !navx_device.isCalibrating();
             if (!calibration_complete) {
                 telemetry.addData("Calibration Complete?", "No");
@@ -72,25 +57,20 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        sleep(10000);
-        moveAlteredSin(26, false);
-        gyroTurn(-30, false);
-        moveAlteredSin(31, false);
-        gyroTurn(-60, false);
+        moveAlteredSin(22, false);
+        gyroTurn(30, false);
+        moveAlteredSin(30.25, false);
+        gyroTurn(60, false);
+        sleep(100);
         rest();
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
+        rest();
         sleep(500);
         dumpClimbers();
         sleep(1200);
         returnToOrigPosAfterDumpOfClimbers();
         rest();
-    }
-
-    private void parkFromLeftSide() {
-        moveStraight(8,true,.5);
-        gyroTurn(45,true);
-        moveStraight(7,false,.24);
     }
 
     private void adjustAndPressLeft() {
@@ -101,23 +81,6 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         adjustToThisDistance(24,sonarFoot);
         gyroTurn(-10, false);
         moveStraight(30, false, .6);
-    }
-
-    public void parkFromRightSide () {
-        //park
-        moveStraight(8,true,.4);
-        gyroTurn(-45,true);
-        moveStraight(15,false,.3);
-    }
-
-    public void dumpClimbers() {
-        moveStraight(8.5, false, .3);
-        climber.setPosition(Keys.CLIMBER_DUMP);
-    }
-
-    public void returnToOrigPosAfterDumpOfClimbers() {
-        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(8.5, true, .3);
     }
 
     public void adjustToThisDistance(double distance, AnalogInput sonar) {
@@ -146,6 +109,16 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         rest();
         telemetry.addData("sonar","done");
         rest();
+    }
+
+    public void dumpClimbers() {
+        moveStraight(8.5, false, .3);
+        climber.setPosition(Keys.CLIMBER_DUMP);
+    }
+
+    public void returnToOrigPosAfterDumpOfClimbers() {
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(8.5, true, .3);
     }
 
     //returns sonar values in inches!!!
@@ -218,6 +191,7 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         }
         rest();
     }
+
     public void setMotorPowerUniform(double power, boolean backwards) {
         int direction = 1;
         if (backwards) {

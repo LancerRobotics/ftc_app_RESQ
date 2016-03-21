@@ -82,7 +82,7 @@ public class AutonomousBlueMainFromClosePos extends LinearOpMode {
         gyroTurn(60, false);
         sleep(100);
         rest();
-        adjustToThisDistance(14, sonarFoot);
+        adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
 

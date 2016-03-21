@@ -75,7 +75,7 @@ public class AutonomousRedClimbersWithDelayFromFarPos extends LinearOpMode {
         sleep(10000);
         moveAlteredSin(88 + (4.75 * Math.sqrt(2)), false);
         gyroTurn(-50, false);
-        adjustToThisDistance(14, sonarFoot);
+        adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         sleep(500);
         dumpClimbers();

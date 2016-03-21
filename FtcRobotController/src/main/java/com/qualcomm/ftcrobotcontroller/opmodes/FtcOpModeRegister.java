@@ -33,6 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Collision;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Gyro;
 import com.qualcomm.ftcrobotcontroller.opmodes.ftclancers.Jarvis;
+import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueClimbersFromFarPos;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueClimbersWithDelayFromClosePos;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueClimbersWithDelayFromFarPos;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousBlueMainFromClosePos;
@@ -77,6 +78,10 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Autonomous Blue Main Close Pos", AutonomousBlueMainFromClosePos.class);
     manager.register("Autonomous Red Main Far Pos", AutonomousRedMainFromFarPos.class);
     manager.register("Autonomous Red Main Close Pos", AutonomousRedMainFromClosePos.class);
+    // manager.register("Autonomous Blue Climbers Only WITHOUT Delay Far Pos", AutonomousBlueClimbersFromFarPos.class);
+    // manager.register("Autonomous Blue Climbers Only WITHOUT Delay Close Pos", AutonomousBlueClimbersFromClosePos.class);
+    // manager.register("Autonomous Red Climbers Only WITHOUT Delay Far Pos", AutonomousRedClimbersFromFarPos.class);
+    // manager.register("Autonomous Red Climbers Only WITHOUT Delay Close Pos", AutonomousRedClimbersFromClosePos.class);
     manager.register("Autonomous Blue Climbers Only With Delay Far Pos", AutonomousBlueClimbersWithDelayFromFarPos.class);
     manager.register("Autonomous Blue Climbers Only With Delay Close Pos", AutonomousBlueClimbersWithDelayFromClosePos.class);
     manager.register("Autonomous Red Climbers Only With Delay Far Pos", AutonomousRedClimbersWithDelayFromFarPos.class);

@@ -1,32 +1,17 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.supers;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.hardware.Camera;
-import android.util.Log;
-
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
-import com.qualcomm.ftcrobotcontroller.Beacon;
-import com.qualcomm.ftcrobotcontroller.CameraPreview;
-import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.ftcrobotcontroller.Keys;
-import com.qualcomm.ftcrobotcontroller.Vision;
-import com.qualcomm.ftcrobotcontroller.XYCoor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import java.io.File;
-import java.util.ArrayList;
-
 /**
  * Created by matt quan on 2/18/2016.
  */
-public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
+public class AutonomousRedClimbersFromClosePos extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
     Servo swivel, dump, climber, hang, clampRight, clampLeft, triggerRight, triggerLeft;
     AnalogInput sonarAbovePhone, sonarFoot;
@@ -72,7 +57,6 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        sleep(10000);
         moveAlteredSin(26, false);
         gyroTurn(-30, false);
         moveAlteredSin(31, false);
