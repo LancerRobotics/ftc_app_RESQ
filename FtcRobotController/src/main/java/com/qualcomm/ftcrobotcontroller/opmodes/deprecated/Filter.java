@@ -47,7 +47,7 @@ public class Filter extends OpMode {
             }
         }
 
-        //COLLECTOR almost done
+        //COLLECTOR_POWER almost done
         /*
         we could just use this, easier @mattquan
         if (gamepad2.y) {collector.setPower(-.5);}

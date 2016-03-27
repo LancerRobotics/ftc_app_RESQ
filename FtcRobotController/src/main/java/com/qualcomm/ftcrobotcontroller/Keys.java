@@ -46,7 +46,7 @@ public class Keys {
 
     //Smooth move values
     public static final double MAX_SPEED_SMOOTH_MOVE = .6;
-    public static final double MIN_SPEED_SMOOTH_MOVE = .001;
+    public static final double MIN_SPEED_SMOOTH_MOVE = .15;
 
 
     //Imaging stuff
@@ -113,8 +113,7 @@ public class Keys {
     public static final double HR_STORE = 1- HL_STORE; //TO BE FIXED;
     public static final double HR_DUMP = 1 - HL_DUMP;
 
-    //Collector power
-    public static final double COLLECTOR = .5;
+
 
     //Color Sensor Thresholds
     public static final int COLOR_RED_RED = 100;
@@ -132,7 +131,8 @@ public class Keys {
     public static final double WHEEL_DIAMETER = 6.5;
 
 
-
+    //Collector power
+    public static final double COLLECTOR_POWER = MAX_SPEED;
 
 
 

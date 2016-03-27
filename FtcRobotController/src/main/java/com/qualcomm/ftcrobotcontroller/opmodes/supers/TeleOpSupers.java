@@ -1,6 +1,5 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.supers;
 
-import com.kauailabs.navx.ftc.AHRS;
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -251,9 +250,9 @@ public class TeleOpSupers extends OpMode{
     public void collectorMovement(boolean backward, boolean stop) {
         if(!stop) {
             if (backward)
-                collector.setPower(-Keys.COLLECTOR);
+                collector.setPower(-Keys.COLLECTOR_POWER);
             else
-                collector.setPower((Keys.COLLECTOR));
+                collector.setPower((Keys.COLLECTOR_POWER));
         }
         else {
             collector.setPower(0);

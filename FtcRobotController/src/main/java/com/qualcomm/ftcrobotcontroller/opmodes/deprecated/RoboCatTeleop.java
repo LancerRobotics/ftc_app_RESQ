@@ -75,7 +75,7 @@ public class RoboCatTeleop extends OpMode{
         //The below method makes our robot move and is included further down the code
         powerSplit(pwrLeft, pwrRight);
 
-        //COLLECTOR AND FILTER CONTROLS
+        //COLLECTOR_POWER AND FILTER CONTROLS
         //The following code makes the left bumper control the collector moving backwards, if it is moving forwards or not moving at
         // all. This enables us to remove blocakges of blocks from the collection system.
         // The filters also move in order to get a ball out of the system, if one was to go into the collection system.

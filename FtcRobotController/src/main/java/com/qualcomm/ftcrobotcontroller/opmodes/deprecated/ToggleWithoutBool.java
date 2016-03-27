@@ -281,9 +281,9 @@ public class ToggleWithoutBool extends OpMode{
     public void collectorMovement(boolean backward, boolean stop) {
         if(!stop) {
             if (backward)
-                collector.setPower(-Keys.COLLECTOR);
+                collector.setPower(-Keys.COLLECTOR_POWER);
             else
-                collector.setPower((Keys.COLLECTOR));
+                collector.setPower((Keys.COLLECTOR_POWER));
         }
         else {
             collector.setPower(0);
