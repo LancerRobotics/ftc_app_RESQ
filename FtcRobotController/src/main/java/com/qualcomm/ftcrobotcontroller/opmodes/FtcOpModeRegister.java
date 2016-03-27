@@ -82,16 +82,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     // manager.register("Autonomous Blue Climbers Only WITHOUT Delay Close Pos", AutonomousBlueClimbersFromClosePos.class);
     // manager.register("Autonomous Red Climbers Only WITHOUT Delay Far Pos", AutonomousRedClimbersFromFarPos.class);
     // manager.register("Autonomous Red Climbers Only WITHOUT Delay Close Pos", AutonomousRedClimbersFromClosePos.class);
-    manager.register("Autonomous Blue Climbers Only With Delay Far Pos", AutonomousBlueClimbersWithDelayFromFarPos.class);
-    manager.register("Autonomous Blue Climbers Only With Delay Close Pos", AutonomousBlueClimbersWithDelayFromClosePos.class);
-    manager.register("Autonomous Red Climbers Only With Delay Far Pos", AutonomousRedClimbersWithDelayFromFarPos.class);
-    manager.register("Autonomous Red Climbers Only With Delay Close Pos", AutonomousRedClimbersWithDelayFromClosePos.class);
-    manager.register("Autonomous Blue Parking Zone Only Far Pos", AutonomousBlueParkingZoneOnlyFromFarPos.class);
-    manager.register("Autonomous Blue Parking Zone Only Close Pos", AutonomousBlueParkingZoneOnlyFromClosePos.class);
-    manager.register("Autonomous Red Parking Zone Only Far Pos", AutonomousRedParkingZoneOnlyFromFarPos.class);
-    manager.register("Autonomous Red Parking Zone Only Close Pos", AutonomousRedParkingZoneOnlyFromClosePos.class);
-    manager.register("Autonomous Blue Parking Zone Only Far Pos With Delay", AutonomousBlueParkingZoneOnlyFromFarPosWithDelay.class);
-    manager.register("Autonomous Blue Parking Zone Only Close Pos With Delay", AutonomousBlueParkingZoneOnlyFromClosePosWithDelay.class);
+    manager.register("Worlds Auton Test",AutonomousTemplate.class);
     manager.register("Judges Code", JudgesSupers.class);
   }
 }
