@@ -82,7 +82,7 @@ public class AutonomousTemplate extends LinearOpMode {
             if (currentTick<ticksToGo/2) {
                 //use an inv tan function as acceleration
                 //power = ((2/pi)*.86) arctan (x/totalticks*.1)
-                double power = ((2/Math.PI)*Keys.MAX_SPEED) * Math.atan(currentTick/totalTicks/2*.1);
+                double power = ((2/Math.PI)*Keys.MAX_SPEED) * Math.atan(currentTick/totalTicks/2*10);
                 telemetry.addData("power","accel"+power);
                 if (power<Keys.MIN_SPEED_SMOOTH_MOVE) {
                     telemetry.addData("bool",power<Keys.MIN_SPEED_SMOOTH_MOVE);
