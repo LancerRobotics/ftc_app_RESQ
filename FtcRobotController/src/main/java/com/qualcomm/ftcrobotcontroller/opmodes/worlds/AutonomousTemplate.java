@@ -60,7 +60,7 @@ public class AutonomousTemplate extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        smoothMoveVol2(22,false);
+        smoothMoveVol2(48,false);
 
     }
 
