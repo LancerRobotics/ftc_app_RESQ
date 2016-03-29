@@ -51,6 +51,7 @@ import com.qualcomm.ftcrobotcontroller.opmodes.supers.AutonomousRedParkingZoneOn
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.JudgesSupers;
 import com.qualcomm.ftcrobotcontroller.opmodes.supers.TeleOpSupers;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousTemplate;
+import com.qualcomm.ftcrobotcontroller.opmodes.worlds.Teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
@@ -74,7 +75,7 @@ public class FtcOpModeRegister implements OpModeRegister {
      *
      * If two or more op modes are registered with the same name, the app will display an error.
      */
-    manager.register("Teleop", TeleOpSupers.class);
+    manager.register("Teleop", Teleop.class);
     manager.register("Autonomous Blue Main Far Pos", AutonomousBlueMainFromFarPos.class);
     manager.register("Autonomous Blue Main Close Pos", AutonomousBlueMainFromClosePos.class);
     manager.register("Autonomous Red Main Far Pos", AutonomousRedMainFromFarPos.class);
