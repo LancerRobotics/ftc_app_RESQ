@@ -7,6 +7,7 @@ public class Keys {
     public static final String backRight = "back_right";
     public static final String backLeft = "back_left";
     public static final String liftLeft = "lift_left";
+    public static final String liftMiddle = "lift_middle";
     public static final String liftRight = "lift_right";
     public static final String collector = "collector";
     public static final String swivel= "swivel";
