@@ -197,6 +197,26 @@ public class FtcRobotControllerActivity extends Activity {
       }
     });
   }
+  public void initCameraPreview(final Camera camera, final com.qualcomm.ftcrobotcontroller.opmodes.worlds.CameraTestOpWorlds context) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera);
+        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+        cameraPreviewLayout.addView(context.preview);
+      }
+    });
+  }
+  public void initCameraPreview(final Camera camera, final com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousTemplate context) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera);
+        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+        cameraPreviewLayout.addView(context.preview);
+      }
+    });
+  }
 
   public void initCameraPreview(final Camera camera, final com.qualcomm.ftcrobotcontroller.opmodes.deprecated.TakeAPicture context) {
     runOnUiThread(new Runnable() {
