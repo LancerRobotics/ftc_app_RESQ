@@ -1,7 +1,11 @@
 package com.qualcomm.ftcrobotcontroller.opmodes.worlds;
 
+import android.graphics.Bitmap;
+import android.hardware.Camera;
+
 import com.kauailabs.navx.ftc.AHRS;
 import com.kauailabs.navx.ftc.navXPIDController;
+import com.qualcomm.ftcrobotcontroller.CameraPreview;
 import com.qualcomm.ftcrobotcontroller.Keys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -13,9 +17,13 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 public class AutonomousTemplate extends LinearOpMode {
 
+    private Camera mCamera;
+    public CameraPreview preview;
+    public Bitmap image;
+
 
     DcMotor fr, fl, bl, br, collector;
-    Servo swivel, dump, climber, hang, clampRight, clampLeft, triggerRight, triggerLeft;
+    Servo swivel, dump, climber, hang, clampRight, clampLeft;
     AnalogInput sonarAbovePhone, sonarFoot;
     boolean calibration_complete = false;
     //double a3,a4,a5;
@@ -30,8 +38,6 @@ public class AutonomousTemplate extends LinearOpMode {
         clampLeft = hardwareMap.servo.get(Keys.clampLeft);
         clampRight = hardwareMap.servo.get(Keys.clampRight);
         dump = hardwareMap.servo.get(Keys.dump);
-        triggerLeft = hardwareMap.servo.get(Keys.triggerLeft);
-        triggerRight = hardwareMap.servo.get(Keys.triggerRight);
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
         bl = hardwareMap.dcMotor.get(Keys.backLeft);
@@ -44,8 +50,6 @@ public class AutonomousTemplate extends LinearOpMode {
         hang.setPosition(Keys.HANG_INIT);
         clampLeft.setPosition(Keys.CLAMP_LEFT_INIT);
         clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
-        triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
-        triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
         collector.setDirection(DcMotor.Direction.REVERSE);
         sonarAbovePhone = hardwareMap.analogInput.get(Keys.SONAR_ABOVE_PHONE);
