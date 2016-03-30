@@ -737,9 +737,21 @@ public class Vision {
         return listOfLabelsInPicture.size();
     }
 
+    public static Bitmap compress (Bitmap image) {
+        if (image.getHeight()>160||image.getWidth()>160) {
+            //too large to be uploaded into a texture
+            int nh = (int) ( image.getHeight() * (160.0 / image.getWidth()) );
+            Log.e("nh", nh + " h" + image.getHeight() + " w" + image.getWidth());
+            image = Bitmap.createScaledBitmap(image,160,nh,true);
+            //original will be same size as everything else
+            //the saved version of the pic is original size, however
 
+        }
 
-    public static ArrayList<Object> returnCircles (Bitmap circies) {
+        return image;
+    }
+
+    public static ArrayList<Object> returnCircles (Bitmap circles) {
         Log.e("starting","circle");
         //for each label, determine if it's a circle
         //find a bounding rectangle to find the center and radius of the circle.
@@ -751,9 +763,9 @@ public class Vision {
         ArrayList<Integer> labels = new ArrayList<Integer>();
         //k so for any given label, numOfLabels will only be greater, not less, so while some labels will have 0 edges, u wont miss any
         ArrayList<Integer> listOfLabelsInPicture = new ArrayList<Integer>();
-        for (int i =0; i <circies.getWidth();i++) {
-            for (int j= 0 ;j <circies.getHeight();j++) {
-                int label = Color.red(circies.getPixel(i,j));
+        for (int i =0; i <circles.getWidth();i++) {
+            for (int j= 0 ;j <circles.getHeight();j++) {
+                int label = Color.red(circles.getPixel(i,j));
                 if (label!=255) {
                     //check if this label is in the list
                     if (!listOfLabelsInPicture.contains(label)) {
@@ -766,14 +778,14 @@ public class Vision {
             int label = listOfLabelsInPicture.get(counter);
             //so for each label, determine if it's a circle
             //comb thru the image vertically first to determine left most pixel
-            circies = circies.copy(Bitmap.Config.ARGB_8888, true);
+            circles = circles.copy(Bitmap.Config.ARGB_8888, true);
             //make image mutable
             XYCoor leftMost = new XYCoor();
-
-            for (int i = 0; i < circies.getWidth() && leftMost.getX() == -1; i++) {
-                for (int j = 0; j < circies.getHeight() && leftMost.getX() == -1; j++) {
+            //so the additional condition is my built in break statemtn
+            for (int i = 0; i < circles.getWidth() && leftMost.getX() == -1; i++) {
+                for (int j = 0; j < circles.getHeight() && leftMost.getX() == -1; j++) {
                     //if leftMost.getX is set, exit out
-                    if (Color.red(circies.getPixel(i, j)) == label) {
+                    if (Color.red(circles.getPixel(i, j)) == label) {
                         //cool u found the label
                         //Log.e("found",leftMost.toString());
                         leftMost = new XYCoor(i, j);
@@ -784,22 +796,24 @@ public class Vision {
             //now do for right most. so this, you will satrt from right side going to 0
             XYCoor rightMost = new XYCoor();
 
-            for (int i = circies.getWidth() - 1; i >= 0 && rightMost.getX() == -1; i--) {
-                for (int j = 0; j < circies.getHeight() && rightMost.getX() == -1; j++) {
+            for (int i = circles.getWidth() - 1; i >= 0 && rightMost.getX() == -1; i--) {
+                for (int j = 0; j < circles.getHeight() && rightMost.getX() == -1; j++) {
                     //if rightMost.getX is set, exit out
-                    if (Color.red(circies.getPixel(i, j)) == label) {
+                    if (Color.red(circles.getPixel(i, j)) == label) {
                         //cool u found the label
                         rightMost = new XYCoor(i, j);
                     }
                 }
             }
 
+
+
             XYCoor topMost = new XYCoor();
 
-            for (int i = 0; i < circies.getHeight() && topMost.getX() == -1; i++) {
-                for (int j = 0; j < circies.getWidth() && topMost.getX() == -1; j++) {
+            for (int i = 0; i < circles.getHeight() && topMost.getX() == -1; i++) {
+                for (int j = 0; j < circles.getWidth() && topMost.getX() == -1; j++) {
                     //if topMost.getX is set, exit out
-                    if (Color.red(circies.getPixel(j, i)) == label) {
+                    if (Color.red(circles.getPixel(j, i)) == label) {
                         //cool u found the label
                         topMost = new XYCoor(j, i);
                     }
@@ -807,10 +821,10 @@ public class Vision {
             }
             XYCoor bottomMost = new XYCoor();
 
-            for (int i = circies.getHeight() - 1; i >= 0 && bottomMost.getX() == -1; i--) {
-                for (int j = 0; j < circies.getWidth() && bottomMost.getX() == -1; j++) {
+            for (int i = circles.getHeight() - 1; i >= 0 && bottomMost.getX() == -1; i--) {
+                for (int j = 0; j < circles.getWidth() && bottomMost.getX() == -1; j++) {
                     //if bottom.getX is set, exit out
-                    if (Color.red(circies.getPixel(j, i)) == label) {
+                    if (Color.red(circles.getPixel(j, i)) == label) {
                         //cool u found the label
                         bottomMost = new XYCoor(j, i);
                     }
@@ -826,20 +840,19 @@ public class Vision {
             if (Math.abs(leftRightRadius - topBottomRadius) > Vision.DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS) {
                 //then it isn't a cirlce
                 //so we'll white out and move on
-                circies = removeLabel(circies, label);
+                circles = removeLabel(circles, label);
                 Log.e("not a circle", label + " radius = not square - delete");
 
             } else if (leftRightRadius <= MIN_RADIUS_LENGTH || topBottomRadius <= MIN_RADIUS_LENGTH) {
                 //not a circle because it's too small... we don't want small circles
                 Log.e("not a circle", label + "radius = too small");
-                circies = removeLabel(circies, label);
-            } /*else if (leftRightRadius > -MAX_RADIUS_LENGTH || topBottomRadius >= MAX_RADIUS_LENGTH) {
-                //too big to be a beacon circle...
-                Log.e("not a circle we like", label + "radius - too large");
-                circies = removeLabel(circies,label);
-                }
-                */ //apparently this is flawed
-             else {
+                circles = removeLabel(circles, label);
+            }
+            else if (checkIfClosedShape(circles, label, leftMost,rightMost,topMost,bottomMost)==false) {
+                circles = removeLabel(circles,label);
+
+            } else {
+
                 Log.e("almost there", "checking def of circle");
                 //ok so if u made it thus far, u should still check the distance to the center
                 //midpoint of right/left
@@ -850,7 +863,7 @@ public class Vision {
                 double radius = (leftRightRadius + topBottomRadius) / 2.0;
                 Log.e("coordinates", "right" + rightMost.toString() + "left" + leftMost.toString() + "top" + topMost.toString() + "bottom" + bottomMost.toString() + "center" + center.toString() + "radius" + radius);
                 //we need to find all the edges
-                ArrayList<XYCoor> edgesOfShape = getCoordinatesOfEdges(circies, label);
+                ArrayList<XYCoor> edgesOfShape = getCoordinatesOfEdges(circles, label);
                 boolean litmustTest = true;
                 //if litmusTest comes out false, meaning we broke out of statement becuase one was out of ordinairy, then it's not a circle
                 for (int i = 0; i < edgesOfShape.size(); i++) {
@@ -870,7 +883,7 @@ public class Vision {
                 if (litmustTest == false) {
                     //failed that litmus test, one was out of the circle
                     //not a circle
-                    circies = removeLabel(circies, label);
+                    circles = removeLabel(circles, label);
                     Log.e("not a circle", label + "def. of circle/litmus test fail");
                 } else {
                     //implied else, ur a circle, let's keep you
@@ -883,11 +896,44 @@ public class Vision {
         }
         //turn it into organized
         ArrayList <Object> data = new ArrayList<Object>();
-        data.add(RETURNCIRCLES_DATA_BITMAP, circies);
+        data.add(RETURNCIRCLES_DATA_BITMAP, circles);
         Log.e("centers", centers.toString());
         data.add(RETURNCIRCLES_DATA_XYCOORSCENTER, centers);
         data.add(RETURNCIRCLES_DATA_LABELSLIST, labels);
         return data;
+    }
+
+    private static boolean checkIfClosedShape(Bitmap circles, int label, XYCoor leftMost, XYCoor rightMost, XYCoor topMost, XYCoor bottomMost) {
+        for (int i =((int)leftMost.getX()); i<=((int)rightMost.getX());i++) {
+            //so for all these columns, make sure there are two labels
+            int columnCounter = 0;
+            for (int y =((int)topMost.getY());y<=((int)bottomMost.getY());y++) {
+                if (Color.red(circles.getPixel(i,y))==label) {
+                    columnCounter++;
+                }
+            }
+            if (columnCounter!=2) {
+                Log.e("not a circle", "not a closed shape at column "+i+" and counter was "+columnCounter);
+                return false;
+            }
+            //implied else, do nothing, move on
+
+        }
+        //now check the horizontal line test
+        for (int i =((int)topMost.getY());i<=((int)bottomMost.getY());i++) {
+            int rowCounter = 0;
+            for (int x = (int)(leftMost.getX());x<=(int)(rightMost.getX());x++) {
+                if (Color.red(circles.getPixel(x,i))==label) {
+                    rowCounter++;
+                }
+            }
+            if (rowCounter!=2) {
+                Log.e("not a circle","not a closed shape at row "+i+"counter was "+rowCounter);
+            return false;
+            }
+        }
+        //else you passed all these test without failing
+        return true;
     }
 
     private static ArrayList<XYCoor> getCoordinatesOfEdges(Bitmap circies, int label) {
@@ -989,7 +1035,6 @@ public class Vision {
             if (pairsOfCircles.size()==1) {
                 //awesomeee my job is easy
                 Log.e("only one pair left","good! returning now!");
-                savePictureOuput(circles,context);
                 return circles;
             }
             else {
