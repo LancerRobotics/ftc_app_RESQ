@@ -40,7 +40,7 @@ public class CameraTestOpWorlds extends LinearOpMode {
         SharedPreferences prefs = hardwareMap.appContext.getApplicationContext().getSharedPreferences(
                 "com.quan.companion", Context.MODE_PRIVATE);
         String path = prefs.getString(Keys.pictureImagePathSharedPrefsKeys, "No path found");
-        Log.e("path",path);
+        Log.e("path", path);
         telemetry.addData("image",path);
         //debug stuff - telemetry.addData("camera", "path: " + path);
         File imgFile = new File(path);

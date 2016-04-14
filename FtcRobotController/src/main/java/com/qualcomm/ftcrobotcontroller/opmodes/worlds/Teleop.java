@@ -155,10 +155,6 @@ public class Teleop extends OpMode {
             }
 
 
-
-
-
-
             //Auto-Trigger
         /*if(!gamepad2.x && !gamepad2.b && !gamepad2.a && !rightTrigger && !leftTrigger) {
             if (navx_device.getPitch() > Keys.PITCH_OF_MOUNTAIN) {
