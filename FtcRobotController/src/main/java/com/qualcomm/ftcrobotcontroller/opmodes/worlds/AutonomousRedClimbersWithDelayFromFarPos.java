@@ -35,7 +35,7 @@ public class AutonomousRedClimbersWithDelayFromFarPos extends LinearOpMode {
     DcMotor fr, fl, bl, br, collector;
     Servo swivel, dump, climber, hang, clampRight, clampLeft, guardRight, guardLeft;
     AnalogInput sonarAbovePhone, sonarFoot;
-    boolean calibration_complete = false;
+    boolean calibration_complete = false, pressed = false, a = false, b = false;
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
@@ -76,7 +76,17 @@ public class AutonomousRedClimbersWithDelayFromFarPos extends LinearOpMode {
             }
         }
         telemetry.addData("Calibration Complete?", "Yes");
-        //telemetry.addData("Start Autonomous?", "Yes");
+        telemetry.addData("Select the a button to not move out of the way of the incoming robot and the b button to move out of the way of the incoming robot", "");
+        while (!pressed) {
+            if (gamepad1.a) {
+                a = true;
+                pressed = true;
+            } else if (gamepad1.b) {
+                b = true;
+                pressed = true;
+            }
+        }
+        telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         sleep(10000);
         gyroTurn(-47, false);
@@ -89,6 +99,13 @@ public class AutonomousRedClimbersWithDelayFromFarPos extends LinearOpMode {
         sleep(1200);
         returnToOrigPosAfterDumpOfClimbers();
         rest();
+        if(b) {
+            moveStraight(24, true, .5);
+            gyroTurn(-30, false);
+        }
+        else if(a) {
+            rest();
+        }
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {
