@@ -28,8 +28,6 @@ public class AutonomousRedParkingZoneOnlyFromFarPosWithDelay extends LinearOpMod
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
-    //HELLO WORLD
-
     @Override
     public void runOpMode() throws InterruptedException {
         climber = hardwareMap.servo.get(Keys.climber);
