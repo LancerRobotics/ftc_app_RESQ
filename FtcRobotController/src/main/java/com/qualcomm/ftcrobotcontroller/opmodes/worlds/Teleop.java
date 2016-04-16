@@ -19,13 +19,26 @@ public class Teleop extends OpMode {
         double pwrLeft, pwrRight;
 
         //Servos
-        Servo swivel, dump, climber, hang, clampRight, clampLeft;
+        Servo swivel, dump, climber, hang, clampRight, clampLeft, guardLeft, guardRight;
 
         //Climbers
         boolean climberButtonPressed = false;
         double[] climberPositions = {Keys.CLIMBER_INITIAL_STATE, Keys.CLIMBER_DUMP};
         int climberPos;
         int climberToggleReturnArray[] = new int[2];
+
+        //Left Guard;
+        boolean guardLeftButtonPressed = false;
+        double[] guardLeftPositions = {Keys.LEFT_GUARD_INIT, Keys.LEFT_GUARD_DOWN};
+        int guardLeftPos;
+        int guardLeftToggleReturnArray[] = new int[2];
+
+        //Right Guard;
+        boolean guardRightButtonPressed = false;
+        double[] guardRightPositions = {Keys.RIGHT_GUARD_INIT, Keys.RIGHT_GUARD_DOWN};
+        int guardRightPos;
+        int guardRightToggleReturnArray[] = new int[2];
+
 
 
 
@@ -58,20 +71,25 @@ public class Teleop extends OpMode {
             clampLeft = hardwareMap.servo.get(Keys.clampLeft);
             clampRight = hardwareMap.servo.get(Keys.clampRight);
             dump = hardwareMap.servo.get(Keys.dump);
+            guardLeft = hardwareMap.servo.get(Keys.guardLeft);
+            guardRight = hardwareMap.servo.get(Keys.guardRight);
             fr.setDirection(DcMotor.Direction.REVERSE);
             br.setDirection(DcMotor.Direction.REVERSE);
             liftLeft.setDirection(DcMotor.Direction.REVERSE);
             liftMiddle.setDirection(DcMotor.Direction.REVERSE);
 
             climberPos = 1;
-            climber.setPosition(climberPositions[0]);
+            guardLeftPos = 1;
+            guardRightPos = 1;
 
+            climber.setPosition(climberPositions[0]);
             dump.setPosition(Keys.DUMP_INIT);
             swivel.setPosition(Keys.SWIVEL_CENTER);
             hang.setPosition(Keys.HANG_INIT);
             clampLeft.setPosition(Keys.CLAMP_LEFT_INIT);
             clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
-            //limitLeft = hardwareMap.analogInput.get(Keys.LIMIT_LEFT);
+            guardLeft.setPosition(guardLeftPositions[0]);
+            guardRight.setPosition(guardRightPositions[0]);
             limitRight = hardwareMap.analogInput.get(Keys.LIMIT_RIGHT);
             telemetry.addData("Start Teleop?", "Yes");
         }
@@ -154,6 +172,25 @@ public class Teleop extends OpMode {
                 climberButtonPressed = false;
             }
 
+            //Left Guard
+            guardLeftToggleReturnArray = toggle(gamepad1.x, guardLeft, guardLeftPositions, guardLeftPos, guardLeftButtonPressed);
+            guardLeftPos = guardLeftToggleReturnArray[0];
+            if(guardLeftToggleReturnArray[1] == 1) {
+                guardLeftButtonPressed = true;
+            }
+            else {
+                guardLeftButtonPressed = false;
+            }
+
+            //Right Guard
+            guardRightToggleReturnArray = toggle(gamepad1.b, guardRight, guardRightPositions, guardRightPos, guardRightButtonPressed);
+            guardRightPos = guardRightToggleReturnArray[0];
+            if(guardRightToggleReturnArray[1] == 1) {
+                guardRightButtonPressed = true;
+            }
+            else {
+                guardRightButtonPressed = false;
+            }
 
             //Auto-Trigger
         /*if(!gamepad2.x && !gamepad2.b && !gamepad2.a && !rightTrigger && !leftTrigger) {
@@ -169,13 +206,13 @@ public class Teleop extends OpMode {
         }*/
 
             //Swivels
-            if(gamepad1.x) {
+            if(gamepad2.x) {
                 swivel.setPosition(Keys.SWIVEL_LEFT);
             }
-            else if(gamepad1.b) {
+            else if(gamepad2.b) {
                 swivel.setPosition(Keys.SWIVEL_RIGHT);
             }
-            else if(gamepad1.a) {
+            else if(gamepad2.a) {
                 swivel.setPosition(Keys.SWIVEL_CENTER);
             }
 

@@ -18,6 +18,8 @@ public class Keys {
     public static final String clampRight = "clamp_right";
     public static final String buttonPusher = "button_pusher";
     public static final String hang = "hang";
+    public static final String guardLeft = "guard_left";
+    public static final String guardRight = "guard_right";
     public static final String advancedSensorModule = "asm";
     public static final String LIMIT_LEFT = "lsl";
     public static final String LIMIT_RIGHT = "lsr";
@@ -79,6 +81,14 @@ public class Keys {
     //Left Trigger Values
     public static final double LEFT_TRIGGER_INIT = .80;
     public static final double LEFT_TRIGGER_TRIGGER = 0.20;
+
+    //Guard Left Values
+    public static final double LEFT_GUARD_INIT = 0;
+    public static final double LEFT_GUARD_DOWN = .5;
+
+    //Guard Right Values
+    public static final double RIGHT_GUARD_INIT = 1;
+    public static final double RIGHT_GUARD_DOWN = .5;
 
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;
