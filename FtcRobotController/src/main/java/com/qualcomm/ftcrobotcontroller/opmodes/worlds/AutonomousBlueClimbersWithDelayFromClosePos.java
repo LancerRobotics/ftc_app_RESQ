@@ -92,9 +92,9 @@ public class AutonomousBlueClimbersWithDelayFromClosePos extends LinearOpMode {
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         sleep(10000);
-        moveAlteredSin(14, false);
+        smoothMoveVol2(14, false);
         gyroTurn(30, false);
-        moveAlteredSin(30.25, false);
+        smoothMoveVol2(30.25, false);
         gyroTurn(60, false);
         sleep(100);
         rest();

@@ -93,7 +93,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         waitForStart();
         sleep(10000);
         gyroTurn(47, false);
-        moveAlteredSin(69 + 4*Math.sqrt(2), false);
+        smoothMoveVol2(69 + 4*Math.sqrt(2), false);
         gyroTurn(45, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));

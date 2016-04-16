@@ -67,9 +67,9 @@ public class AutonomousRedParkingZoneOnlyFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(31.5, false);
+        smoothMoveVol2(31.5, false);
         gyroTurn(-90, false);
-        moveAlteredSin(29, false);
+        smoothMoveVol2(29, false);
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {

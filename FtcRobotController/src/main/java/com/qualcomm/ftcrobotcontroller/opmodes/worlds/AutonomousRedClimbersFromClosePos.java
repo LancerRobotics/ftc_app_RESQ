@@ -67,9 +67,9 @@ public class AutonomousRedClimbersFromClosePos extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(26, false);
+        smoothMoveVol2(26, false);
         gyroTurn(-30, false);
-        moveAlteredSin(31, false);
+        smoothMoveVol2(31, false);
         gyroTurn(-60, false);
         rest();
         adjustToThisDistance(12, sonarFoot);

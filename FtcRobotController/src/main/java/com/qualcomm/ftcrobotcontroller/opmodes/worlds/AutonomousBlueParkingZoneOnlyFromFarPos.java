@@ -71,7 +71,7 @@ public class AutonomousBlueParkingZoneOnlyFromFarPos extends LinearOpMode {
         gyroTurn(47, false);
         smoothMoveVol2(55, false);
         gyroTurn(60, false);
-        moveAlteredSin(23, false);
+        smoothMoveVol2(23, false);
         telemetry.addData("Stop Autonomous Here?", "YES");
     }
 

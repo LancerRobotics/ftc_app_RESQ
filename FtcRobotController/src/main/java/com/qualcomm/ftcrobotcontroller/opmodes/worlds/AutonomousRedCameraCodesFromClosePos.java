@@ -89,9 +89,10 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
         }
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        moveAlteredSin(26, false);
+        gyroTurn(-47, false);
+        smoothMoveVol2(13, false);
         gyroTurn(-30, false);
-        moveAlteredSin(35, false);
+        smoothMoveVol2(35, false);
         gyroTurn(-60, false);
         sleep(100);
         rest();
