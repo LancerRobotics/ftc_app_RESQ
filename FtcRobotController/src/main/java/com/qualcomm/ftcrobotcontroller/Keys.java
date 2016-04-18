@@ -83,12 +83,12 @@ public class Keys {
     public static final double LEFT_TRIGGER_TRIGGER = 0.20;
 
     //Guard Left Values
-    public static final double LEFT_GUARD_INIT = 0;
-    public static final double LEFT_GUARD_DOWN = .5;
+    public static final double LEFT_GUARD_UP = 1;
+    public static final double LEFT_GUARD_DOWN = 0;
 
     //Guard Right Values
-    public static final double RIGHT_GUARD_INIT = 1;
-    public static final double RIGHT_GUARD_DOWN = .5;
+    public static final double RIGHT_GUARD_UP = 0;
+    public static final double RIGHT_GUARD_DOWN = 1;
 
     //NavX values
     public static final byte NAVX_DEVICE_UPDATE_RATE_HZ = 50;

@@ -29,13 +29,13 @@ public class Teleop extends OpMode {
 
         //Left Guard;
         boolean guardLeftButtonPressed = false;
-        double[] guardLeftPositions = {Keys.LEFT_GUARD_INIT, Keys.LEFT_GUARD_DOWN};
+        double[] guardLeftPositions = {Keys.LEFT_GUARD_DOWN, Keys.LEFT_GUARD_UP};
         int guardLeftPos;
         int guardLeftToggleReturnArray[] = new int[2];
 
         //Right Guard;
         boolean guardRightButtonPressed = false;
-        double[] guardRightPositions = {Keys.RIGHT_GUARD_INIT, Keys.RIGHT_GUARD_DOWN};
+        double[] guardRightPositions = {Keys.RIGHT_GUARD_DOWN, Keys.RIGHT_GUARD_UP};
         int guardRightPos;
         int guardRightToggleReturnArray[] = new int[2];
 
