@@ -89,8 +89,7 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
         }
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        gyroTurn(-47, false);
-        smoothMoveVol2(13, false);
+        smoothMoveVol2(20, false);
         gyroTurn(-30, false);
         smoothMoveVol2(35, false);
         gyroTurn(-60, false);
@@ -151,11 +150,13 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
         }
         if(b) {
             moveStraight(24, true, .5);
-            gyroTurn(-30, false);
+            gyroTurn(-45, false);
+            moveStraight(29, false, .5);
         }
         else if(a) {
             rest();
         }
+        telemetry.addData("beacon",beacon);
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {
@@ -213,6 +214,7 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
 
         }
         rest();
+
     }
 
     private void adjustAndPressLeft() {

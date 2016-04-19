@@ -69,7 +69,7 @@ public class AutonomousBlueParkingZoneOnlyFromClosePos extends LinearOpMode {
         waitForStart();
         smoothMoveVol2(34.5, false);
         gyroTurn(90, false);
-        moveAlteredSin(35, false);
+        smoothMoveVol2(35, false);
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {

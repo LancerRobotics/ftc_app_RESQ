@@ -91,7 +91,7 @@ public class AutonomousBlueCameraCodesFromFarPos extends LinearOpMode {
         waitForStart();
         gyroTurn(47, false);
         smoothMoveVol2(69 + 8 * Math.sqrt(2), false);
-        gyroTurn(45, false);
+        gyroTurn(43, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();

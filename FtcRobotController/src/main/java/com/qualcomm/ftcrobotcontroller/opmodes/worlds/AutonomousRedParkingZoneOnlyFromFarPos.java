@@ -80,8 +80,8 @@ public class AutonomousRedParkingZoneOnlyFromFarPos extends LinearOpMode {
         waitForStart();
         gyroTurn(-47, false);
         smoothMoveVol2(59, false);
-        gyroTurn(-60, false);
-        smoothMoveVol2(25, false);
+        gyroTurn(-75, false);
+        smoothMoveVol2(29, false);
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {

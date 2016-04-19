@@ -90,8 +90,8 @@ public class AutonomousRedCameraCodeFromFarPos extends LinearOpMode {
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         gyroTurn(-47, false);
-        smoothMoveVol2(72 + (4.75 * Math.sqrt(2)), false);
-        gyroTurn(-50, false);
+        smoothMoveVol2(72 + (6.75 * Math.sqrt(2)), false);
+        gyroTurn(-48, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
@@ -145,11 +145,13 @@ public class AutonomousRedCameraCodeFromFarPos extends LinearOpMode {
         }
         if(b) {
             moveStraight(24, true, .5);
-            gyroTurn(-30, false);
+            gyroTurn(-45, false);
+            moveStraight(29, false, .5);
         }
         else if(a) {
             rest();
         }
+        telemetry.addData("beacon",beacon);
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {

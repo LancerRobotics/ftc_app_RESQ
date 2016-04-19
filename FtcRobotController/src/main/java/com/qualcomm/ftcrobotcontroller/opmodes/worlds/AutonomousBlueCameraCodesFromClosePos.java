@@ -92,7 +92,7 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
         }
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        smoothMoveVol2(18, false);
+        smoothMoveVol2(15, false);
         gyroTurn(30, false);
         smoothMoveVol2(34, false);
         gyroTurn(60, false);

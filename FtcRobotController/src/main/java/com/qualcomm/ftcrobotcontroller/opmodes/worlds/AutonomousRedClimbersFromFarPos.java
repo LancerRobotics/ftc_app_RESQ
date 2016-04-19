@@ -89,7 +89,9 @@ public class AutonomousRedClimbersFromFarPos extends LinearOpMode {
         rest();
         if(b) {
             moveStraight(24, true, .5);
-            gyroTurn(-30, false);
+            gyroTurn(-45, false);
+            moveStraight(29, false, .5);
+
         }
         else if(a) {
             rest();

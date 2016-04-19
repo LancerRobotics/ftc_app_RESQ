@@ -89,14 +89,14 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         sleep(10000);
-        gyroTurn(-47, false);
-        smoothMoveVol2(13, false);
+        smoothMoveVol2(32, false);
         gyroTurn(-30, false);
         smoothMoveVol2(31, false);
         gyroTurn(-60, false);
         rest();
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
+        rest();
         sleep(500);
         dumpClimbers();
         sleep(1200);
@@ -104,7 +104,8 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
         rest();
         if(b) {
             moveStraight(24, true, .5);
-            gyroTurn(-30, false);
+            gyroTurn(-45, false);
+            moveStraight(29, false, .5);
         }
         else if(a) {
             rest();
