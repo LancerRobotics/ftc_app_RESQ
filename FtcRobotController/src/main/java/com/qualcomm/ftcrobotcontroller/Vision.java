@@ -334,6 +334,25 @@ public class Vision {
         return palet;
 
     }
+
+    public static Bitmap filterRedBlue (Bitmap original) {
+        original = original.copy(Bitmap.Config.ARGB_8888,true);
+        for (int i =0; i <original.getWidth();i++) {
+            for (int j =0; j<original.getHeight();j++) {
+                int pixel = original.getPixel(i,j);
+                float[] hsv = new float[3];
+                Color.RGBToHSV(Color.red(pixel), Color.green(pixel), Color.blue(pixel), hsv);
+                float hue = hsv[0];
+
+                if (!isRedHue(hue)&&!isBlueHue(hue)) {
+                    original.setPixel(i,j,Color.argb(255,255,255,255));
+                }
+
+            }
+        }
+        return original;
+    }
+
     public static Beacon getBeacon (Bitmap circles, Bitmap original) {
         //precondition that it is either one circle or two
         //get a list of the edges
