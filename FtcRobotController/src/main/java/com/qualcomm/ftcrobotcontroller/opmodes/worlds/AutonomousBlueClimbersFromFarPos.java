@@ -68,7 +68,8 @@ public class AutonomousBlueClimbersFromFarPos extends LinearOpMode {
             }
         }
         telemetry.addData("Calibration Complete?", "Yes");
-        telemetry.addData("Select the a button to not move out of the way of the incoming robot and the b button to move out of the way of the incoming robot", "");
+        telemetry.addData("Press A to not move out of the way after the climbers have been scored.", "");
+        telemetry.addData("Press B to move out of the way after the climbers have been scored.", "");
         while (!pressed) {
             if (gamepad1.a) {
                 a = true;
@@ -97,6 +98,7 @@ public class AutonomousBlueClimbersFromFarPos extends LinearOpMode {
             moveStraight(29, false, .5);
         }
         else if(a) {
+            moveStraight(8, false, .5);
             rest();
         }
     }

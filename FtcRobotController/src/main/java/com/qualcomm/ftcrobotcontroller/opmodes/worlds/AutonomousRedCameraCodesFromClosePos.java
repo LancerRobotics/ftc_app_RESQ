@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
+    ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -77,7 +79,8 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
             }
         }
         telemetry.addData("Calibration Complete?", "Yes");
-        telemetry.addData("Select the a button to not move out of the way of the incoming robot and the b button to move out of the way of the incoming robot", "");
+        telemetry.addData("Press A to not move out of the way after the beacon has been pressed.", "");
+        telemetry.addData("Press B to move out of the way after the beacon has been pressed.", "");
         while (!pressed) {
             if (gamepad1.a) {
                 a = true;
@@ -89,7 +92,7 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
         }
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        smoothMoveVol2(20, false);
+        smoothMoveVol2(18.5, false);
         gyroTurn(-30, false);
         smoothMoveVol2(35, false);
         gyroTurn(-60, false);
@@ -104,7 +107,14 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
 //i need to init the camera and also get the instance of the camera        //on pic take protocol
         telemetry.addData("camera","initingcameraPreview");
         ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
-
+        timer.reset();
+        dumpClimbers();
+        rest();
+        sleep(1200);
+        returnToOrigPosAfterDumpOfClimbers();
+        rest();
+        int timeItTakes = (int)(timer.time() * 1000);
+        sleep(Vision.RETRIEVE_FILE_TIME - timeItTakes);
         //wait, because I have handler wait three seconds b4 it'll take a picture, in initCamera
         sleep(Vision.RETRIEVE_FILE_TIME);
         //now we are going to retreive the image and convert it to bitmap
@@ -117,13 +127,8 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
         File imgFile = new File(path);
         image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
         Log.e("image",image.toString());
-        dumpClimbers();
-        rest();
-        sleep(500);
         //cool now u have the image file u just took the picture of
         VisionProcess mVP = new VisionProcess(image);
-        returnToOrigPosAfterDumpOfClimbers();
-        rest();
         Log.e("starting output","start");
         telemetry.addData("starting output","doing smart computer stuff now");
         Beacon beacon = mVP.output(hardwareMap.appContext);
@@ -134,17 +139,25 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
                 //assume this is the right side, assume left side got chopped off
                 if (beacon.getRight()== Beacon.COLOR_RED) {
                     pushRightButton();
+                    sleep(500);
+                    returnToOrigPosAfterPushRightButton();
                 }
                 else {
                     adjustAndPressLeft();
+                    sleep(500);
+                    returnToOrigPosAfterAdjustAndPressLeft();
                 }
             }
             else {
                 if (beacon.whereIsRed().equals( Beacon.RIGHT)) {
                     pushRightButton();
+                    sleep(500);
+                    returnToOrigPosAfterPushRightButton();
                 } else if (beacon.whereIsRed().equals( Beacon.LEFT)) {
                     telemetry.addData("beacon", 4);
                     adjustAndPressLeft();
+                    sleep(500);
+                    returnToOrigPosAfterAdjustAndPressLeft();
                 }
             }
         }
@@ -154,6 +167,7 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
             moveStraight(29, false, .5);
         }
         else if(a) {
+            moveStraight(8, false, .5);
             rest();
         }
         telemetry.addData("beacon",beacon);
@@ -215,6 +229,16 @@ public class AutonomousRedCameraCodesFromClosePos extends LinearOpMode {
         }
         rest();
 
+    }
+
+    private void returnToOrigPosAfterPushRightButton() {
+        moveStraight(30, true, .6);
+        gyroTurn(10, false);
+        adjustToThisDistance(12, sonarFoot);
+    }
+
+    private void returnToOrigPosAfterAdjustAndPressLeft() {
+        adjustToThisDistance(12, sonarFoot);
     }
 
     private void adjustAndPressLeft() {

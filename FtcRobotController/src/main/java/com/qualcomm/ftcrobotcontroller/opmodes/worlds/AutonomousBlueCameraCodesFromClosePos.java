@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
+    ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -80,7 +82,8 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
             }
         }
         telemetry.addData("Calibration Complete?", "Yes");
-        telemetry.addData("Select the a button to not move out of the way of the incoming robot and the b button to move out of the way of the incoming robot", "");
+        telemetry.addData("Press A to not move out of the way after the beacon has been pressed.", "");
+        telemetry.addData("Press B to move out of the way after the beacon has been pressed.", "");
         while (!pressed) {
             if (gamepad1.a) {
                 a = true;
@@ -109,7 +112,14 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
         ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
 
         //wait, because I have handler wait three seconds b4 it'll take a picture, in initCamera
-        sleep(Vision.RETRIEVE_FILE_TIME);
+        timer.reset();
+        dumpClimbers();
+        rest();
+        sleep(500);
+        returnToOrigPosAfterDumpOfClimbers();
+        rest();
+        int timeItTakes = (int)(timer.time() * 1000);
+        sleep(Vision.RETRIEVE_FILE_TIME - timeItTakes);
         //now we are going to retreive the image and convert it to bitmap
         SharedPreferences prefs = hardwareMap.appContext.getApplicationContext().getSharedPreferences(
                 "com.quan.companion", Context.MODE_PRIVATE);
@@ -120,13 +130,8 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
         File imgFile = new File(path);
         image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
         Log.e("image",image.toString());
-        dumpClimbers();
-        rest();
-        sleep(500);
         //cool now u have the image file u just took the picture of
         VisionProcess mVP = new VisionProcess(image);
-        returnToOrigPosAfterDumpOfClimbers();
-        rest();
         Log.e("starting output","start");
         telemetry.addData("starting output","doing smart computer stuff now");
         Beacon beacon = mVP.output(hardwareMap.appContext);
@@ -139,20 +144,28 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
                     telemetry.addData("beacon", 1);
                     //this is what i want, since im on red team. hit right side
                     pushRightButton();
+                    sleep(500);
+                    returnToOrigPosAfterPushRightButton();
                 } else {
                     //the other side must be red
                     //drop servo arm, then move forward
                     telemetry.addData("beacon", 2);
                     adjustAndPressLeft();
+                    sleep(500);
+                    returnToOrigPosAfterAdjustAndPressLeft();
                     //park
                     //parkFromLeftSide();
                 }
             } else {
                 if (beacon.whereIsBlue().equals(Beacon.RIGHT)) {
                     pushRightButton();
+                    sleep(500);
+                    returnToOrigPosAfterPushRightButton();
                 } else if (beacon.whereIsBlue().equals(Beacon.LEFT)) {
                     telemetry.addData("beacon", 4);
                     adjustAndPressLeft();
+                    sleep(500);
+                    returnToOrigPosAfterAdjustAndPressLeft();
                 }
             }
         }
@@ -162,8 +175,10 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
             moveStraight(29, false, .5);
         }
         else if(a) {
+            moveStraight(8, false, .5);
             rest();
         }
+        telemetry.addData("beacon", beacon);
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {
@@ -231,6 +246,17 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
         adjustToThisDistance(24, sonarFoot);
         gyroTurn(-10, false);
         moveStraight(30, false, .6);
+        rest();
+    }
+
+    private void returnToOrigPosAfterPushRightButton() {
+        moveStraight(30, true, .6);
+        gyroTurn(10, false);
+        adjustToThisDistance(12, sonarFoot);
+    }
+
+    private void returnToOrigPosAfterAdjustAndPressLeft() {
+        adjustToThisDistance(12, sonarFoot);
     }
 
     public void adjustToThisDistance(double distance, AnalogInput sonar) {

@@ -108,6 +108,7 @@ public class AutonomousRedClimbersWithDelayFromClosePos extends LinearOpMode {
             moveStraight(29, false, .5);
         }
         else if(a) {
+            moveStraight(8, false, .5);
             rest();
         }
     }
