@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.io.File;
 
@@ -39,7 +40,7 @@ public class AutonomousTemplate extends LinearOpMode {
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
-
+    private ElapsedTime timer;
     @Override
     public void runOpMode() throws InterruptedException {
         climber = hardwareMap.servo.get(Keys.climber);
@@ -75,6 +76,7 @@ public class AutonomousTemplate extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         smoothMoveVol2(48,false);
+        smoothDump(timer);
         mCamera = ((FtcRobotControllerActivity) hardwareMap.appContext).mCamera;
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
         telemetry.addData("camera","initingcameraPreview");
@@ -99,6 +101,26 @@ public class AutonomousTemplate extends LinearOpMode {
         Beacon beacon = mVP.output(hardwareMap.appContext);
         Log.e("beacon",beacon.toString());
         telemetry.addData("beacon",beacon);
+
+    }
+
+    public void smoothDump(ElapsedTime timer) {
+        moveStraight(8.5, false, .3);
+        double pos = Keys.CLIMBER_INITIAL_STATE;
+        //.85 to .31 so you want to decrement
+        timer.reset();
+        while (pos>Keys.CLIMBER_DUMP) {
+            if (((int)(timer.time()*1000))%200==0) {
+                //every 1/5 sec, move up .05 position
+                climber.setPosition(pos);
+                pos-=.05;
+
+            }
+        }
+        //once it is here, it finished dumping.
+        //retract - the sudden should be ok cuz hopefully by that time it will have already dumped
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(8.5, true, .3);
 
     }
 
