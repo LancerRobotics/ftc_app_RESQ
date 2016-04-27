@@ -138,7 +138,6 @@ public class AutonomousTemplate extends LinearOpMode {
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
         moveStraight(8.5, true, .3);
         telemetry.addData("place","after while");
-
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {

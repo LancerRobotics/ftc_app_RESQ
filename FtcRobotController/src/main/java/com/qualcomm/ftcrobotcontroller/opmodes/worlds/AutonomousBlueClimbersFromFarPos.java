@@ -89,10 +89,7 @@ public class AutonomousBlueClimbersFromFarPos extends LinearOpMode {
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
-        sleep(500);
-        dumpClimbers();
-        sleep(500);
-        returnToOrigPosAfterDumpOfClimbers();
+        smoothDump(timer);
         if(b) {
             moveStraight(24, true, .5);
             gyroTurn(20, false);
@@ -109,18 +106,32 @@ public class AutonomousBlueClimbersFromFarPos extends LinearOpMode {
         double pos = Keys.CLIMBER_INITIAL_STATE;
         //.85 to .31 so you want to decrement
         timer.reset();
+        telemetry.addData("place","before while");
         while (pos>Keys.CLIMBER_DUMP) {
-            if (((int)(timer.time()*1000))%200==0) {
-                //every 1/5 sec, move up .05 position
-                climber.setPosition(pos);
-                pos-=.05;
-
+            timer.reset();
+            while (timer.time()*1000<200) {
+                //do nothing
+                try {
+                    sleep(2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                telemetry.addData("waiting",timer.time()*1000);
             }
+            pos-=.05;
+            climber.setPosition(pos);
+            /*telemetry.addData("place","during while");
+            telemetry.addData("timer",timer.time());
+            telemetry.addData("timer math",((int)(timer.time()*1000)));
+            telemetry.addData("timer math2",((int)(timer.time()*1000))%200);
+            telemetry.addData("climber",climber.getPosition());
+            telemetry.addData("constant","INIT"+Keys.CLIMBER_INITIAL_STATE+" DUMP"+Keys.CLIMBER_DUMP);*/
         }
         //once it is here, it finished dumping.
         //retract - the sudden should be ok cuz hopefully by that time it will have already dumped
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
         moveStraight(8.5, true, .3);
+        telemetry.addData("place","after while");
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {

@@ -74,6 +74,7 @@ import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousBlueCameraCodesF
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousBlueCameraCodesFromFarPos;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedCameraCodesFromClosePos;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedCameraCodeFromFarPos;
+import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousTemplate;
 import com.qualcomm.hardware.HardwareFactory;
 import com.qualcomm.robotcore.hardware.configuration.Utility;
 import com.qualcomm.robotcore.util.Dimmer;
@@ -241,6 +242,17 @@ public class FtcRobotControllerActivity extends Activity {
   }
 
   public void initCameraPreview(final Camera camera, final AutonomousRedStates context) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera);
+        FrameLayout cameraPreviewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+        cameraPreviewLayout.addView(context.preview);
+      }
+    });
+  }
+
+  public void initCameraPreview(final Camera camera, final AutonomousTemplate context) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {

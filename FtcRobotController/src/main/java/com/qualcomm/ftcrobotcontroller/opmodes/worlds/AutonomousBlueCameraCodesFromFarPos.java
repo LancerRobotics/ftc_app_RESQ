@@ -104,9 +104,7 @@ public class AutonomousBlueCameraCodesFromFarPos extends LinearOpMode {
         telemetry.addData("camera","initingcameraPreview");
         ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
         timer2.reset();
-        dumpClimbers();
-        sleep(500);
-        returnToOrigPosAfterDumpOfClimbers();
+        smoothDump(timer);
         int timeItTakes = (int)(timer2.time() * 1000);
         sleep(Vision.RETRIEVE_FILE_TIME - timeItTakes);
         //wait, because I have handler wait three seconds b4 it'll take a picture, in initCamera
@@ -179,18 +177,32 @@ public class AutonomousBlueCameraCodesFromFarPos extends LinearOpMode {
         double pos = Keys.CLIMBER_INITIAL_STATE;
         //.85 to .31 so you want to decrement
         timer.reset();
+        telemetry.addData("place","before while");
         while (pos>Keys.CLIMBER_DUMP) {
-            if (((int)(timer.time()*1000))%200==0) {
-                //every 1/5 sec, move up .05 position
-                climber.setPosition(pos);
-                pos-=.05;
-
+            timer.reset();
+            while (timer.time()*1000<200) {
+                //do nothing
+                try {
+                    sleep(2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                telemetry.addData("waiting",timer.time()*1000);
             }
+            pos-=.05;
+            climber.setPosition(pos);
+            /*telemetry.addData("place","during while");
+            telemetry.addData("timer",timer.time());
+            telemetry.addData("timer math",((int)(timer.time()*1000)));
+            telemetry.addData("timer math2",((int)(timer.time()*1000))%200);
+            telemetry.addData("climber",climber.getPosition());
+            telemetry.addData("constant","INIT"+Keys.CLIMBER_INITIAL_STATE+" DUMP"+Keys.CLIMBER_DUMP);*/
         }
         //once it is here, it finished dumping.
         //retract - the sudden should be ok cuz hopefully by that time it will have already dumped
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
         moveStraight(8.5, true, .3);
+        telemetry.addData("place","after while");
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {
