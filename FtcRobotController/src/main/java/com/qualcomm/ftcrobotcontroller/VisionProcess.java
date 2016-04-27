@@ -20,7 +20,8 @@ public class VisionProcess {
 
     public Beacon output(Context context) {
         Log.e("output","started");
-        Bitmap CBG = Vision.fastblur(Vision.toGrayscaleBitmap(Vision.applyContrastBrightnessFilter(original, Vision.CONTRAST_ADJUSTMENT,Vision.BRIGHTNESS_ADJUSTMENT)),2);
+        Bitmap CBG = Vision.fastblur(Vision.toGrayscaleBitmap(Vision.applyContrastBrightnessFilter(Vision.filterRedBlue(Vision.applyContrastBrightnessFilter(original, Vision.CONTRAST_ADJUSTMENT,Vision.BRIGHTNESS_ADJUSTMENT)),Vision.CONTRAST_ADJUSTMENT,Vision.BRIGHTNESS_ADJUSTMENT)),1);
+
         Log.e("contrast","done");
         Log.e("gray","done");
         Log.e("blur","done");

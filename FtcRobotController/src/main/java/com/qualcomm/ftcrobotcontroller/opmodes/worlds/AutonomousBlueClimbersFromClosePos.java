@@ -97,11 +97,11 @@ public class AutonomousBlueClimbersFromClosePos extends LinearOpMode {
         returnToOrigPosAfterDumpOfClimbers();
         if(b) {
             moveStraight(24, true, .5);
-            gyroTurn(20, false);
-            moveStraight(29, false, .5);
+            gyroTurn(30, false);
+            moveStraight(34, false, .5);
         }
         else if(a) {
-            moveStraight(8, false, .5);
+            moveStraight(7.5, false, .5);
             rest();
         }
     }

@@ -29,7 +29,7 @@ public class Vision {
     public static final int MIN_NEEDED_TO_BE_AN_EDGE = 15;
     public static final int DIFFERENCE_IN_RADIUS_FOR_RECTANGLE_BOUNDS = 1;
     public static final double TOLERANCE_FOR_RADIUS_DIFFERENCE = .7;
-    public static final int MIN_RADIUS_LENGTH = 7;
+    public static final int MIN_RADIUS_LENGTH = 6;
     public static final int MAX_RADIUS_LENGTH = 13;
 
 
@@ -868,9 +868,10 @@ public class Vision {
                 circles = removeLabel(circles, label);
             }
             else if (checkIfClosedShape(circles, label, leftMost,rightMost,topMost,bottomMost)==false) {
-                circles = removeLabel(circles,label);
+               circles = removeLabel(circles,label);
 
-            } else {
+            }
+            else {
 
                 Log.e("almost there", "checking def of circle");
                 //ok so if u made it thus far, u should still check the distance to the center
@@ -931,7 +932,7 @@ public class Vision {
                     columnCounter++;
                 }
             }
-            if (columnCounter!=2) {
+            if (columnCounter<2) {
                 Log.e("not a circle", "not a closed shape at column "+i+" and counter was "+columnCounter);
                 return false;
             }
