@@ -68,7 +68,7 @@ public class Keys {
     //Swivel values
     public static final double SWIVEL_CENTER = .5;
     public static final double SWIVEL_LEFT = .15;
-    public static final double SWIVEL_RIGHT = .825;
+    public static final double SWIVEL_RIGHT = .85;
 
     //button pusher todo REMOVE ALL REFERENCES OF THIS
     public static final double BUTTON_PUSHER_INIT=.95;

@@ -148,9 +148,11 @@ public class JudgesWorlds extends LinearOpMode {
                         dump.setPosition(Keys.DUMP_INIT);
                         liftRight.setPower(.5);
                         liftLeft.setPower(.5);
+                        liftMiddle.setPower(.5);
                         sleep(800);
                         liftLeft.setPower(0);
                         liftRight.setPower(0);
+                        liftMiddle.setPower(0);
                         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
                         telemetry.addData("Done?", "DONE/END OF JUDGES CODE");
                         break;
