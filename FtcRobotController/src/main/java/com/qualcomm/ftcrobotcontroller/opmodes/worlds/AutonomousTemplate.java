@@ -76,6 +76,7 @@ public class AutonomousTemplate extends LinearOpMode {
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
         smoothMoveVol2(48,false);
+        telemetry.addData("starting","smoothDump starting");
         smoothDump(timer);
         mCamera = ((FtcRobotControllerActivity) hardwareMap.appContext).mCamera;
         //i need to init the camera and also get the instance of the camera        //on pic take protocol
