@@ -104,7 +104,9 @@ public class AutonomousBlueCameraCodesFromFarPos extends LinearOpMode {
         telemetry.addData("camera","initingcameraPreview");
         ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
         timer2.reset();
-        smoothDump(timer);
+        dumpClimbers();
+        sleep(500);
+        returnToOrigPosAfterDumpOfClimbers();
         int timeItTakes = (int)(timer2.time() * 1000);
         sleep(Vision.RETRIEVE_FILE_TIME - timeItTakes);
         //wait, because I have handler wait three seconds b4 it'll take a picture, in initCamera
@@ -296,6 +298,7 @@ public class AutonomousBlueCameraCodesFromFarPos extends LinearOpMode {
     }
 
     public void dumpClimbers() {
+        climber.setPosition(Keys.CLIMBER_HALFWAY);
         moveStraight(8.5, false, .3);
         climber.setPosition(Keys.CLIMBER_DUMP);
     }

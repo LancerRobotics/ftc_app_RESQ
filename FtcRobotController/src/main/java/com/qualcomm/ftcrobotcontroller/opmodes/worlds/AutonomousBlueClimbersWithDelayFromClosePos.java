@@ -104,7 +104,9 @@ public class AutonomousBlueClimbersWithDelayFromClosePos extends LinearOpMode {
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
         sleep(500);
-        smoothDump(timer);
+        dumpClimbers();
+        sleep(500);
+        returnToOrigPosAfterDumpOfClimbers();
         if(b) {
             moveStraight(24, true, .5);
             gyroTurn(20, false);
@@ -230,6 +232,7 @@ public class AutonomousBlueClimbersWithDelayFromClosePos extends LinearOpMode {
     }
 
     public void dumpClimbers() {
+        climber.setPosition(Keys.CLIMBER_HALFWAY);
         moveStraight(8.5, false, .3);
         climber.setPosition(Keys.CLIMBER_DUMP);
     }

@@ -61,6 +61,7 @@ public class Keys {
     //Climber values
     public static final double CLIMBER_DUMP = .3415;
     public static final double CLIMBER_INITIAL_STATE = .85;
+    public static final double CLIMBER_HALFWAY = .54;
 
     public static final double JAM_INIT = .1;
     public static final double JAM_JAM = .2;
@@ -164,6 +165,4 @@ public class Keys {
     public static final String score = "score";
     public static final double SCORE_SCORING = .5;
     public static final double SCORE_CLOSE = .5;
-    public static final double CLIMBER_HALFWAY = .5;
-
 }

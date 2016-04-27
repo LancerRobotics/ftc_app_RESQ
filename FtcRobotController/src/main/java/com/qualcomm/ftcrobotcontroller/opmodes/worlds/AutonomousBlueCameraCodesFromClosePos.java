@@ -113,7 +113,10 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
 
         //wait, because I have handler wait three seconds b4 it'll take a picture, in initCamera
         timer2.reset();
-        smoothDump(timer);
+        dumpClimbers();
+        sleep(500);
+        returnToOrigPosAfterDumpOfClimbers();
+        rest();
         int timeItTakes = (int)(timer2.time() * 1000);
         sleep(Vision.RETRIEVE_FILE_TIME - timeItTakes);
         //now we are going to retreive the image and convert it to bitmap
@@ -302,6 +305,7 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
     }
 
     public void dumpClimbers() {
+        climber.setPosition(Keys.CLIMBER_HALFWAY);
         moveStraight(8.5, false, .3);
         climber.setPosition(Keys.CLIMBER_DUMP);
     }

@@ -43,7 +43,6 @@ import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousBlueParkingZoneO
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousBlueParkingZoneOnlyFromFarPosWithDelay;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedCameraCodesFromClosePos;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedCameraCodeFromFarPos;
-import com.qualcomm.ftcrobotcontroller.opmodes.supers.JudgesSupers;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedClimbersFromClosePos;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedClimbersFromFarPos;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedClimbersWithDelayFromClosePos;
@@ -52,6 +51,7 @@ import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedParkingZoneOn
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedParkingZoneOnlyFromClosePosWithDelay;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedParkingZoneOnlyFromFarPos;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedParkingZoneOnlyFromFarPosWithDelay;
+import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonDefense;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.CameraTestOpWorlds;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.JudgesWorlds;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.Teleop;
@@ -102,5 +102,6 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Worlds CameraTestOp", CameraTestOpWorlds.class);
     manager.register("reg camera test", CameraTestOp.class);
     manager.register("Judges Code", JudgesWorlds.class);
+    manager.register("Smooth Dump", AutonDefense.class);
   }
 }

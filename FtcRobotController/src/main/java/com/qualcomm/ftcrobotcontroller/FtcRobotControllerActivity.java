@@ -69,6 +69,7 @@ import com.qualcomm.ftccommon.UpdateUI;
 import com.qualcomm.ftcrobotcontroller.opmodes.FtcOpModeRegister;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousBlueStates;
 import com.qualcomm.ftcrobotcontroller.opmodes.states.AutonomousRedStates;
+import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonDefense;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousBlueCameraCodesFromClosePos;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousBlueCameraCodesFromFarPos;
 import com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousRedCameraCodesFromClosePos;
@@ -207,7 +208,7 @@ public class FtcRobotControllerActivity extends Activity {
       }
     });
   }
-  public void initCameraPreview(final Camera camera, final com.qualcomm.ftcrobotcontroller.opmodes.worlds.AutonomousTemplate context) {
+  public void initCameraPreview(final Camera camera, final AutonDefense context) {
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
