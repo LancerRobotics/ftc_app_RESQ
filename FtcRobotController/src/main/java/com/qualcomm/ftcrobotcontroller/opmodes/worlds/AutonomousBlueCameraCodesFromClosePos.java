@@ -44,7 +44,7 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
-    ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timer = new ElapsedTime(), timer2 = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -112,13 +112,9 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
         ((FtcRobotControllerActivity) hardwareMap.appContext).initCameraPreview(mCamera, this);
 
         //wait, because I have handler wait three seconds b4 it'll take a picture, in initCamera
-        timer.reset();
-        dumpClimbers();
-        rest();
-        sleep(500);
-        returnToOrigPosAfterDumpOfClimbers();
-        rest();
-        int timeItTakes = (int)(timer.time() * 1000);
+        timer2.reset();
+        smoothDump(timer);
+        int timeItTakes = (int)(timer2.time() * 1000);
         sleep(Vision.RETRIEVE_FILE_TIME - timeItTakes);
         //now we are going to retreive the image and convert it to bitmap
         SharedPreferences prefs = hardwareMap.appContext.getApplicationContext().getSharedPreferences(
@@ -236,6 +232,25 @@ public class AutonomousBlueCameraCodesFromClosePos extends LinearOpMode {
 
         }
         rest();
+    }
+
+    public void smoothDump(ElapsedTime timer) {
+        moveStraight(8.5, false, .3);
+        double pos = Keys.CLIMBER_INITIAL_STATE;
+        //.85 to .31 so you want to decrement
+        timer.reset();
+        while (pos>Keys.CLIMBER_DUMP) {
+            if (((int)(timer.time()*1000))%200==0) {
+                //every 1/5 sec, move up .05 position
+                climber.setPosition(pos);
+                pos-=.05;
+
+            }
+        }
+        //once it is here, it finished dumping.
+        //retract - the sudden should be ok cuz hopefully by that time it will have already dumped
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(8.5, true, .3);
     }
 
     private void adjustAndPressLeft() {

@@ -121,7 +121,6 @@ public class AutonomousTemplate extends LinearOpMode {
         //retract - the sudden should be ok cuz hopefully by that time it will have already dumped
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
         moveStraight(8.5, true, .3);
-
     }
 
     public void smoothMoveVol2 (double inches, boolean backwards) {

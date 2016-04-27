@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by matt quan on 2/18/2016.
@@ -28,6 +29,7 @@ public class AutonomousRedClimbersFromFarPos extends LinearOpMode {
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
+    ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -84,10 +86,7 @@ public class AutonomousRedClimbersFromFarPos extends LinearOpMode {
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         sleep(500);
-        dumpClimbers();
-        sleep(1200);
-        returnToOrigPosAfterDumpOfClimbers();
-        rest();
+        smoothDump(timer);
         if(b) {
             moveStraight(24, true, .5);
             gyroTurn(-45, false);
@@ -155,6 +154,25 @@ public class AutonomousRedClimbersFromFarPos extends LinearOpMode {
 
         }
         rest();
+    }
+
+    public void smoothDump(ElapsedTime timer) {
+        moveStraight(8.5, false, .3);
+        double pos = Keys.CLIMBER_INITIAL_STATE;
+        //.85 to .31 so you want to decrement
+        timer.reset();
+        while (pos>Keys.CLIMBER_DUMP) {
+            if (((int)(timer.time()*1000))%200==0) {
+                //every 1/5 sec, move up .05 position
+                climber.setPosition(pos);
+                pos-=.05;
+
+            }
+        }
+        //once it is here, it finished dumping.
+        //retract - the sudden should be ok cuz hopefully by that time it will have already dumped
+        climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
+        moveStraight(8.5, true, .3);
     }
 
     private void adjustAndPressLeft() {
