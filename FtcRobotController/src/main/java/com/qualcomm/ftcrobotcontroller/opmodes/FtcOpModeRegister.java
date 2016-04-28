@@ -102,6 +102,6 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("Worlds CameraTestOp", CameraTestOpWorlds.class);
     manager.register("reg camera test", CameraTestOp.class);
     manager.register("Judges Code", JudgesWorlds.class);
-    manager.register("Smooth Dump", AutonDefense.class);
+    manager.register("Defense",AutonDefense.class);
   }
 }

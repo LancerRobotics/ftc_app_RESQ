@@ -32,15 +32,15 @@ public class AutonDefense extends LinearOpMode {
     public CameraPreview preview;
     public Bitmap image;
 
+    ElapsedTime timer;
 
     DcMotor fr, fl, bl, br, collector;
-    Servo swivel, dump, climber, hang, clampRight, clampLeft;
+    Servo swivel, dump, climber, hang, clampRight, clampLeft, guardLeft, guardRight;
     AnalogInput sonarAbovePhone, sonarFoot;
     boolean calibration_complete = false;
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
-    private ElapsedTime timer = new ElapsedTime();
     @Override
     public void runOpMode() throws InterruptedException {
         climber = hardwareMap.servo.get(Keys.climber);
@@ -48,6 +48,8 @@ public class AutonDefense extends LinearOpMode {
         hang = hardwareMap.servo.get(Keys.hang);
         clampLeft = hardwareMap.servo.get(Keys.clampLeft);
         clampRight = hardwareMap.servo.get(Keys.clampRight);
+        guardLeft = hardwareMap.servo.get(Keys.guardLeft);
+        guardRight = hardwareMap.servo.get(Keys.guardRight);
         dump = hardwareMap.servo.get(Keys.dump);
         fr = hardwareMap.dcMotor.get(Keys.frontRight);
         fl = hardwareMap.dcMotor.get(Keys.frontLeft);
@@ -63,6 +65,8 @@ public class AutonDefense extends LinearOpMode {
         clampRight.setPosition(Keys.CLAMP_RIGHT_INIT);
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
         collector.setDirection(DcMotor.Direction.REVERSE);
+        guardLeft.setPosition(Keys.LEFT_GUARD_DOWN);
+        guardRight.setPosition(Keys.RIGHT_GUARD_DOWN);
         sonarAbovePhone = hardwareMap.analogInput.get(Keys.SONAR_ABOVE_PHONE);
         sonarFoot = hardwareMap.analogInput.get(Keys.SONAR_FOOT);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
@@ -75,8 +79,13 @@ public class AutonDefense extends LinearOpMode {
         telemetry.addData("Calibration Complete?", "Yes");
         //telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        sleep(10000);
-        smoothMoveVol2(120,false);
+        timer = new ElapsedTime();
+        timer.reset();
+        sleep(5000);
+        smoothMoveVol2(45,false);
+        int timeUsed = (int)(timer.time() * 1000);
+        sleep(10000 - timeUsed);
+        smoothMoveVol2(90,false);
     }
 
     public void smoothDump(ElapsedTime timer) {

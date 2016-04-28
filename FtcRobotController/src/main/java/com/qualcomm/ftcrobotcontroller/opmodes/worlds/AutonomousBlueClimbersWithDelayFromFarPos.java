@@ -93,22 +93,22 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         }
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        sleep(10000);
-        gyroTurn(47, false);
-        smoothMoveVol2(69 + 4*Math.sqrt(2), false);
-        gyroTurn(45, false);
-        adjustToThisDistance(12, sonarFoot);
+        sleep(17000);
+        if(opModeIsActive()) gyroTurn(47, false);
+        if(opModeIsActive())smoothMoveVol2(69, false);
+        if(opModeIsActive())gyroTurn(45, false);
+        if(opModeIsActive())adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
-        rest();
-        smoothDump(timer);
+        if(opModeIsActive())rest();
+        if(opModeIsActive())smoothDump(timer);
         if(b) {
-            moveStraight(24, true, .5);
-            gyroTurn(20, false);
-            moveStraight(29, false, .5);
+            if(opModeIsActive())moveStraight(24, true, .5);
+            if(opModeIsActive())gyroTurn(20, false);
+            if(opModeIsActive())moveStraight(29, false, .5);
         }
         else if(a) {
-            moveStraight(8, false, .5);
-            rest();
+            if(opModeIsActive())moveStraight(8, false, .5);
+            if(opModeIsActive())rest();
         }
     }
 
@@ -128,6 +128,12 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                     e.printStackTrace();
                 }
                 telemetry.addData("waiting",timer.time()*1000);
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             pos-=.05;
             climber.setPosition(pos);
@@ -137,11 +143,17 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
             telemetry.addData("timer math2",((int)(timer.time()*1000))%200);
             telemetry.addData("climber",climber.getPosition());
             telemetry.addData("constant","INIT"+Keys.CLIMBER_INITIAL_STATE+" DUMP"+Keys.CLIMBER_DUMP);*/
+            try {
+                waitForNextHardwareCycle();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         //once it is here, it finished dumping.
         //retract - the sudden should be ok cuz hopefully by that time it will have already dumped
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(8.5, true, .3);
+        if(opModeIsActive()) moveStraight(8.5, true, .3);
         telemetry.addData("place","after while");
     }
 
@@ -171,7 +183,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                     telemetry.addData("power","adjusted"+power);
                 }
                 telemetry.addData("power",power);
-                setMotorPowerUniform(power, backwards);
+                if (opModeIsActive())setMotorPowerUniform(power, backwards);
                 savedPower=power;
                 savedTick=currentTick;
             }
@@ -182,7 +194,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                 double horizontalStretch = totalTicks/2*.2;
                 if (newCurrentCount<horizontalStretch) {
                     //becuase of domain restrictions
-                    setMotorPowerUniform(savedPower,backwards);
+                    if(opModeIsActive())setMotorPowerUniform(savedPower,backwards);
                 }
                 else {
                     //in the domain
@@ -193,23 +205,29 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                         power = Keys.MIN_SPEED_SMOOTH_MOVE;
                         telemetry.addData("power","adjusted"+power);
                     }
-                    setMotorPowerUniform(power,backwards);
+                    if(opModeIsActive())setMotorPowerUniform(power,backwards);
                 }
 
             }
-
+            try {
+                waitForNextHardwareCycle();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         rest();
     }
 
     private void adjustAndPressLeft() {
+        if(opModeIsActive())
         moveStraight(11, false, .6);
     }
 
     private void pushRightButton() {
-        adjustToThisDistance(24, sonarFoot);
-        gyroTurn(-10, false);
-        moveStraight(30, false, .6);
+        if(opModeIsActive())adjustToThisDistance(24, sonarFoot);
+        if(opModeIsActive())gyroTurn(-10, false);
+        if(opModeIsActive())moveStraight(30, false, .6);
     }
 
     public void adjustToThisDistance(double distance, AnalogInput sonar) {
@@ -221,8 +239,14 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                 telemetry.addData("while", "looping3");
                 telemetry.addData("mySonar", readSonar(sonar));
                 telemetry.addData("dist", distance);
-                setMotorPowerUniform(.25, true);
+                if(opModeIsActive())setMotorPowerUniform(.25, true);
                 telemetry.addData("bool read<dist+tol", readSonar(sonar) < distance - Keys.SONAR_TOLERANCE);
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         } else if (myPosition > distance + Keys.SONAR_TOLERANCE) {
             telemetry.addData("if", "readSonar<distance");
@@ -230,24 +254,30 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                 telemetry.addData("while", "looping");
                 telemetry.addData("mySonar", readSonar(sonar));
                 telemetry.addData("dist", distance);
-                setMotorPowerUniform(.25, false);
+                if(opModeIsActive())setMotorPowerUniform(.25, false);
                 telemetry.addData("bool read>dist+tol", readSonar(sonar) > distance + Keys.SONAR_TOLERANCE);
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        rest();
+        if(opModeIsActive())rest();
         telemetry.addData("sonar", "done");
-        rest();
+        if(opModeIsActive())rest();
     }
 
     public void dumpClimbers() {
         climber.setPosition(Keys.CLIMBER_HALFWAY);
-        moveStraight(8.5, false, .3);
+        if(opModeIsActive())moveStraight(8.5, false, .3);
         climber.setPosition(Keys.CLIMBER_DUMP);
     }
 
     public void returnToOrigPosAfterDumpOfClimbers() {
         climber.setPosition(Keys.CLIMBER_INITIAL_STATE);
-        moveStraight(8.5, true, .3);
+        if(opModeIsActive())moveStraight(8.5, true, .3);
     }
 
     //returns sonar values in inches!!!
@@ -264,14 +294,26 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         int positionBeforeMovement = fl.getCurrentPosition();
         if (backwards) {
             while (fl.getCurrentPosition() > positionBeforeMovement - totalTicks) {
-                setMotorPowerUniform(power, backwards);
+                if(opModeIsActive())setMotorPowerUniform(power, backwards);
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
-                setMotorPowerUniform(power, backwards);
+                if(opModeIsActive())setMotorPowerUniform(power, backwards);
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        rest();
+        if(opModeIsActive())rest();
     }
 
     public void moveAlteredSin(double dist, boolean backwards) {
@@ -314,9 +356,15 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
             }
 
             telemetry.addData("power", power);
-            setMotorPowerUniform(power, backwards);
+            if(opModeIsActive())setMotorPowerUniform(power, backwards);
+            try {
+                waitForNextHardwareCycle();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        rest();
+        if(opModeIsActive())rest();
     }
 
     public void setMotorPowerUniform(double power, boolean backwards) {
@@ -379,11 +427,17 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                 double turnPower = .8;
                 if (buttFirst) {
                     turnPower = -.8;
-                    turnRight(turnPower);
+                    if(opModeIsActive())turnRight(turnPower);
                 } else {
-                    turnLeft(turnPower);
+                    if(opModeIsActive())turnLeft(turnPower);
                 }
                 telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             telemetry.addData("more boolean2", navx_device.getYaw() > degreesToGo + Keys.TOLERANCE_LEVEL_2);
             while (navx_device.getYaw() > degreesToGo + Keys.TOLERANCE_LEVEL_2) {
@@ -392,11 +446,17 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                 double turnPower = .75;
                 if (buttFirst) {
                     turnPower = -1 * turnPower;
-                    turnRight(turnPower);
+                    if(opModeIsActive())turnRight(turnPower);
                 } else {
-                    turnLeft(turnPower);
+                    if(opModeIsActive())turnLeft(turnPower);
                 }
                 telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             while (!(degreesToGo - Keys.TOLERANCE_LEVEL_3 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_3)) {
                 collector.setPower(Keys.COLLECTOR_POWER*-1);
@@ -404,11 +464,17 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                 double turnPower = .7;
                 if (buttFirst) {
                     turnPower = -1 * turnPower;
-                    turnRight(turnPower);
+                    if(opModeIsActive())turnRight(turnPower);
                 } else {
-                    turnLeft(turnPower);
+                    if(opModeIsActive())turnLeft(turnPower);
                 }
                 telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             telemetry.addData("while", "done");
         } else if (navx_device.getYaw() < degreesToGo) {
@@ -418,42 +484,60 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                 double turnPower = .8;
                 if (buttFirst) {
                     turnPower = -1 * turnPower;
-                    turnLeft(turnPower);
+                    if(opModeIsActive())turnLeft(turnPower);
                 } else {
-                    turnRight(turnPower);
+                    if(opModeIsActive())turnRight(turnPower);
                 }
                 telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
                 telemetry.addData("while", "turningRight");
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             while (!(degreesToGo - Keys.TOLERANCE_LEVEL_2 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_2)) {
                 collector.setPower(Keys.COLLECTOR_POWER*-1);
                 double turnPower = .75;
                 if (buttFirst) {
                     turnPower = -1 * turnPower;
-                    turnLeft(turnPower);
+                    if(opModeIsActive())turnLeft(turnPower);
                 } else {
-                    turnRight(turnPower);
+                    if(opModeIsActive())turnRight(turnPower);
                 }
                 telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
                 telemetry.addData("while", "turningRight");
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             while (!(degreesToGo - Keys.TOLERANCE_LEVEL_3 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_3)) {
                 collector.setPower(Keys.COLLECTOR_POWER*-1);
                 double turnPower = .7;
                 if (buttFirst) {
                     turnPower = -1 * turnPower;
-                    turnLeft(turnPower);
+                    if(opModeIsActive())turnLeft(turnPower);
                 } else {
-                    turnRight(turnPower);
+                    if(opModeIsActive())turnRight(turnPower);
                 }
 
                 telemetry.addData("if", ".yaw" + navx_device.getYaw() + "toGo" + degreesToGo);
                 telemetry.addData("while", "turningRight");
+                try {
+                    waitForNextHardwareCycle();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             telemetry.addData("whileD", "done");
         }
         telemetry.addData("ifD", "done");
-        rest();
+        if(opModeIsActive())rest();
     }
 
 }

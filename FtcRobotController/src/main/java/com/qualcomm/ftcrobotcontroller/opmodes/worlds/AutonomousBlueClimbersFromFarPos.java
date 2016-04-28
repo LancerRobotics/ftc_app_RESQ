@@ -32,7 +32,7 @@ public class AutonomousBlueClimbersFromFarPos extends LinearOpMode {
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
-    ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timer = new ElapsedTime(), timer2 = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -83,17 +83,20 @@ public class AutonomousBlueClimbersFromFarPos extends LinearOpMode {
         }
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
+        timer2.reset();
         gyroTurn(47, false);
-        smoothMoveVol2(69 + 4*Math.sqrt(2), false);
+        smoothMoveVol2(69 + 1*Math.sqrt(2), false);
         gyroTurn(45, false);
         adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
         rest();
         smoothDump(timer);
         if(b) {
-            moveStraight(24, true, .5);
-            gyroTurn(20, false);
-            moveStraight(29, false, .5);
+            smoothMoveVol2(24, true);
+            while(timer2.time() * 1000 == 10000) {
+                sleep(1);
+            }
+            smoothMoveVol2(24, true);
         }
         else if(a) {
             moveStraight(8, false, .5);
