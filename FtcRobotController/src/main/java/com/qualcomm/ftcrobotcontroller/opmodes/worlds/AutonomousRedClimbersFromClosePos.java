@@ -29,7 +29,7 @@ public class AutonomousRedClimbersFromClosePos extends LinearOpMode {
     //double a3,a4,a5;
     private AHRS navx_device;
     private navXPIDController yawPIDController;
-    ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timer = new ElapsedTime(), timer2 = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -80,7 +80,8 @@ public class AutonomousRedClimbersFromClosePos extends LinearOpMode {
         }
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        smoothMoveVol2(32, false);
+        timer2.reset();
+        smoothMoveVol2(26, false);
         gyroTurn(-30, false);
         smoothMoveVol2(31, false);
         gyroTurn(-60, false);
@@ -90,9 +91,11 @@ public class AutonomousRedClimbersFromClosePos extends LinearOpMode {
         rest();
         smoothDump(timer);
         if(b) {
-            moveStraight(24, true, .5);
-            gyroTurn(-45, false);
-            moveStraight(29, false, .5);
+            moveStraight(16, true, .5);
+            while(timer2.time() < 10) {
+                sleep(1);
+            }
+            moveStraight(36, true, .5);
         }
         else if(a) {
             moveStraight(8, false, .5);

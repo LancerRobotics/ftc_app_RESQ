@@ -133,6 +133,8 @@ public class Teleop extends OpMode {
                 collectorMovement(true, false);
             else
                 collectorMovement(true, true);
+            telemetry.addData("GamePad 2 Left Trigger Pressed?", gamepad2.left_trigger > .15);
+            telemetry.addData("GamePad 2 Left Bumper Pressed?", gamepad2.left_bumper);
 
             //Dump
             if(gamepad2.right_trigger > .15) {

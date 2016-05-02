@@ -74,7 +74,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         sonarAbovePhone = hardwareMap.analogInput.get(Keys.SONAR_ABOVE_PHONE);
         sonarFoot = hardwareMap.analogInput.get(Keys.SONAR_FOOT);
         navx_device = AHRS.getInstance(hardwareMap.deviceInterfaceModule.get(Keys.advancedSensorModule), Keys.NAVX_DIM_I2C_PORT, AHRS.DeviceDataType.kProcessedData, Keys.NAVX_DEVICE_UPDATE_RATE_HZ);
-        while (!calibration_complete) {
+        while (!calibration_complete && opModeIsActive()) {
             calibration_complete = !navx_device.isCalibrating();
             if (!calibration_complete) {
                 telemetry.addData("Calibration Complete?", "No");
@@ -82,7 +82,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         }
         telemetry.addData("Calibration Complete?", "Yes");
         telemetry.addData("Select the a button to not move out of the way of the incoming robot and the b button to move out of the way of the incoming robot", "");
-        while (!pressed) {
+        while (!pressed && opModeIsActive()) {
             if (gamepad1.a) {
                 a = true;
                 pressed = true;
@@ -93,9 +93,9 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         }
         telemetry.addData("Start Autonomous?", "Yes");
         waitForStart();
-        sleep(17000);
+        sleep(15000);
         if(opModeIsActive()) gyroTurn(47, false);
-        if(opModeIsActive())smoothMoveVol2(69, false);
+        if(opModeIsActive())smoothMoveVol2(62.5143, false);
         if(opModeIsActive())gyroTurn(45, false);
         if(opModeIsActive())adjustToThisDistance(12, sonarFoot);
         telemetry.addData("sonar", readSonar(sonarFoot));
@@ -118,9 +118,9 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         //.85 to .31 so you want to decrement
         timer.reset();
         telemetry.addData("place","before while");
-        while (pos>Keys.CLIMBER_DUMP) {
+        while (pos>Keys.CLIMBER_DUMP && opModeIsActive()) {
             timer.reset();
-            while (timer.time()*1000<200) {
+            while (timer.time()*1000<200 && opModeIsActive()) {
                 //do nothing
                 try {
                     sleep(2);
@@ -166,7 +166,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         //p;us one because make the first tick 1, not 0, so fxn will never be 0
         double savedPower=0;
         double savedTick=0;
-        while (fl.getCurrentPosition() < ticksToGo+1) {
+        while (fl.getCurrentPosition() < ticksToGo+1 && opModeIsActive()) {
             telemetry.addData("front left encoder: ", fl.getCurrentPosition());
             telemetry.addData("ticksFor", totalTicks);
             collector.setPower(-1*Keys.COLLECTOR_POWER);
@@ -235,7 +235,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         telemetry.addData("myPos", myPosition);
         if (readSonar(sonar) < distance - Keys.SONAR_TOLERANCE) {
             telemetry.addData("if", "readSonar<distance");
-            while (readSonar(sonar) < distance - Keys.SONAR_TOLERANCE) {
+            while (readSonar(sonar) < distance - Keys.SONAR_TOLERANCE && opModeIsActive()) {
                 telemetry.addData("while", "looping3");
                 telemetry.addData("mySonar", readSonar(sonar));
                 telemetry.addData("dist", distance);
@@ -250,7 +250,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
             }
         } else if (myPosition > distance + Keys.SONAR_TOLERANCE) {
             telemetry.addData("if", "readSonar<distance");
-            while (readSonar(sonar) > distance + Keys.SONAR_TOLERANCE) {
+            while (readSonar(sonar) > distance + Keys.SONAR_TOLERANCE && opModeIsActive()) {
                 telemetry.addData("while", "looping");
                 telemetry.addData("mySonar", readSonar(sonar));
                 telemetry.addData("dist", distance);
@@ -293,7 +293,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         double totalTicks = rotations * 1120 * 3 / 2;
         int positionBeforeMovement = fl.getCurrentPosition();
         if (backwards) {
-            while (fl.getCurrentPosition() > positionBeforeMovement - totalTicks) {
+            while (fl.getCurrentPosition() > positionBeforeMovement - totalTicks && opModeIsActive()) {
                 if(opModeIsActive())setMotorPowerUniform(power, backwards);
                 try {
                     waitForNextHardwareCycle();
@@ -303,7 +303,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                 }
             }
         } else {
-            while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
+            while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks && opModeIsActive()) {
                 if(opModeIsActive())setMotorPowerUniform(power, backwards);
                 try {
                     waitForNextHardwareCycle();
@@ -322,7 +322,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         double rotations = dist / (Keys.WHEEL_DIAMETER * Math.PI);
         double totalTicks = rotations * 1120 * 3 / 2;
         int positionBeforeMovement = fl.getCurrentPosition();
-        while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks) {
+        while (fl.getCurrentPosition() < positionBeforeMovement + totalTicks && opModeIsActive()) {
             telemetry.addData("front left encoder: ", "sin" + fl.getCurrentPosition());
             telemetry.addData("ticksFor", totalTicks);
             collector.setPower(-1*Keys.COLLECTOR_POWER);
@@ -421,7 +421,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
         if (navx_device.getYaw() > degreesToGo) {
             telemetry.addData("if", "getYaw>degrees");
             telemetry.addData("more boolean", !(degreesToGo - Keys.TOLERANCE_LEVEL_1 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_1));
-            while (!(degreesToGo - Keys.TOLERANCE_LEVEL_1 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_1)) {
+            while (opModeIsActive() && !(degreesToGo - Keys.TOLERANCE_LEVEL_1 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_1)) {
                 collector.setPower(Keys.COLLECTOR_POWER*-1);
                 telemetry.addData("while", "turningLeft1");
                 double turnPower = .8;
@@ -440,7 +440,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                 }
             }
             telemetry.addData("more boolean2", navx_device.getYaw() > degreesToGo + Keys.TOLERANCE_LEVEL_2);
-            while (navx_device.getYaw() > degreesToGo + Keys.TOLERANCE_LEVEL_2) {
+            while (opModeIsActive() && navx_device.getYaw() > degreesToGo + Keys.TOLERANCE_LEVEL_2) {
                 collector.setPower(Keys.COLLECTOR_POWER*-1);
                 telemetry.addData("while", "turningLeft2");
                 double turnPower = .75;
@@ -458,7 +458,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                     e.printStackTrace();
                 }
             }
-            while (!(degreesToGo - Keys.TOLERANCE_LEVEL_3 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_3)) {
+            while (opModeIsActive() && !(degreesToGo - Keys.TOLERANCE_LEVEL_3 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_3)) {
                 collector.setPower(Keys.COLLECTOR_POWER*-1);
                 telemetry.addData("while", "turningLeft3");
                 double turnPower = .7;
@@ -479,7 +479,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
             telemetry.addData("while", "done");
         } else if (navx_device.getYaw() < degreesToGo) {
             telemetry.addData("if", "getYaw<degrees");
-            while (!(degreesToGo - Keys.TOLERANCE_LEVEL_1 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_1)) {
+            while (opModeIsActive() && !(degreesToGo - Keys.TOLERANCE_LEVEL_1 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_1)) {
                 collector.setPower(Keys.COLLECTOR_POWER*-1);
                 double turnPower = .8;
                 if (buttFirst) {
@@ -497,7 +497,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                     e.printStackTrace();
                 }
             }
-            while (!(degreesToGo - Keys.TOLERANCE_LEVEL_2 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_2)) {
+            while (opModeIsActive() && !(degreesToGo - Keys.TOLERANCE_LEVEL_2 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_2)) {
                 collector.setPower(Keys.COLLECTOR_POWER*-1);
                 double turnPower = .75;
                 if (buttFirst) {
@@ -515,7 +515,7 @@ public class AutonomousBlueClimbersWithDelayFromFarPos extends LinearOpMode {
                     e.printStackTrace();
                 }
             }
-            while (!(degreesToGo - Keys.TOLERANCE_LEVEL_3 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_3)) {
+            while (opModeIsActive() && !(degreesToGo - Keys.TOLERANCE_LEVEL_3 < navx_device.getYaw() && navx_device.getYaw() < degreesToGo + Keys.TOLERANCE_LEVEL_3)) {
                 collector.setPower(Keys.COLLECTOR_POWER*-1);
                 double turnPower = .7;
                 if (buttFirst) {
