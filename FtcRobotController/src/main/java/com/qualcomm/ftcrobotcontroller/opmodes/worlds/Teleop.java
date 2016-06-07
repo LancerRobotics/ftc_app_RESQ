@@ -94,6 +94,7 @@ public class Teleop extends OpMode {
             telemetry.addData("Start Teleop?", "Yes");
         }
 
+
         public void loop() {
 
             gamepad1LeftStickY = Range.clip(gamepad1.left_stick_y, -1, 1);
@@ -193,19 +194,6 @@ public class Teleop extends OpMode {
             else {
                 guardRightButtonPressed = false;
             }
-
-            //Auto-Trigger
-        /*if(!gamepad2.x && !gamepad2.b && !gamepad2.a && !rightTrigger && !leftTrigger) {
-            if (navx_device.getPitch() > Keys.PITCH_OF_MOUNTAIN) {
-                triggerLeft.setPosition(Keys.LEFT_TRIGGER_TRIGGER);
-                triggerRight.setPosition(Keys.RIGHT_TRIGGER_TRIGGER);
-            }
-            else {
-                triggerLeft.setPosition(Keys.LEFT_TRIGGER_INIT);
-                triggerRight.setPosition(Keys.RIGHT_TRIGGER_INIT);
-                //else do nothing
-            }
-        }*/
 
             //Swivels
             if(gamepad2.x) {
